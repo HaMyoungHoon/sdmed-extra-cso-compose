@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="calendar_purple">#FFBB86FC</color>
+    <color name="calendar_secondary">#FF15C7FF</color>
+    <color name="calendar_red">#FFFF404D</color>
+    <color name="calendar_red2">#FFFFD4C9</color>
+
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="primary">#FF8C7851</color>
+    <color name="secondary">#FFEADDCF</color>
+    <color name="tertiary">#FFF25042</color>
+
+    <color name="gray">#FF9FA4AB</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="absolute_black">#FF000000</color>
+    <color name="absolute_white">#FFFFFFFF</color>
+
+    <color name="recycler_odd">#FFFBDD74</color>
+    <color name="recycler_even">#FFF9BC60</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="def_background">#FFF9F4EF</color>
+    <color name="def_foreground">#FF020826</color>
+    <color name="def_paragraph">#FF716040</color>
+    <color name="half_background">#6FFFFFFF</color>
+    <color name="half_foreground">#6F000000</color>
+    <color name="def_stroke">#FF020826</color>
+
+    <color name="def_button_background">#FF8C7851</color>
+    <color name="def_button_foreground">#FFFFFFFE</color>
+
+    <color name="def_card_background">#FFEADDCF</color>
+    <color name="def_card_foreground">#FF020826</color>
+    <color name="def_card_paragraph">#FF716040</color>
+
+    <color name="color_1F000000">#1F000000</color>
+    <color name="color_1A000000">#1A000000</color>
+    <color name="color_AA000000">#AA000000</color>
+    <color name="color_AAFFFFFF">#AAFFFFFF</color>
+
+    <color name="divider_gray">#FF7F848B</color>
+    <color name="disable_fore_gray">#FF777B7E</color>
+    <color name="disable_back_gray">#FFD9DDDC</color>
+
+    <color name="edi_state_none">@color/def_foreground</color>
+    <color name="edi_state_ok">#FFFFFD85</color>
+    <color name="edi_state_reject">#FFF5516D</color>
+    <color name="edi_state_pending">#FFC5C6A9</color>
+    <color name="edi_state_partial">#FFB293B4</color>
+    <color name="edi_back_state_none">@color/def_background</color>
+    <color name="edi_back_state_ok">#FF9BD770</color>
+    <color name="edi_back_state_reject">#FFF88B9D</color>
+    <color name="edi_back_state_pending">#FFCCB7CD</color>
+    <color name="edi_back_state_partial">#FFFFFC5C</color>
+
+    <color name="qna_state_none">@color/def_foreground</color>
+    <color name="qna_state_ok">#FFFFFD85</color>
+    <color name="qna_state_recep">#FF4DD17F</color>
+    <color name="qna_state_reply">#FF2D3047</color>
+    <color name="qna_back_state_none">@color/def_background</color>
+    <color name="qna_back_state_ok">#FF9BD770</color>
+    <color name="qna_back_state_recep">#FFC5C6A9</color>
+    <color name="qna_back_state_reply">#FFB293B4</color>
+</resources>
