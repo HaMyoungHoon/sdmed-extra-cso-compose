@@ -23,7 +23,6 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import sdmed.extra.cso.interfaces.command.IEventListener
-import sdmed.extra.cso.utils.view.FHexagonMaskView
 import java.io.File
 
 class FGlideSupport {
@@ -71,36 +70,6 @@ class FGlideSupport {
                 })
                 .into(imageView)
         }
-        fun imageLoad(context: Context, imageView: FHexagonMaskView, glideSrc: String?, hexagonMaskNullResourceId: Int?, onResourceReady: (Drawable) -> Unit) {
-            if (glideSrc.isNullOrEmpty()) {
-                try {
-                    hexagonMaskNullResourceId?.let {
-                        if (it == 0x00000000) {
-                            return@let
-                        }
-                        imageView.setImageDrawable(AppCompatResources.getDrawable(imageView.context, it))
-                    }
-                } catch (_: Exception) {
-                    imageView.setImageDrawable(null)
-                }
-                return
-            }
-            try {
-                Glide.with(context).load(glideSrc)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .optionalCenterCrop()
-                    .priority(Priority.IMMEDIATE)
-                    .format(DecodeFormat.PREFER_ARGB_8888)
-                    .into(object: CustomTarget<Drawable>() {
-                        override fun onLoadCleared(placeholder: Drawable?) {
-                        }
-                        override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
-                            onResourceReady(resource)
-                        }
-                    })
-            } catch (e: Exception) {
-            }
-        }
         fun imageResizedLoad(url: String, imageView: ImageView, width: Int?, height: Int?) {
             Glide.with(imageView.context).load(url)
                 .override(width ?: Target.SIZE_ORIGINAL, height ?: Target.SIZE_ORIGINAL)
@@ -145,19 +114,6 @@ class FGlideSupport {
                         onResourceReady(resource)
                     }
                 })
-        }
-        fun imageLoad(imageView: FHexagonMaskView, src: String?, width: Int?, height: Int?) {
-            if (src.isNullOrEmpty()) {
-                // do something
-                return
-            }
-
-            Glide.with(imageView.context).load(src)
-                .skipMemoryCache(true)
-                .override(width ?: Target.SIZE_ORIGINAL, height ?: Target.SIZE_ORIGINAL)
-                .optionalCenterCrop()
-                .priority(Priority.IMMEDIATE)
-                .into(imageView)
         }
     }
 }

@@ -13,6 +13,7 @@ object FConstants {
     const val NOTIFICATION_CHANNEL_ID = "notify_channel_sdmed_extra_cso"
     const val NOTIFICATION_CHANNEL_NAME = "NotifyChannelSDMedExtraCSO"
 
+    const val APP_COLOR = "appColor"
     const val AUTH_TOKEN = "token"
     const val TOKEN_REFRESHING = "tokenRefreshing"
     const val HOME_MENU_INDEX = "homeMenuIndex"

@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.app.Service
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
@@ -13,7 +12,6 @@ import android.media.AudioAttributes
 import android.media.AudioManager
 import android.os.Build
 import android.os.CombinedVibration
-import android.os.IBinder
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
@@ -25,22 +23,17 @@ import com.gun0912.tedpermission.coroutine.TedPermission
 import sdmed.extra.cso.MainActivity
 import sdmed.extra.cso.R
 import sdmed.extra.cso.bases.FConstants
+import sdmed.extra.cso.bases.FBaseService
 import sdmed.extra.cso.models.common.NotifyIndex
 import sdmed.extra.cso.utils.FCoroutineUtil
 import java.util.UUID
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class FNotificationService(private val context: Context): Service()  {
+class FNotificationService(applicationContext: Context): FBaseService(applicationContext)  {
     var notificationId = 0
         private set
     private val _progressNotifyBuilder: MutableList<ProgressNotifyModel> = mutableListOf()
     private val _notificationManager: NotificationManagerCompat by lazy {
-        NotificationManagerCompat.from(context)
-    }
-    override fun onBind(p0: Intent?): IBinder? {
-        return null
+        NotificationManagerCompat.from(diContext.value)
     }
 
     fun checkPermission(context: Context, fn: () -> Unit) {

@@ -12,8 +12,8 @@ data class QnAHeaderModel(
     var regDate: Timestamp = Timestamp(Date().time),
     var qnaState: QnAState = QnAState.None,
 ): FDataModelClass<QnAHeaderModel.ClickEvent>() {
-    val qnaColor: Int get() = qnaState.parseQnAColor()
-    val qnaBackColor: Int get() = qnaState.parseQnABackColor()
+//    val qnaColor: Int get() = qnaState.parseQnAColor()
+//    val qnaBackColor: Int get() = qnaState.parseQnABackColor()
 
     enum class ClickEvent(var index: Int) {
         THIS(0)

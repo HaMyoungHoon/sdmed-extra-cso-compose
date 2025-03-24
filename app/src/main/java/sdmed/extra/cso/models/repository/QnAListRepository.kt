@@ -7,16 +7,13 @@ import sdmed.extra.cso.models.retrofit.qna.QnAContentModel
 import sdmed.extra.cso.models.retrofit.qna.QnAHeaderModel
 import sdmed.extra.cso.models.retrofit.qna.QnAReplyModel
 import sdmed.extra.cso.utils.FExtensions
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class QnAListRepository @Inject constructor(private val service: IQnAListService): IQnAListRepository {
-    override suspend fun getList(page: Int, size: Int) = FExtensions.restTryT { service.getList(page, size) }
-    override suspend fun getLike(searchString: String, page: Int, size: Int) = FExtensions.restTryT { service.getLike(searchString, page, size) }
-    override suspend fun getHeaderData(thisPK: String) = FExtensions.restTryT { service.getHeaderData(thisPK) }
-    override suspend fun getContentData(thisPK: String) = FExtensions.restTryT { service.getContentData(thisPK) }
-    override suspend fun postData(title: String, qnaContentModel: QnAContentModel) = FExtensions.restTryT { service.postData(title, qnaContentModel) }
-    override suspend fun postReply(thisPK: String, qnaReplyModel: QnAReplyModel) = FExtensions.restTryT { service.postReply(thisPK, qnaReplyModel) }
-    override suspend fun putData(thisPK: String) = FExtensions.restTryT { service.putData(thisPK) }
+class QnAListRepository(private val _service: IQnAListService): IQnAListRepository {
+    override suspend fun getList(page: Int, size: Int) = FExtensions.restTryT { _service.getList(page, size) }
+    override suspend fun getLike(searchString: String, page: Int, size: Int) = FExtensions.restTryT { _service.getLike(searchString, page, size) }
+    override suspend fun getHeaderData(thisPK: String) = FExtensions.restTryT { _service.getHeaderData(thisPK) }
+    override suspend fun getContentData(thisPK: String) = FExtensions.restTryT { _service.getContentData(thisPK) }
+    override suspend fun postData(title: String, qnaContentModel: QnAContentModel) = FExtensions.restTryT { _service.postData(title, qnaContentModel) }
+    override suspend fun postReply(thisPK: String, qnaReplyModel: QnAReplyModel) = FExtensions.restTryT { _service.postReply(thisPK, qnaReplyModel) }
+    override suspend fun putData(thisPK: String) = FExtensions.restTryT { _service.putData(thisPK) }
 }

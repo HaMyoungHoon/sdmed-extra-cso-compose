@@ -15,13 +15,20 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
-import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.kodein.di.DI
+import org.kodein.di.DIAware
+import org.kodein.di.android.x.androidXModule
+import org.kodein.di.bindProvider
+import org.kodein.di.bindSingleton
 import sdmed.extra.cso.MainActivity
-import sdmed.extra.cso.models.services.ForcedTerminationService
+import sdmed.extra.cso.interfaces.repository.*
+import sdmed.extra.cso.interfaces.services.*
+import sdmed.extra.cso.models.repository.*
+import sdmed.extra.cso.models.services.*
+import sdmed.extra.cso.views.theme.FThemeUtil
 
-@HiltAndroidApp
-class FMainApplication: MultiDexApplication(), LifecycleEventObserver {
+class FMainApplication: MultiDexApplication(), LifecycleEventObserver, DIAware {
     companion object {
         var isForeground = MutableStateFlow(false)
         private set
@@ -36,6 +43,29 @@ class FMainApplication: MultiDexApplication(), LifecycleEventObserver {
             return _ins!!
         }
     }
+
+    override val di = DI.direct {
+        import(androidXModule(this@FMainApplication))
+        bindProvider<FUIStateService>(FUIStateService::class) { FUIStateService() }
+        bindSingleton<FNotificationService>(FNotificationService::class) { FNotificationService(applicationContext) }
+        bindSingleton<FMqttService>(FMqttService::class) { FMqttService(applicationContext) }
+        bindSingleton<FBackgroundEDIRequestUpload>(FBackgroundEDIRequestUpload::class) { FBackgroundEDIRequestUpload(applicationContext) }
+        bindSingleton<FBackgroundEDIRequestNewUploadService>(FBackgroundEDIRequestNewUploadService::class) { FBackgroundEDIRequestNewUploadService(applicationContext) }
+        bindSingleton<FBackgroundEDIFileUpload>(FBackgroundEDIFileUpload::class) { FBackgroundEDIFileUpload(applicationContext) }
+        bindSingleton<FBackgroundQnAUpload>(FBackgroundQnAUpload::class) { FBackgroundQnAUpload(applicationContext) }
+        bindSingleton<FBackgroundUserFileUploadService>(FBackgroundUserFileUploadService::class) { FBackgroundUserFileUploadService(applicationContext) }
+
+        bindSingleton<IAzureBlobRepository>(IAzureBlobRepository::class) { AzureBlobRepository(RetrofitService.create(IAzureBlobService::class.java)) }
+        bindSingleton<ICommonRepository>(ICommonRepository::class) { CommonRepository(RetrofitService.create(ICommonService::class.java)) }
+        bindSingleton<IMqttRepository>(IMqttRepository::class) { MqttRepository(RetrofitService.create(IMqttService::class.java)) }
+        bindSingleton<IEDIListRepository>(IEDIListRepository::class) { EDIListRepository(RetrofitService.create(IEDIListService::class.java)) }
+        bindSingleton<IEDIDueDateRepository>(IEDIDueDateRepository::class) { EDIDueDateRepository(RetrofitService.create(IEDIDueDateService::class.java)) }
+        bindSingleton<IEDIRequestRepository>(IEDIRequestRepository::class) { EDIRequestRepository(RetrofitService.create(IEDIRequestService::class.java)) }
+        bindSingleton<IMedicinePriceListRepository>(IMedicinePriceListRepository::class) { MedicinePriceListRepository(RetrofitService.create(IMedicinePriceListService::class.java)) }
+        bindSingleton<IQnAListRepository>(IQnAListRepository::class) { QnAListRepository(RetrofitService.create(IQnAListService::class.java)) }
+        bindSingleton<IMyInfoRepository>(IMyInfoRepository::class) { MyInfoRepository(RetrofitService.create(IMyInfoService::class.java)) }
+        bindSingleton<IHospitalTempRepository>(IHospitalTempRepository::class) { HospitalTempRepository(RetrofitService.create(IHospitalTempService::class.java)) }
+    }.di
 
     fun isDebug() = 0 != applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE
     fun getVersionCode(flags: Int = 0): Long {
@@ -84,7 +114,7 @@ class FMainApplication: MultiDexApplication(), LifecycleEventObserver {
         super.onCreate()
         _ins = this
         registerActivity()
-//        FThemeUtil.applyTheme()
+        FThemeUtil.applyTheme()
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         try {
             startService(Intent(this, ForcedTerminationService::class.java))

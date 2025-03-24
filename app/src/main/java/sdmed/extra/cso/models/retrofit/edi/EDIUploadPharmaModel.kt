@@ -38,8 +38,8 @@ data class EDIUploadPharmaModel(
         .stateIn(CoroutineScope(Dispatchers.Main + SupervisorJob()), SharingStarted.Lazily, "${currentPosition.value}/${fileList.size}")
 
     fun getYearMonth() = "${year}-${month}"
-    fun getEdiColor() = ediState.parseEDIColor()
-    fun getEdiBackColor() = ediState.parseEDIBackColor()
+//    fun getEdiColor() = ediState.parseEDIColor()
+//    fun getEdiBackColor() = ediState.parseEDIBackColor()
     enum class ClickEvent(var index: Int) {
         OPEN(0),
         ADD(1),

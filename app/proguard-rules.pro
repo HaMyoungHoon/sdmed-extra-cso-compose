@@ -37,7 +37,8 @@
 -keep class * extends com.google.gson.reflect.TypeToken
 -keep public class * implements java.lang.reflect.Type
 -keep class * extends com.google.gson.TypeAdapter
-
+-keep, allowobfuscation, allowoptimization class org.kodein.di.TypeReference
+-keep, allowobfuscation, allowoptimization class * extends org.kodein.di.TypeReference
 -keep, allowobfuscation, allowshrinking interface retrofit2.Call
 -keep, allowobfuscation, allowshrinking class retrofit2.Response
 -keep, allowobfuscation, allowshrinking class kotlin.coroutines.Continuation

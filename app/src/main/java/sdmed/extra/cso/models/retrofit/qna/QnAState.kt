@@ -1,6 +1,8 @@
 package sdmed.extra.cso.models.retrofit.qna
 
-import sdmed.extra.cso.R
+import androidx.compose.runtime.Composable
+import sdmed.extra.cso.views.theme.FThemeUtil
+import sdmed.extra.cso.views.theme.LightColor
 
 enum class QnAState(var index: Int, var desc: String) {
     None(0, "미지정"),
@@ -11,16 +13,18 @@ enum class QnAState(var index: Int, var desc: String) {
     fun isEditable(): Boolean {
         return this == Reply
     }
+    @Composable
     fun parseQnAColor() = when (this) {
-        None -> R.color.qna_state_none
-        OK -> R.color.qna_state_ok
-        Recep -> R.color.qna_state_recep
-        Reply -> R.color.qna_state_reply
+        None -> FThemeUtil.baseColor().qnaStateNone
+        OK -> FThemeUtil.baseColor().qnaStateOk
+        Recep -> FThemeUtil.baseColor().qnaStateRecep
+        Reply -> FThemeUtil.baseColor().qnaStateReply
     }
+    @Composable
     fun parseQnABackColor() = when (this) {
-        None -> R.color.qna_back_state_none
-        OK -> R.color.qna_back_state_ok
-        Recep -> R.color.qna_back_state_recep
-        Reply -> R.color.qna_back_state_reply
+        None -> FThemeUtil.baseColor().qnaBackStateNone
+        OK -> FThemeUtil.baseColor().qnaBackStateOk
+        Recep -> FThemeUtil.baseColor().qnaBackStateRecep
+        Reply -> FThemeUtil.baseColor().qnaBackStateReply
     }
 }

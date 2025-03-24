@@ -29,8 +29,8 @@ data class EDIUploadModel(
     val isTransfer get() = ediType == EDIType.TRANSFER
     fun getYearMonth() = "${year}-$month"
     fun getRegDateString() = FDateTime().setThis(regDate).toString("yyyy-MM")
-    fun getEdiColor() = ediState.parseEDIColor()
-    fun getEdiBackColor() = ediState.parseEDIBackColor()
+//    fun getEdiColor() = ediState.parseEDIColor()
+//    fun getEdiBackColor() = ediState.parseEDIBackColor()
     enum class ClickEvent(var index: Int) {
         OPEN(0)
     }

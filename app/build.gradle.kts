@@ -8,17 +8,30 @@ plugins {
 
 android {
     namespace = "sdmed.extra.cso"
-    compileSdk = 36
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "sdmed.extra.cso"
         minSdk = 28
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 1
-        versionName = "1.0.0"
+        versionName = "2.0.0"
         val googleApiKey: String by project
         resValue("string", "googleApiKey", googleApiKey)
         manifestPlaceholders.put("googleApiKey", googleApiKey)
+    }
+    sourceSets {
+        getByName("main") {
+            res.srcDirs(
+                "src/main/res",
+
+                "src/main/res/drawables",
+                "src/main/res/drawables/shape",
+                "src/main/res/drawables/selector",
+                "src/main/res/drawables/vector",
+                "src/main/res/drawables/image"
+            )
+        }
     }
 
     signingConfigs {
@@ -84,6 +97,11 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.compose)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.material.window)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.compose.viewmodel)
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.datastore.preferences)
@@ -92,13 +110,13 @@ dependencies {
     implementation(libs.androidx.multidex)
     implementation(libs.androidx.security.cryptoKtx)
 
-    implementation(libs.google.dagger)
-    kapt(libs.google.dagger.compiler)
     implementation(libs.google.location)
     implementation(libs.google.maps)
     implementation(libs.google.map.util)
     implementation(libs.google.play)
-    implementation(libs.google.material)
+
+    implementation(libs.kodein.core)
+    implementation(libs.kodein.framework)
 
     implementation(libs.glide)
     implementation(libs.glide.okhttp)

@@ -1,11 +1,10 @@
 package sdmed.extra.cso.models.services
 
-import android.app.Service
 import android.content.Context
-import android.content.Intent
-import android.os.IBinder
 import org.greenrobot.eventbus.EventBus
+import org.kodein.di.instance
 import sdmed.extra.cso.R
+import sdmed.extra.cso.bases.FBaseService
 import sdmed.extra.cso.interfaces.repository.IAzureBlobRepository
 import sdmed.extra.cso.interfaces.repository.ICommonRepository
 import sdmed.extra.cso.interfaces.repository.IEDIListRepository
@@ -19,24 +18,17 @@ import sdmed.extra.cso.utils.FCoroutineUtil
 import sdmed.extra.cso.utils.FExtensions
 import sdmed.extra.cso.utils.FImageUtils
 import java.util.UUID
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class FBackgroundEDIFileUpload(private val context: Context): Service()  {
-    @Inject private lateinit var mqttService: FMqttService
-    @Inject private lateinit var notificationService: FNotificationService
-    @Inject private lateinit var commonRepository: ICommonRepository
-    @Inject private lateinit var azureBlobRepository: IAzureBlobRepository
-    @Inject private lateinit var ediListRepository: IEDIListRepository
-    private val sasKeyQ = QueueLockModel<EDISASKeyQueueModel>("sasQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")}")
-    private val azureQ = QueueLockModel<EDIAzureQueueModel>("azureQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")}")
-    private val resultQ = QueueLockModel<EDIFileResultQueueModel>("resultQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")}")
+class FBackgroundEDIFileUpload(applicationContext: Context): FBaseService(applicationContext)  {
+    val mqttService: FMqttService by di.instance(FMqttService::class)
+    val notificationService: FNotificationService by di.instance(FNotificationService::class)
+    val commonRepository: ICommonRepository by di.instance(ICommonRepository::class)
+    val azureBlobRepository: IAzureBlobRepository by di.instance(IAzureBlobRepository::class)
+    val ediListRepository: IEDIListRepository by di.instance(IEDIListRepository::class)
+    private val sasKeyQ = QueueLockModel<EDISASKeyQueueModel>("sasQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")} ${UUID.randomUUID()}")
+    private val azureQ = QueueLockModel<EDIAzureQueueModel>("azureQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")} ${UUID.randomUUID()}")
+    private val resultQ = QueueLockModel<EDIFileResultQueueModel>("resultQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")} ${UUID.randomUUID()}")
     private var resultQRun = false
-
-    override fun onBind(p0: Intent?): IBinder? {
-        return null
-    }
     fun sasKeyEnqueue(data: EDISASKeyQueueModel) = sasKeyQ.enqueue(data, true, { sasKeyThreadStart() })
     private fun azureEnqueue(data: EDIAzureQueueModel) = azureQ.enqueue(data, true, { azureThreadStart() })
     private fun resultEnqueue(data: EDIFileResultQueueModel) {

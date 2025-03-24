@@ -31,7 +31,7 @@ class FCameraUtil(var context: Context, private var cameraResult: ActivityResult
                     .check()
 
                 if (!permissionResult.isGranted) {
-                    FUIStateService().toast(context, context.getString(R.string.permit_require))
+                    FUIStateService().toast(context.getString(R.string.permit_require))
                 } else {
                     val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                     if (takePictureIntent.resolveActivity(context.packageManager) != null) {

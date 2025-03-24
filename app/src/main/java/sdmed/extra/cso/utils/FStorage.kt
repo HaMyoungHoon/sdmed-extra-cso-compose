@@ -27,6 +27,8 @@ object FStorage {
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
 
+    fun getAppColor(context: Context) = getString(context, FConstants.APP_COLOR)
+    fun setAppColor(context: Context, data: String?) = data?.let { putString(context, FConstants.APP_COLOR, it) }
     fun getAuthToken(context: Context) = getString(context, FConstants.AUTH_TOKEN)
     fun setAuthToken(context: Context, data: String?) = data?.let { putString(context, FConstants.AUTH_TOKEN, it) }
     fun removeAuthToken(context: Context) = removeData(context, FConstants.AUTH_TOKEN)

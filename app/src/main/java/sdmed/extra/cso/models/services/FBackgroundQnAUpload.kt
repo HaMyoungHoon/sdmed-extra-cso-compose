@@ -5,7 +5,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import org.greenrobot.eventbus.EventBus
+import org.kodein.di.DI
+import org.kodein.di.DIAware
+import org.kodein.di.DIContext
+import org.kodein.di.diContext
+import org.kodein.di.instance
 import sdmed.extra.cso.R
+import sdmed.extra.cso.bases.FBaseService
+import sdmed.extra.cso.bases.FMainApplication
 import sdmed.extra.cso.interfaces.repository.IAzureBlobRepository
 import sdmed.extra.cso.interfaces.repository.ICommonRepository
 import sdmed.extra.cso.interfaces.repository.IQnAListRepository
@@ -19,27 +26,20 @@ import sdmed.extra.cso.utils.FCoroutineUtil
 import sdmed.extra.cso.utils.FExtensions
 import sdmed.extra.cso.utils.FImageUtils
 import java.util.UUID
-import javax.inject.Inject
-import javax.inject.Singleton
-import kotlin.getValue
 
-@Singleton
-class FBackgroundQnAUpload(private val context: Context): Service() {
-    @Inject private lateinit var mqttService: FMqttService
-    @Inject private lateinit var notificationService: FNotificationService
-    @Inject private lateinit var commonRepository: ICommonRepository
-    @Inject private lateinit var azureBlobRepository: IAzureBlobRepository
-    @Inject private lateinit var qnaListRepository: IQnAListRepository
+class FBackgroundQnAUpload(applicationContext: Context): FBaseService(applicationContext) {
+    val mqttService: FMqttService by di.instance(FMqttService::class)
+    val notificationService: FNotificationService by di.instance(FNotificationService::class)
+    val commonRepository: ICommonRepository by di.instance(ICommonRepository::class)
+    val azureBlobRepository: IAzureBlobRepository by di.instance(IAzureBlobRepository::class)
+    val qnaListRepository: IQnAListRepository by di.instance(IQnAListRepository::class)
 
-    private val sasKeyQ = QueueLockModel<QnASASKeyQueueModel>("sasQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")}")
-    private val azureQ = QueueLockModel<QnAAzureQueueModel>("azureQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")}")
-    private val resultQ = QueueLockModel<QnAResultQueueModel>("resultQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")}")
+    private val sasKeyQ = QueueLockModel<QnASASKeyQueueModel>("sasQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")} ${UUID.randomUUID()}")
+    private val azureQ = QueueLockModel<QnAAzureQueueModel>("azureQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")} ${UUID.randomUUID()}")
+    private val resultQ = QueueLockModel<QnAResultQueueModel>("resultQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")} ${UUID.randomUUID()}")
 
     private var resultQRun = false
 
-    override fun onBind(p0: Intent?): IBinder? {
-        return null
-    }
     fun sasKeyEnqueue(data: QnASASKeyQueueModel) = sasKeyQ.enqueue(data, true, { sasKeyThreadStart() })
     private fun azureEnqueue(data: QnAAzureQueueModel) = azureQ.enqueue(data, true, { azureThreadStart() })
     private fun resultEnqueue(data: QnAResultQueueModel) {

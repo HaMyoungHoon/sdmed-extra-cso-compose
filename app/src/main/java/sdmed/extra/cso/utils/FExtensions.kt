@@ -3,10 +3,8 @@ package sdmed.extra.cso.utils
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.util.TypedValue
 import androidx.core.app.ActivityCompat
-import androidx.core.net.toFile
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import sdmed.extra.cso.bases.FConstants
@@ -16,7 +14,6 @@ import sdmed.extra.cso.interfaces.IRestResult
 import sdmed.extra.cso.models.DataExceptionHandler
 import sdmed.extra.cso.models.RestResult
 import sdmed.extra.cso.models.RestResultT
-import sdmed.extra.cso.utils.FImageUtils.isLocalFile
 import sdmed.extra.cso.views.landing.LandingActivity
 import java.io.File
 import java.text.SimpleDateFormat

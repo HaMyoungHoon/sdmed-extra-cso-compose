@@ -6,20 +6,22 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import dagger.hilt.android.EntryPointAccessors
+import org.kodein.di.DIAware
+import org.kodein.di.instance
 import sdmed.extra.cso.R
-import sdmed.extra.cso.interfaces.services.INotificationServiceEntryPoint
 import sdmed.extra.cso.models.common.NotifyIndex
 import sdmed.extra.cso.models.services.FNotificationService
 import kotlin.apply
+import kotlin.getValue
 import kotlin.jvm.java
 
 class FBroadcastReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
+        val di = (context.applicationContext as? DIAware)?.di ?: return
         val title = intent?.getStringExtra("title") ?: context.getString(R.string.app_name)
         val content = intent?.getStringExtra("content") ?: ""
         val notifyIndex = NotifyIndex.parseIndex(intent?.getIntExtra("alarmType", 0))
-        val fNotificationService = EntryPointAccessors.fromApplication(context.applicationContext, INotificationServiceEntryPoint::class.java).getNotificationService()
+        val fNotificationService: FNotificationService by di.instance(FNotificationService::class)
         fNotificationService.sendNotify(context, notifyIndex, title, content, FNotificationService.NotifyType.DEFAULT)
     }
 
