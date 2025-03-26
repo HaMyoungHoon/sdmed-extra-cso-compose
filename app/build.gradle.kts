@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
 }
@@ -105,6 +104,7 @@ dependencies {
     implementation(libs.androidx.compose.viewmodel)
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.exifinterface)
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.multidex)
@@ -125,10 +125,7 @@ dependencies {
     implementation(libs.kodein.core)
     implementation(libs.kodein.framework)
 
-    implementation(libs.glide)
-    implementation(libs.glide.okhttp)
-    kapt(libs.glide.compiler)
-    implementation(libs.webpdecoder)
+    implementation(libs.coil)
 
     implementation(libs.fasterxml.jacson)
     implementation(libs.hivemq.client)
