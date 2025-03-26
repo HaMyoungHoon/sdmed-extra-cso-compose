@@ -13,7 +13,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class AsyncRelayCommand(private val _execute: suspend CoroutineScope.(params: Any?) -> Unit, private var _canExecute: ((params: Any?) -> Boolean)? = null): ICommand {
+class AsyncRelayCommand(private val _execute: suspend CoroutineScope.(params: Any?) -> Unit = { }, private var _canExecute: ((params: Any?) -> Boolean)? = null, private var _scope: CoroutineScope? = null): ICommand {
     private var _lastClickedTime: Long = 0L
     private val _isEnabled = AtomicBoolean(true)
     override var clickIntervalMillis = 250
@@ -26,21 +26,23 @@ class AsyncRelayCommand(private val _execute: suspend CoroutineScope.(params: An
         if (!isSafe()) {
             return
         }
-        if (_canExecute?.invoke(params) != false && getEnable()) {
-            setEnable(false)
-            CoroutineScope(Dispatchers.Main).launch {
-                val context = if (this.coroutineContext.isActive) Dispatchers.Main else Dispatchers.IO
-                withContext(context) {
-                    suspendCoroutine<Unit> { continuation ->
-                        launch {
-                            try {
-                                _execute(params)
-                                asyncEvent?.onEvent(params)
-                                continuation.resume(setEnable(true))
-                            } catch (e: Exception) {
-                                continuation.resumeWithException(e)
-                                setEnable(true)
-                            }
+        if (_canExecute?.invoke(params) != true && !getEnable()) {
+            return
+        }
+        setEnable(false)
+        val scope = _scope ?: CoroutineScope(Dispatchers.Main)
+        scope.launch {
+            val context = if (this.coroutineContext.isActive) Dispatchers.Main else Dispatchers.IO
+            withContext(context) {
+                suspendCoroutine { continuation ->
+                    launch {
+                        try {
+                            _execute(params)
+                            asyncEvent?.onEvent(params)
+                            continuation.resume(setEnable(true))
+                        } catch (e: Exception) {
+                            continuation.resumeWithException(e)
+                            setEnable(true)
                         }
                     }
                 }

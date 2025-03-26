@@ -136,8 +136,8 @@ class FNotificationService(applicationContext: Context): FBaseService(applicatio
             return
         }
         val intent = Intent(context, indexToActivity(notifyIndex)).apply {
-            putExtra("notifyIndex", notifyIndex.index)
-            putExtra("thisPK", thisPK)
+            putExtra(FConstants.NOTIFY_INDEX, notifyIndex.index)
+            putExtra(FConstants.NOTIFY_PK, thisPK)
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             action = UUID.randomUUID().toString()
         }

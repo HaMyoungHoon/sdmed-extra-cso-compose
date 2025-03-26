@@ -60,7 +60,10 @@
         </provider>
         <receiver android:name=".bases.FBroadcastReceiver" android:exported="true" />
         <service android:name=".models.services.ForcedTerminationService" android:stopWithTask="false" />
-        <activity android:name=".views.landing.LandingActivity" android:exported="true" android:configChanges="screenSize|smallestScreenSize|screenLayout">
+        <activity android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Sdmedextracso"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -72,7 +75,6 @@
                 <data android:host="${applicationId}" android:scheme="http" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" android:configChanges="screenSize|smallestScreenSize|screenLayout" />
     </application>
 
 </manifest>

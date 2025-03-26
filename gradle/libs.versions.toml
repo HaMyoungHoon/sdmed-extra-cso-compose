@@ -1,6 +1,7 @@
 [versions]
 agp = "8.9.0"
-kotlin = "2.1.10"
+kotlin = "2.1.20"
+ksp = "2.1.10-1.0.30"
 
 androidx-appcompat = "1.7.0"
 androidx-compose = "1.10.1"
@@ -14,7 +15,10 @@ androidx-datastore = "1.1.3"
 androidx-lifecycle = "2.8.7"
 androidx-lifecycleRuntimeKtx = "2.8.7"
 androidx-multidex = "2.0.1"
+androidx-navigation = "2.8.9"
+androidx-window = "1.3.0"
 
+google-accompanist = "0.37.2"
 google-location = "21.3.0"
 google-maps = "2.2.0"
 google-map-util = "3.11.2"
@@ -34,9 +38,9 @@ squareup-retrofit = "2.11.0"
 
 jetbrains-coroutines-core = "1.10.1"
 jetbrains-coroutines-android = "1.10.1"
-jetbrains-kotlin-std = "2.1.10"
+jetbrains-serialization-json = "1.8.0"
+jetbrains-kotlin-std = "2.1.20"
 
-greenrobot-eventbus = "3.3.1"
 tedpermission = "3.4.2"
 
 [libraries]
@@ -55,7 +59,14 @@ androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycleRuntimeKtx" }
 androidx-multidex = { group = "androidx.multidex", name = "multidex", version.ref = "androidx-multidex" }
 androidx-security-cryptoKtx = { group = "androidx.security", name = "security-crypto-ktx", version.ref = "androidx-cryptoKtx"}
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation" }
+androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "androidx-navigation" }
+androidx-navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "androidx-navigation" }
+androidx-navigation-suite = { module = "androidx.compose.material3:material3-adaptive-navigation-suite" }
+androidx-window = { group = "androidx.window", name = "window", version.ref = "androidx-window" }
 
+google-accompanist-adaptive = { group = "com.google.accompanist", name = "accompanist-adaptive", version.ref = "google-accompanist" }
+google-accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "google-accompanist" }
 google-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "google-location" }
 google-maps = { group = "com.google.maps", name = "google-maps-services", version.ref = "google-maps" }
 google-map-util = { group = "com.google.maps.android", name = "android-maps-utils", version.ref = "google-map-util" }
@@ -82,9 +93,9 @@ squareup-retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-g
 
 jetbrains-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "jetbrains-coroutines-core" }
 jetbrains-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "jetbrains-coroutines-android" }
+jetbrains-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "jetbrains-serialization-json"}
 jetbrains-kotlin-std = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "jetbrains-kotlin-std" }
 
-greenrobot-eventbus = { group = "org.greenrobot", name = "eventbus", version.ref = "greenrobot-eventbus" }
 tedpermission = { group = "io.github.ParkSangGwon", name = "tedpermission-coroutine", version.ref = "tedpermission" }
 
 [plugins]
@@ -93,4 +104,6 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-kapt = { id = "kotlin-kapt" }
 kotlin-parcelize = { id = "kotlin-parcelize" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

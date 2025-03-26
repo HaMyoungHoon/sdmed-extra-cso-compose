@@ -1,5 +1,7 @@
 package sdmed.extra.cso.models.retrofit.edi
 
+import androidx.compose.runtime.Composable
+import kotlinx.coroutines.flow.MutableStateFlow
 import sdmed.extra.cso.bases.FDataModelClass
 import sdmed.extra.cso.fDate.FDateTime
 
@@ -22,6 +24,7 @@ data class EDIUploadModel(
     var fileList: MutableList<EDIUploadFileModel> = arrayListOf(),
     var responseList: MutableList<EDIUploadResponseModel> = arrayListOf()
 ): FDataModelClass<EDIUploadModel.ClickEvent>() {
+    val isSelected = MutableStateFlow(false)
     val orgViewName get() = if (ediType == EDIType.DEFAULT) orgName else tempOrgName
     val tempOrgString get() = "(${tempOrgName})"
     val isDefault get() = ediType == EDIType.DEFAULT
@@ -29,8 +32,10 @@ data class EDIUploadModel(
     val isTransfer get() = ediType == EDIType.TRANSFER
     fun getYearMonth() = "${year}-$month"
     fun getRegDateString() = FDateTime().setThis(regDate).toString("yyyy-MM")
-//    fun getEdiColor() = ediState.parseEDIColor()
-//    fun getEdiBackColor() = ediState.parseEDIBackColor()
+    @Composable
+    fun getEdiColor() = ediState.parseEDIColor()
+    @Composable
+    fun getEdiBackColor() = ediState.parseEDIBackColor()
     enum class ClickEvent(var index: Int) {
         OPEN(0)
     }

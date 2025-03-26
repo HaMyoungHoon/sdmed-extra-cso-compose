@@ -21,9 +21,11 @@
     <string name="login_btn_desc">signIn</string>
     <string name="login_title_desc">CSO Login</string>
 
+    <string name="landing_desc">Landing</string>
+    <string name="menu_desc">Menu</string>
     <string name="menu_edi_desc">EDI</string>
     <string name="menu_price_desc">Price</string>
-    <string name="menu_home_desc">Home</string>
+    <string name="menu_home_desc">Upload</string>
     <string name="menu_qna_desc">QnA</string>
     <string name="menu_my_desc">My</string>
     <string name="edi_list_desc">edi list</string>

@@ -13,6 +13,7 @@ import sdmed.extra.cso.models.common.NotifyIndex
 import sdmed.extra.cso.models.mqtt.MqttConnectModel
 import sdmed.extra.cso.models.mqtt.MqttContentModel
 import sdmed.extra.cso.models.mqtt.MqttContentType
+import sdmed.extra.cso.models.retrofit.FRetrofitVariable
 import sdmed.extra.cso.models.services.FNotificationService.NotifyType
 import sdmed.extra.cso.utils.FAmhohwa
 import sdmed.extra.cso.utils.FExtensions
@@ -22,6 +23,9 @@ class FMqttService(applicationContext: Context): FBaseService(applicationContext
     val mqttRepository: IMqttRepository by di.instance(IMqttRepository::class)
     var client: Mqtt5Client? = null
     suspend fun mqttInit() {
+        if (FRetrofitVariable.token.value == null) {
+            return
+        }
         val ret = mqttRepository.getSubscribe()
         if (ret.result != true) {
             return

@@ -1,44 +1,82 @@
 package sdmed.extra.cso.interfaces.theme
 
+import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
 
 interface IBaseColor {
-    val calendarPurple: Color
-    val calendarSecondary: Color
-    val calendarRed: Color
-    val calendarRed2: Color
-    val teal200: Color
-
     val primary: Color
+    val onPrimary: Color
+    val primaryContainer: Color
+    val onPrimaryContainer: Color
+    val inversePrimary: Color
     val secondary: Color
+    val onSecondary: Color
+    val secondaryContainer: Color
+    val onSecondaryContainer: Color
     val tertiary: Color
+    val onTertiary: Color
+    val tertiaryContainer: Color
+    val onTertiaryContainer: Color
+    val quaternary: Color
+    val onQuaternary: Color
+    val quaternaryContainer: Color
+    val onQuaternaryContainer: Color
+    val quinary: Color
+    val onQuinary: Color
+    val quinaryContainer: Color
+    val onQuinaryContainer: Color
+    val senary: Color
+    val onSenary: Color
+    val senaryContainer: Color
+    val onSenaryContainer: Color
+    val septenary: Color
+    val onSeptenary: Color
+    val septenaryContainer: Color
+    val onSeptenaryContainer: Color
+    val octonary: Color
+    val onOctonary: Color
+    val octonaryContainer: Color
+    val onOctonaryContainer: Color
+    val nonary: Color
+    val onNonary: Color
+    val nonaryContainer: Color
+    val onNonaryContainer: Color
+    val denary: Color
+    val onDenary: Color
+    val denaryContainer: Color
+    val onDenaryContainer: Color
+
+    val foreground: Color
+    val paragraph: Color
+    val background: Color
+    val onBackground: Color
+    val surface: Color
+    val onSurface: Color
+    val surfaceVariant: Color
+    val onSurfaceVariant: Color
+    val surfaceTint: Color
+    val inverseSurface: Color
+    val inverseOnSurface: Color
+    val error: Color
+    val onError: Color
+    val errorContainer: Color
+    val onErrorContainer: Color
+    val outline: Color
+    val outlineVariant: Color
+    val scrim: Color
+
+    val buttonBackground: Color
+    val buttonForeground: Color
+    val cardBackground: Color
+    val cardForeground: Color
+    val cardParagraph: Color
+
     val gray: Color
     val black: Color
     val white: Color
-
     val absoluteBlack: Color
     val absoluteWhite: Color
     val transparent: Color
-    val defBackground: Color
-    val defForeground: Color
-    val defParagraph: Color
-    val halfBackground: Color
-    val halfForeground: Color
-    val defStroke: Color
-    val defButtonBackground: Color
-    val defButtonForeground: Color
-    val defCardBackground: Color
-    val defCardForeground: Color
-    val defCardParagraph: Color
-
-    val color1F000000: Color
-    val color1A000000: Color
-    val colorAA000000: Color
-    val colorAAFFFFFF: Color
-
-    val recyclerOdd: Color
-    val recyclerEven: Color
-
     val dividerGray: Color
     val disableForeGray: Color
     val disableBackGray: Color
@@ -62,4 +100,6 @@ interface IBaseColor {
     val qnaBackStateOk: Color
     val qnaBackStateRecep: Color
     val qnaBackStateReply: Color
+
+    fun materialTheme(): ColorScheme
 }

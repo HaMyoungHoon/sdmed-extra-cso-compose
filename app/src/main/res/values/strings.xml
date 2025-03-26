@@ -21,9 +21,11 @@
     <string name="login_btn_desc">로그인</string>
     <string name="login_title_desc">CSO Login</string>
 
+    <string name="landing_desc">초기화면</string>
+    <string name="menu_desc">메뉴</string>
     <string name="menu_edi_desc">EDI</string>
     <string name="menu_price_desc">약가</string>
-    <string name="menu_home_desc">홈</string>
+    <string name="menu_home_desc">업로드</string>
     <string name="menu_qna_desc">QnA</string>
     <string name="menu_my_desc">내 정보</string>
     <string name="edi_list_desc">EDI 목록</string>

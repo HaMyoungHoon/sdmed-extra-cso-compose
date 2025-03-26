@@ -4,13 +4,14 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "sdmed.extra.cso"
     compileSdk = 35
 
     defaultConfig {
+        namespace = "sdmed.extra.cso"
         applicationId = "sdmed.extra.cso"
         minSdk = 28
         targetSdk = 35
@@ -62,13 +63,15 @@ android {
     flavorDimensions += "version"
     productFlavors {
         create("kr") {
+            namespace = "sdmed.extra.cso"
             dimension = "version"
-            applicationId = "kr.sdmed.extra.cso"
+//            applicationIdSuffix = ".kr"
             resValue("string", "dynamic_app_name", "@string/app_name")
         }
         create("dev") {
+            namespace = "sdmed.extra.cso"
             dimension = "version"
-            applicationId = "kr.sdmed.extra.cso.dev"
+//            applicationIdSuffix = ".dev"
             resValue("string", "dynamic_app_name", "@string/app_name_dev")
         }
     }
@@ -78,9 +81,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "21"
-    }
-    dataBinding {
-        enable = true
     }
     buildFeatures {
         compose = true
@@ -109,7 +109,14 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.multidex)
     implementation(libs.androidx.security.cryptoKtx)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
+    implementation(libs.androidx.navigation.suite)
+    implementation(libs.androidx.window)
 
+    implementation(libs.google.accompanist.adaptive)
+    implementation(libs.google.accompanist.permissions)
     implementation(libs.google.location)
     implementation(libs.google.maps)
     implementation(libs.google.map.util)
@@ -137,8 +144,8 @@ dependencies {
 
     implementation(libs.jetbrains.coroutines.core)
     implementation(libs.jetbrains.coroutines.android)
+    implementation(libs.jetbrains.serialization.json)
     implementation(libs.jetbrains.kotlin.std)
 
-    implementation(libs.greenrobot.eventbus)
     implementation(libs.tedpermission)
 }

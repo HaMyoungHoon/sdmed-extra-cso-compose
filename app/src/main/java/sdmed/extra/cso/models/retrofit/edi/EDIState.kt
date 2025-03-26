@@ -1,6 +1,7 @@
 package sdmed.extra.cso.models.retrofit.edi
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import sdmed.extra.cso.views.theme.FThemeUtil
 
 enum class EDIState(var index: Int, var desc: String) {
@@ -14,20 +15,26 @@ enum class EDIState(var index: Int, var desc: String) {
         return !(this == OK || this == Reject)
     }
     @Composable
-    fun parseEDIColor() = when (this) {
-        None -> FThemeUtil.baseColor().ediStateNone
-        OK -> FThemeUtil.baseColor().ediStateOk
-        Reject -> FThemeUtil.baseColor().ediStateReject
-        Pending -> FThemeUtil.baseColor().ediStatePending
-        Partial -> FThemeUtil.baseColor().ediStatePartial
+    fun parseEDIColor(): Color {
+        val color = FThemeUtil.safeColor()
+        return when (this) {
+            None -> color.ediStateNone
+            OK -> color.ediStateOk
+            Reject -> color.ediStateReject
+            Pending -> color.ediStatePending
+            Partial -> color.ediStatePartial
+        }
     }
     @Composable
-    fun parseEDIBackColor() = when (this) {
-        None -> FThemeUtil.baseColor().ediBackStateNone
-        OK -> FThemeUtil.baseColor().ediBackStateOk
-        Reject -> FThemeUtil.baseColor().ediBackStateReject
-        Pending -> FThemeUtil.baseColor().ediBackStatePending
-        Partial -> FThemeUtil.baseColor().ediBackStatePartial
+    fun parseEDIBackColor(): Color {
+        val color = FThemeUtil.safeColor()
+        return when (this) {
+            None -> color.ediBackStateNone
+            OK -> color.ediBackStateOk
+            Reject -> color.ediBackStateReject
+            Pending -> color.ediBackStatePending
+            Partial -> color.ediBackStatePartial
+        }
     }
     companion object {
         fun parseEDIState(index: Int?) = when (index) {
@@ -36,15 +43,6 @@ enum class EDIState(var index: Int, var desc: String) {
             3 -> Pending
             4 -> Partial
             else -> None
-        }
-        @Composable
-        fun parseEDIColor(ediState: EDIState?) = when (ediState) {
-            None -> FThemeUtil.baseColor().ediStateNone
-            OK -> FThemeUtil.baseColor().ediStateOk
-            Reject -> FThemeUtil.baseColor().ediStateReject
-            Pending -> FThemeUtil.baseColor().ediStatePending
-            Partial -> FThemeUtil.baseColor().ediStatePartial
-            null -> FThemeUtil.baseColor().ediStateNone
         }
         fun isEditable(ediState: EDIState): Boolean {
             return !(ediState == OK || ediState == Reject)

@@ -1,26 +1,17 @@
 package sdmed.extra.cso.bases
 
 import android.content.pm.PackageManager
-import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
-import org.kodein.di.DIAware
-import org.kodein.di.DIContext
-import org.kodein.di.diContext
-import sdmed.extra.cso.interfaces.command.IAsyncEventListener
+import kotlinx.coroutines.flow.MutableStateFlow
 import sdmed.extra.cso.models.common.ToastMessageModel
-import sdmed.extra.cso.models.eventbus.TokenCheckEvent
 import sdmed.extra.cso.models.retrofit.FRetrofitVariable
 import sdmed.extra.cso.models.retrofit.users.UserMultiLoginModel
 import sdmed.extra.cso.models.retrofit.users.UserRole
@@ -31,37 +22,18 @@ import sdmed.extra.cso.utils.FAmhohwa
 import sdmed.extra.cso.utils.FCoroutineUtil
 import sdmed.extra.cso.utils.FStorage
 import sdmed.extra.cso.views.component.LoadingDialog
-import sdmed.extra.cso.views.landing.LandingActivity
 
-abstract class FBaseActivity<T: FBaseViewModel>(val needRoles: UserRoles = UserRole.None.toS()): ComponentActivity(), DIAware {
-    final override val diContext: DIContext<*> get() = diContext(this)
-    override val di by lazy { (application as FMainApplication).di }
+abstract class FBaseActivity<T: FBaseViewModel>(val needRoles: UserRoles = UserRole.None.toS()): ComponentActivity() {
     protected abstract val dataContext: T
     private var _needTokenRefresh = true
-    val initAble get() = !_needTokenRefresh
     var isActivityPause = false
         private set
+    val requireLogin = MutableStateFlow(true)
     protected var myState: UserStatus = UserStatus.None
         private set
     protected var haveRole: Boolean = false
         private set
 
-    @Composable
-    protected abstract fun content(dataContext: T)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            setToast()
-            setLoading()
-            content(dataContext)
-        }
-        _needTokenRefresh = getToken()
-        if (initAble) {
-            FCoroutineUtil.coroutineScope({
-                afterOnCreate()
-            })
-        }
-    }
     override fun onResume() {
         isActivityPause = false
         super.onResume()
@@ -77,61 +49,31 @@ abstract class FBaseActivity<T: FBaseViewModel>(val needRoles: UserRoles = UserR
     override fun onDestroy() {
         super.onDestroy()
         loading(false)
-        if (EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this)
-        }
-    }
-
-    private suspend fun afterOnCreate() {
-        loading()
-        if (this !is LandingActivity) {// && this !is LoginActivity) {
-            stateCheck()
-            if (myState != UserStatus.Live) {
-                loading(false)
-                return
-            }
-            roleCheck()
-            if (!haveRole) {
-                loading(false)
-                return
-            }
-        }
-        loading(false)
-
-        viewInit()
-    }
-    open fun viewInit() {
-        setEventListener()
-    }
-    open fun setEventListener() {
-        dataContext.addEventListener(object: IAsyncEventListener {
-            override suspend fun onEvent(data: Any?) {
-                setLayoutCommand(data)
-            }
-        })
-    }
-    open fun setLayoutCommand(data: Any?) {
     }
 
     protected fun toast(@StringRes resId: Int, duration: Int = Toast.LENGTH_SHORT) = toast(resources.getString(resId), duration)
     protected fun toast(msg: String?, duration: Int = Toast.LENGTH_SHORT) = dataContext.uiStateService.toast(msg, duration)
-    protected fun loading(isVisible: Boolean = true, msg: String = "", indicatorColor: Color? = null, textColor: Color? = null) {
-        dataContext.uiStateService.loading(isVisible, msg, indicatorColor, textColor)
+    protected fun loading(isVisible: Boolean = true, msg: String = "") {
+        dataContext.uiStateService.loading(isVisible, msg)
     }
 
     @Composable
-    private fun setToast() {
-        val toastMessageModel = dataContext.uiStateService.toast.collectAsState()
-        val toast = toastMessageModel.value as? ToastMessageModel.Visible ?: return
+    protected fun setToast() {
+        val toastMessageModel by dataContext.uiStateService.toast.collectAsState()
+        val toast = toastMessageModel as? ToastMessageModel.Visible ?: return
         Toast.makeText(LocalContext.current, toast.msg, toast.duration).show()
+        dataContext.uiStateService.unToast()
     }
     @Composable
-    private fun setLoading() {
-        val loading = dataContext.uiStateService.isLoading.collectAsState()
-        LoadingDialog.screen(loading)
+    protected fun setLoading() {
+        val loading by dataContext.uiStateService.isLoading.collectAsState()
+        LoadingDialog().screen(loading)
     }
 
     private suspend fun stateCheck() {
+        if (FRetrofitVariable.token.value == null) {
+            return
+        }
         val ret = dataContext.getMyState()
         if (ret.result == true) {
             myState = ret.data ?: UserStatus.None
@@ -140,6 +82,9 @@ abstract class FBaseActivity<T: FBaseViewModel>(val needRoles: UserRoles = UserR
         }
     }
     private suspend fun roleCheck() {
+        if (FRetrofitVariable.token.value == null) {
+            return
+        }
         if (needRoles.getFlag() == 0) {
             haveRole = true
             return
@@ -152,12 +97,15 @@ abstract class FBaseActivity<T: FBaseViewModel>(val needRoles: UserRoles = UserR
             toast(ret.msg)
         }
     }
+    fun checkToken() {
+        getToken()
+    }
     private fun getToken(): Boolean {
-        if (FRetrofitVariable.token == null) {
-            FRetrofitVariable.token = FStorage.getAuthToken(this)
+        if (FRetrofitVariable.token.value == null) {
+            FRetrofitVariable.token.value = FStorage.getAuthToken(this)
         }
-        if (FRetrofitVariable.token.isNullOrBlank()) {
-            goToLogin()
+        if (FRetrofitVariable.token.value.isNullOrBlank()) {
+            requireLogin.value = true
             return true
         }
         try {
@@ -169,31 +117,15 @@ abstract class FBaseActivity<T: FBaseViewModel>(val needRoles: UserRoles = UserR
                 tokenRefresh()
                 return true
             }
+            requireLogin.value = false
             return false
         } catch (_: Exception) {
-            goToLogin()
         }
         return true
     }
-    private fun goToLogin(expired: Boolean = false) {
-        if (this is LandingActivity) { // || this is LoginActivity) {
-            FCoroutineUtil.coroutineScope({
-                afterOnCreate()
-            })
-        } else {
-            FAmhohwa.logout(this, expired = expired)
-        }
-    }
-    private fun reCreate() {
-        if (this is LandingActivity) {
-            return
-        } else {
-            recreate()
-        }
-    }
     private fun tokenRefresh() {
-        if (FRetrofitVariable.token.isNullOrBlank()) {
-            goToLogin(true)
+        if (FRetrofitVariable.token.value.isNullOrBlank()) {
+            requireLogin.value = true
             return
         }
         val context = this@FBaseActivity
@@ -206,17 +138,14 @@ abstract class FBaseActivity<T: FBaseViewModel>(val needRoles: UserRoles = UserR
                     FStorage.setAuthToken(context, newToken)
                     addLoginData()
                 }
-                FRetrofitVariable.token = FStorage.getAuthToken(context)
+                FRetrofitVariable.token.value = FStorage.getAuthToken(context)
+                requireLogin.value = false
             } else {
                 if (ret.code == -10002) {
                     delLoginData()
                 }
                 FStorage.removeAuthToken(context)
-                goToLogin(true)
             }
-            FCoroutineUtil.coroutineScope({
-                afterOnCreate()
-            })
         })
     }
     protected fun addLoginData() {
@@ -243,9 +172,5 @@ abstract class FBaseActivity<T: FBaseViewModel>(val needRoles: UserRoles = UserR
     protected fun shouldShowRequestPermissionRationale(permissions: Array<String>) = permissions.any { ActivityCompat.shouldShowRequestPermissionRationale(this, it) }
     protected fun hasPermissionsGranted(permissions: Array<String>) = permissions.none {
         ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun tokenCheckEvent(event: TokenCheckEvent) {
     }
 }

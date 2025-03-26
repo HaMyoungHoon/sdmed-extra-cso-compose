@@ -4,7 +4,6 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
-import org.greenrobot.eventbus.EventBus
 import org.kodein.di.DI
 import org.kodein.di.DIAware
 import org.kodein.di.DIContext
@@ -155,7 +154,6 @@ class FBackgroundQnAUpload(applicationContext: Context): FBaseService(applicatio
     }
     private fun notificationCall(title: String, message: String? = null, qnaPK: String = "") {
         notificationService.sendNotify(context, NotifyIndex.QNA_UPLOAD, title, message, FNotificationService.NotifyType.WITH_VIBRATE, true, qnaPK)
-        EventBus.getDefault().post(QnAUploadEvent(qnaPK))
     }
     private fun progressNotificationCall(uuid: String, isCancel: Boolean = false) {
         if (isCancel) {

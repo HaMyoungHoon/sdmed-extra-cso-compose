@@ -1,7 +1,6 @@
 package sdmed.extra.cso.models.services
 
 import android.content.Context
-import org.greenrobot.eventbus.EventBus
 import org.kodein.di.instance
 import sdmed.extra.cso.R
 import sdmed.extra.cso.bases.FBaseService
@@ -145,7 +144,6 @@ class FBackgroundEDIRequestNewUploadService(applicationContext: Context): FBaseS
 
     private fun notificationCall(title: String, message: String? = null, ediPK: String = "") {
         notificationService.sendNotify(context, NotifyIndex.EDI_FILE_UPLOAD, title, message, FNotificationService.NotifyType.WITH_VIBRATE, true, ediPK)
-        EventBus.getDefault().post(EDIUploadEvent(ediPK))
     }
     private fun progressNotificationCall(uuid: String, isCancel: Boolean = false) {
         if (isCancel) {

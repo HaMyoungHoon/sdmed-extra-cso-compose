@@ -3,7 +3,6 @@ package sdmed.extra.cso.utils.googleMap
 import sdmed.extra.cso.R
 import android.content.Context
 import android.view.LayoutInflater
-import androidx.databinding.DataBindingUtil
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.MarkerOptions

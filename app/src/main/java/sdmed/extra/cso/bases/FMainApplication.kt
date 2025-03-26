@@ -1,40 +1,27 @@
 package sdmed.extra.cso.bases
 
-import android.app.Activity
-import android.content.Context
+import android.app.Application
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.Signature
 import android.os.Build
-import android.os.Bundle
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ProcessLifecycleOwner
-import androidx.multidex.MultiDex
-import androidx.multidex.MultiDexApplication
+import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.kodein.di.DI
 import org.kodein.di.DIAware
 import org.kodein.di.android.x.androidXModule
-import org.kodein.di.bindProvider
 import org.kodein.di.bindSingleton
-import sdmed.extra.cso.MainActivity
 import sdmed.extra.cso.interfaces.repository.*
 import sdmed.extra.cso.interfaces.services.*
 import sdmed.extra.cso.models.repository.*
 import sdmed.extra.cso.models.services.*
+import sdmed.extra.cso.utils.FStorage
 import sdmed.extra.cso.views.theme.FThemeUtil
 
-class FMainApplication: MultiDexApplication(), LifecycleEventObserver, DIAware {
+class FMainApplication: Application(), DIAware {
     companion object {
-        var isForeground = MutableStateFlow(false)
-        private set
-        var isMainActivityRunning = MutableStateFlow(false)
-        private set
-
         private var _ins: FMainApplication? = null
         val ins: FMainApplication get() {
             if (_ins == null) {
@@ -42,11 +29,14 @@ class FMainApplication: MultiDexApplication(), LifecycleEventObserver, DIAware {
             }
             return _ins!!
         }
+        val appColor: MutableStateFlow<String?> by lazy {
+            MutableStateFlow(FStorage.getAppColor(ins))
+        }
     }
 
     override val di = DI.direct {
         import(androidXModule(this@FMainApplication))
-        bindProvider<FUIStateService>(FUIStateService::class) { FUIStateService() }
+        bindSingleton<FUIStateService>(FUIStateService::class) { FUIStateService() }
         bindSingleton<FNotificationService>(FNotificationService::class) { FNotificationService(applicationContext) }
         bindSingleton<FMqttService>(FMqttService::class) { FMqttService(applicationContext) }
         bindSingleton<FBackgroundEDIRequestUpload>(FBackgroundEDIRequestUpload::class) { FBackgroundEDIRequestUpload(applicationContext) }
@@ -106,50 +96,12 @@ class FMainApplication: MultiDexApplication(), LifecycleEventObserver, DIAware {
         }
     }
 
-    override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext(base)
-        MultiDex.install(this)
-    }
     override fun onCreate() {
         super.onCreate()
         _ins = this
-        registerActivity()
         FThemeUtil.applyTheme()
-        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         try {
             startService(Intent(this, ForcedTerminationService::class.java))
         } catch (_: Exception) { }
-    }
-    override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-        if (event == Lifecycle.Event.ON_START) {
-            isForeground.value = true
-        } else if (event == Lifecycle.Event.ON_STOP) {
-            isForeground.value = false
-        }
-    }
-    private fun registerActivity() {
-        registerActivityLifecycleCallbacks(object: ActivityLifecycleCallbacks {
-            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}
-            override fun onActivityStarted(activity: Activity) {
-                if (activity is MainActivity) {
-                    isMainActivityRunning.value = true
-                }
-            }
-
-            override fun onActivityStopped(activity: Activity) {
-                if (activity is MainActivity) {
-                    isMainActivityRunning.value = false
-                }
-            }
-
-            override fun onActivityResumed(activity: Activity) {}
-            override fun onActivityPaused(activity: Activity) {}
-            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
-            override fun onActivityDestroyed(activity: Activity) {
-                if (activity is MainActivity) {
-                    isMainActivityRunning.value = false
-                }
-            }
-        })
     }
 }

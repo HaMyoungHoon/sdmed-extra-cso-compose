@@ -16,6 +16,8 @@ object FConstants {
     const val APP_COLOR = "appColor"
     const val AUTH_TOKEN = "token"
     const val TOKEN_REFRESHING = "tokenRefreshing"
+    const val NOTIFY_INDEX = "notifyIndex"
+    const val NOTIFY_PK = "notifyPK"
     const val HOME_MENU_INDEX = "homeMenuIndex"
     const val GOOGLE_MAP_STYLE_INDEX = "googleMapStyleIndex"
     const val MULTI_LOGIN_TOKEN = "multiLoginToken"

@@ -3,7 +3,6 @@ package sdmed.extra.cso.views.component.shape
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -15,24 +14,22 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import sdmed.extra.cso.views.component.vector.PreviewColorProvider
 
-class ShapeDivider: FShapeBase() {
-    @Composable
-    fun horizontal(color: Color) {
-        Box(Modifier.fillMaxWidth().height(1.dp).background(color))
-    }
-    @Composable
-    fun vertical(color: Color) {
-        Box(Modifier.fillMaxHeight().width(1.dp).background(color))
-    }
+@Composable
+fun dividerHorizontal(color: Color) {
+    Box(Modifier.fillMaxWidth().height(1.dp).background(color))
+}
+@Composable
+fun dividerVertical(color: Color) {
+    Box(Modifier.fillMaxHeight().width(1.dp).background(color))
+}
 
-    @Preview(showBackground = true)
-    @Composable
-    fun previewHorizontal(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
-        horizontal(data.second)
-    }
-    @Preview(showBackground = true)
-    @Composable
-    fun previewVertical(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
-        vertical(data.second)
-    }
+@Preview(showBackground = true)
+@Composable
+fun previewHorizontal(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
+    dividerHorizontal(data.second)
+}
+@Preview(showBackground = true)
+@Composable
+fun previewVertical(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
+    dividerVertical(data.second)
 }

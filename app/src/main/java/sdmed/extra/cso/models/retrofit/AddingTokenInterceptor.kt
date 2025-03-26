@@ -7,7 +7,7 @@ import sdmed.extra.cso.bases.FConstants
 class AddingTokenInterceptor: Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val newBuilder = chain.request().newBuilder()
-        val accessKey = FRetrofitVariable.token
+        val accessKey = FRetrofitVariable.token.value
 
         return if (!accessKey.isNullOrEmpty()) {
             chain.proceed(newBuilder

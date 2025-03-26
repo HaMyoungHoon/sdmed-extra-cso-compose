@@ -1,6 +1,7 @@
 package sdmed.extra.cso.models.retrofit.qna
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import sdmed.extra.cso.views.theme.FThemeUtil
 import sdmed.extra.cso.views.theme.LightColor
 
@@ -14,17 +15,23 @@ enum class QnAState(var index: Int, var desc: String) {
         return this == Reply
     }
     @Composable
-    fun parseQnAColor() = when (this) {
-        None -> FThemeUtil.baseColor().qnaStateNone
-        OK -> FThemeUtil.baseColor().qnaStateOk
-        Recep -> FThemeUtil.baseColor().qnaStateRecep
-        Reply -> FThemeUtil.baseColor().qnaStateReply
+    fun parseQnAColor(): Color {
+        val color = FThemeUtil.safeColor()
+        return when (this) {
+            None -> color.qnaStateNone
+            OK -> color.qnaStateOk
+            Recep -> color.qnaStateRecep
+            Reply -> color.qnaStateReply
+        }
     }
     @Composable
-    fun parseQnABackColor() = when (this) {
-        None -> FThemeUtil.baseColor().qnaBackStateNone
-        OK -> FThemeUtil.baseColor().qnaBackStateOk
-        Recep -> FThemeUtil.baseColor().qnaBackStateRecep
-        Reply -> FThemeUtil.baseColor().qnaBackStateReply
+    fun parseQnABackColor(): Color {
+        val color = FThemeUtil.safeColor()
+        return when (this) {
+            None -> color.qnaBackStateNone
+            OK -> color.qnaBackStateOk
+            Recep -> color.qnaBackStateRecep
+            Reply -> color.qnaBackStateReply
+        }
     }
 }

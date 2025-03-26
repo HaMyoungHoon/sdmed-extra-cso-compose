@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import sdmed.extra.cso.bases.FConstants
 import sdmed.extra.cso.fDate.FDateTime2
 import sdmed.extra.cso.models.retrofit.FRetrofitVariable
+import sdmed.extra.cso.models.retrofit.users.UserMultiLoginModel
 import java.net.URLDecoder
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
@@ -35,14 +36,14 @@ object FAmhohwa {
         }
     }
     fun checkInvalidToken(context: Context): Boolean {
-        if (FRetrofitVariable.token.isNullOrEmpty()) {
-            FRetrofitVariable.token = FStorage.getAuthToken(context)
+        if (FRetrofitVariable.token.value.isNullOrEmpty()) {
+            FRetrofitVariable.token.value = FStorage.getAuthToken(context)
         }
-        val tokenRefresh = FRetrofitVariable.token ?: return false
+        val tokenRefresh = FRetrofitVariable.token.value ?: return false
         return tokenIntervalValid(tokenRefresh)
     }
     fun rhsTokenIsMost(newToken: String): Boolean {
-        val tokenAccess = FRetrofitVariable.token ?: return true
+        val tokenAccess = FRetrofitVariable.token.value ?: return true
         return try {
             val previousLong = JWT(tokenAccess).claims[FConstants.CLAIMS_EXP]?.asLong() ?: 0
             val newLong = JWT(newToken).claims[FConstants.CLAIMS_EXP]?.asLong() ?: 0
@@ -57,8 +58,17 @@ object FAmhohwa {
         FExtensions.moveToLandingActivity(context, expired)
     }
     fun removeLoginData(context: Context) {
-        FRetrofitVariable.token = ""
+        FRetrofitVariable.token.value = ""
         FStorage.removeAuthToken(context)
+    }
+    fun addMultiLoginData(context: Context) {
+        FStorage.addMultiLoginData(context, UserMultiLoginModel().apply {
+            thisPK = getThisPK(context)
+            id = getTokenID(context)
+            name = getTokenName(context)
+            token = FStorage.getAuthToken(context) ?: ""
+            isLogin = true
+        })
     }
     fun getUserID(context: Context): String {
         return decodeUtf8(getTokenID(context))
@@ -67,7 +77,7 @@ object FAmhohwa {
         return decodeUtf8(getTokenName(context))
     }
     fun getTokenID(context: Context): String {
-        val token = FRetrofitVariable.token ?: FStorage.getAuthToken(context) ?: return ""
+        val token = FRetrofitVariable.token.value ?: FStorage.getAuthToken(context) ?: return ""
         return try {
             JWT(token).subject ?: ""
         } catch (_: Exception) {
@@ -75,7 +85,7 @@ object FAmhohwa {
         }
     }
     fun getTokenName(context: Context): String {
-        val token = FRetrofitVariable.token ?: FStorage.getAuthToken(context) ?: return ""
+        val token = FRetrofitVariable.token.value ?: FStorage.getAuthToken(context) ?: return ""
         return try {
             JWT(token).claims[FConstants.CLAIMS_NAME]?.asString() ?: ""
         } catch (_: Exception) {
@@ -83,7 +93,7 @@ object FAmhohwa {
         }
     }
     fun getThisPK(context: Context): String {
-        val token = FRetrofitVariable.token ?: FStorage.getAuthToken(context) ?: return ""
+        val token = FRetrofitVariable.token.value ?: FStorage.getAuthToken(context) ?: return ""
         return try {
             JWT(token).claims[FConstants.CLAIMS_INDEX]?.asString() ?: ""
         } catch (_: Exception) {

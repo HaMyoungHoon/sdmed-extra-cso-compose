@@ -11,7 +11,6 @@ import android.location.Geocoder
 import android.os.Build
 import android.view.LayoutInflater
 import androidx.core.app.ActivityCompat
-import androidx.databinding.DataBindingUtil
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptorFactory

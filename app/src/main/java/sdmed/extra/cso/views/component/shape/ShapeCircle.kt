@@ -18,54 +18,52 @@ import sdmed.extra.cso.views.component.vector.VectorCircle
 import sdmed.extra.cso.views.component.vector.VectorCross
 import sdmed.extra.cso.views.component.vector.VectorPlus
 
-class ShapeCircle: FShapeBase() {
-    @Composable
-    fun check(tintColor: Color, fillColor: Color, size: Dp = 24.dp) {
-        val circle = VectorCircle().vector(tintColor, fillColor)
-        val check = VectorCheck().vector(tintColor, fillColor)
-        val contentDescription = getContentDescription()
-        val tint = getTint()
-        Box(contentAlignment = Alignment.Center) {
-            Icon(circle, contentDescription, Modifier.size(size), tint)
-            Icon(check, contentDescription, Modifier.size(size), tint)
-        }
+@Composable
+fun circleCheck(tintColor: Color, fillColor: Color, size: Dp = 24.dp) {
+    val circle = VectorCircle().vector(tintColor, fillColor)
+    val check = VectorCheck().vector(tintColor, fillColor)
+    val contentDescription: String? = null
+    val tint = Color.Unspecified
+    Box(contentAlignment = Alignment.Center) {
+        Icon(circle, contentDescription, Modifier.size(size), tint)
+        Icon(check, contentDescription, Modifier.size(size), tint)
     }
-    @Composable
-    fun plus(tintColor: Color, fillColor: Color, size: Dp = 24.dp) {
-        val circle = VectorCircle().vector(tintColor, fillColor)
-        val plus = VectorPlus().vector(tintColor, fillColor)
-        val contentDescription = getContentDescription()
-        val tint = getTint()
-        Box(contentAlignment = Alignment.Center) {
-            Icon(circle, contentDescription, Modifier.size(size), tint)
-            Icon(plus, contentDescription, Modifier.size(size), tint)
-        }
+}
+@Composable
+fun circlePlus(tintColor: Color, fillColor: Color, size: Dp = 24.dp) {
+    val circle = VectorCircle().vector(tintColor, fillColor)
+    val plus = VectorPlus().vector(tintColor, fillColor)
+    val contentDescription: String? = null
+    val tint = Color.Unspecified
+    Box(contentAlignment = Alignment.Center) {
+        Icon(circle, contentDescription, Modifier.size(size), tint)
+        Icon(plus, contentDescription, Modifier.size(size), tint)
     }
-    @Composable
-    fun cross(tintColor: Color, fillColor: Color, size: Dp = 24.dp) {
-        val circle = VectorCircle().vector(tintColor, fillColor)
-        val cross = VectorCross().vector(tintColor, fillColor)
-        val contentDescription = getContentDescription()
-        val tint = getTint()
-        Box(contentAlignment = Alignment.Center) {
-            Icon(circle, contentDescription, Modifier.size(size), tint)
-            Icon(cross, contentDescription, Modifier.size(size), tint)
-        }
+}
+@Composable
+fun circleCross(tintColor: Color, fillColor: Color, size: Dp = 24.dp) {
+    val circle = VectorCircle().vector(tintColor, fillColor)
+    val cross = VectorCross().vector(tintColor, fillColor)
+    val contentDescription: String? = null
+    val tint = Color.Unspecified
+    Box(contentAlignment = Alignment.Center) {
+        Icon(circle, contentDescription, Modifier.size(size), tint)
+        Icon(cross, contentDescription, Modifier.size(size), tint)
     }
+}
 
-    @Preview
-    @Composable
-    fun previewCheck(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
-        Surface { check(data.first, data.second, 24.dp) }
-    }
-    @Preview
-    @Composable
-    fun previewPlus(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
-        Surface { plus(data.first, data.second, 24.dp) }
-    }
-    @Preview
-    @Composable
-    fun previewCross(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
-        Surface { cross(data.first, data.second, 24.dp) }
-    }
+@Preview
+@Composable
+fun previewCheck(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
+    Surface { circleCheck(data.first, data.second, 24.dp) }
+}
+@Preview
+@Composable
+fun previewPlus(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
+    Surface { circlePlus(data.first, data.second, 24.dp) }
+}
+@Preview
+@Composable
+fun previewCross(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
+    Surface { circleCross(data.first, data.second, 24.dp) }
 }

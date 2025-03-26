@@ -1,7 +1,6 @@
 package sdmed.extra.cso.models.services
 
 import android.content.Context
-import org.greenrobot.eventbus.EventBus
 import org.kodein.di.instance
 import sdmed.extra.cso.R
 import sdmed.extra.cso.bases.FBaseService
@@ -131,7 +130,6 @@ class FBackgroundEDIFileUpload(applicationContext: Context): FBaseService(applic
             val ret = ediListRepository.postPharmaFile(data.ediPK, data.ediPharmaPK, data.medias)
             if (ret.result == true) {
                 notificationCall(context.getString(R.string.edi_file_upload_comp), ediPK = data.ediPK)
-                EventBus.getDefault().post(EDIUploadEvent(data.ediPK))
                 mqttService.mqttEDIFileAdd(data.ediPK, data.ediUploadModel.orgName)
             } else {
                 notificationCall(context.getString(R.string.edi_file_upload_fail), ret.msg)

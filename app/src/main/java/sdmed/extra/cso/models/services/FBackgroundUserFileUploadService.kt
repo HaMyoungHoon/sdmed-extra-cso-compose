@@ -1,7 +1,6 @@
 package sdmed.extra.cso.models.services
 
 import android.content.Context
-import org.greenrobot.eventbus.EventBus
 import org.kodein.di.instance
 import sdmed.extra.cso.R
 import sdmed.extra.cso.bases.FBaseService
@@ -131,7 +130,6 @@ class FBackgroundUserFileUploadService(applicationContext: Context): FBaseServic
     }
     private fun notificationCall(title: String, message: String? = null, thisPK: String = "") {
         notificationService.sendNotify(context, NotifyIndex.USER_FILE_UPLOAD, title, message, FNotificationService.NotifyType.WITH_VIBRATE, true, thisPK)
-        EventBus.getDefault().post(UserFileUploadEvent(thisPK))
     }
     private fun progressNotificationCall(uuid: String, isCancel: Boolean = false) {
         if (isCancel) {

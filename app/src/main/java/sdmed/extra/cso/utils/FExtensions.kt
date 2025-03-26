@@ -14,7 +14,6 @@ import sdmed.extra.cso.interfaces.IRestResult
 import sdmed.extra.cso.models.DataExceptionHandler
 import sdmed.extra.cso.models.RestResult
 import sdmed.extra.cso.models.RestResultT
-import sdmed.extra.cso.views.landing.LandingActivity
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -114,14 +113,6 @@ object FExtensions {
 
     fun moveToLandingActivity(context: Context, expired: Boolean) {
         ActivityCompat.finishAffinity(context as Activity)
-        context.startActivity(Intent(context, LandingActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            if (expired) {
-                putExtra("expired", true)
-            } else {
-                putExtra("logout", true)
-            }
-        })
     }
     fun refreshActivity(context: Context) {
         val activity = context as Activity
