@@ -16,37 +16,35 @@ import sdmed.extra.cso.models.common.LoadingMessageModel
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
 import sdmed.extra.cso.views.theme.FThemeUtil
-import sdmed.extra.cso.views.theme.LightColor
+import sdmed.extra.cso.views.theme.FLightColor
 
-class LoadingDialog {
-    @Composable
-    fun screen(loading: LoadingMessageModel) {
-        val color = FThemeUtil.safeColor()
-        val state = loading as? LoadingMessageModel.Visible ?: return
-        spinnerDialogBox(CustomTextData().apply {
-            text = state.msg
-            textColor = color.primary
-        })
-    }
-    @Composable
-    fun spinnerDialogBox(customTextData: CustomTextData) {
-        val color = FThemeUtil.safeColor()
-        Box(Modifier.fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.5F))
-            .zIndex(1000F)) {
-            Column(Modifier.align(Alignment.Companion.Center), Arrangement.Center, Alignment.CenterHorizontally) {
-                CircularProgressIndicator(Modifier, color.primary)
-                customText(customTextData)
-            }
+@Composable
+fun loadingDialog(loading: LoadingMessageModel) {
+    val color = FThemeUtil.safeColor()
+    val state = loading as? LoadingMessageModel.Visible ?: return
+    spinnerDialogBox(CustomTextData().apply {
+        text = state.msg
+        textColor = color.primary
+    })
+}
+@Composable
+private fun spinnerDialogBox(customTextData: CustomTextData) {
+    val color = FThemeUtil.safeColor()
+    Box(Modifier.fillMaxSize()
+        .background(Color.Black.copy(alpha = 0.5F))
+        .zIndex(1000F)) {
+        Column(Modifier.align(Alignment.Companion.Center), Arrangement.Center, Alignment.CenterHorizontally) {
+            CircularProgressIndicator(Modifier, color.primary)
+            customText(customTextData)
         }
     }
+}
 
-    @Preview
-    @Composable
-    fun previewLoadingDialog() {
-        spinnerDialogBox(CustomTextData().apply {
-            text = "loading"
-            textColor = LightColor.primary
-        })
-    }
+@Preview
+@Composable
+fun previewLoadingDialog() {
+    spinnerDialogBox(CustomTextData().apply {
+        text = "loading"
+        textColor = FLightColor.primary
+    })
 }

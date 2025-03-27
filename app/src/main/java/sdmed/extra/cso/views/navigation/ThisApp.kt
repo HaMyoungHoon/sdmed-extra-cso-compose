@@ -44,7 +44,9 @@ fun thisApp(
     Surface(Modifier.background(color.background)) {
         if (navVisible.value) {
             navigationWrapper(dest, navigationActions::navigateTo) {
-                appNavHost(navHostController, windowPanelType, displayFeatures, startDestination = startDest)
+                appNavHost(navHostController, windowPanelType, displayFeatures,
+                    navSuiteType.toNavType(),
+                    startDestination = startDest)
             }
         }
     }

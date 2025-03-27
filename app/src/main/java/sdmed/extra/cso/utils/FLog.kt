@@ -5,9 +5,9 @@ import sdmed.extra.cso.bases.FMainApplication
 
 object FLog {
     fun debug(tag: String, msg: String) {
-//        if (!FMainApplication.ins.isDebug()) {
-//            return
-//        }
+        if (!FMainApplication.ins.isDebug()) {
+            return
+        }
         Log.d(tag, msg)
     }
 }

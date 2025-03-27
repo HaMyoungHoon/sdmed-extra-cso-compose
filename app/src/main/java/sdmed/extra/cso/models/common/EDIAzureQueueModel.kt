@@ -1,7 +1,6 @@
 package sdmed.extra.cso.models.common
 
 import sdmed.extra.cso.models.retrofit.common.BlobStorageInfoModel
-import sdmed.extra.cso.models.retrofit.edi.EDIUploadFileModel
 import sdmed.extra.cso.models.retrofit.edi.EDIUploadPharmaFileModel
 import sdmed.extra.cso.models.retrofit.edi.EDIUploadPharmaModel
 import sdmed.extra.cso.utils.FExtensions

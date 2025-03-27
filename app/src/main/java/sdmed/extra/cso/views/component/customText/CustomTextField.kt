@@ -22,7 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import sdmed.extra.cso.R
 import sdmed.extra.cso.views.theme.FThemeUtil
-import sdmed.extra.cso.views.theme.LightColor
+import sdmed.extra.cso.views.theme.FLightColor
 
 @Composable
 fun customTextField(data: CustomTextFieldData) {
@@ -52,7 +52,7 @@ fun customTextField(text: String = "",
                     modifier: Modifier = Modifier,
                     enable: Boolean = true,
                     readonly: Boolean = false,
-                    textColor: Color = LightColor.foreground,
+                    textColor: Color = FLightColor.foreground,
                     textSize: TextUnit = FThemeUtil.textUnit(24F),
                     fontWeight: FontWeight = FontWeight.Normal,
                     fontStyle: FontStyle = FontStyle.Normal,
@@ -65,7 +65,7 @@ fun customTextField(text: String = "",
                     minLines: Int = 1,
                     visualTransformation: VisualTransformation = VisualTransformation.None,
                     decorationBox: @Composable (@Composable () -> Unit) -> Unit = @Composable { innerTextField -> innerTextField() },
-                    backgroundTint: Color = LightColor.transparent) {
+                    backgroundTint: Color = FLightColor.transparent) {
     val focusManager = LocalFocusManager.current
     BasicTextField(text, onValueChange, modifier.background(backgroundTint), enable, readonly,
         LocalTextStyle.current.copy(textColor,

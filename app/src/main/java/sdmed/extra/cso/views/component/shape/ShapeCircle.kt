@@ -12,16 +12,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import sdmed.extra.cso.views.component.vector.FVectorData
 import sdmed.extra.cso.views.component.vector.PreviewColorProvider
-import sdmed.extra.cso.views.component.vector.VectorCheck
-import sdmed.extra.cso.views.component.vector.VectorCircle
-import sdmed.extra.cso.views.component.vector.VectorCross
-import sdmed.extra.cso.views.component.vector.VectorPlus
+import sdmed.extra.cso.views.component.vector.vectorCheck
+import sdmed.extra.cso.views.component.vector.vectorCircle
+import sdmed.extra.cso.views.component.vector.vectorCross
+import sdmed.extra.cso.views.component.vector.vectorPlus
 
 @Composable
-fun circleCheck(tintColor: Color, fillColor: Color, size: Dp = 24.dp) {
-    val circle = VectorCircle().vector(tintColor, fillColor)
-    val check = VectorCheck().vector(tintColor, fillColor)
+fun circleCheck(data: FVectorData = FVectorData(), size: Dp = 24.dp) {
+    val circle = vectorCircle(data)
+    val check = vectorCheck(data)
     val contentDescription: String? = null
     val tint = Color.Unspecified
     Box(contentAlignment = Alignment.Center) {
@@ -30,9 +31,16 @@ fun circleCheck(tintColor: Color, fillColor: Color, size: Dp = 24.dp) {
     }
 }
 @Composable
-fun circlePlus(tintColor: Color, fillColor: Color, size: Dp = 24.dp) {
-    val circle = VectorCircle().vector(tintColor, fillColor)
-    val plus = VectorPlus().vector(tintColor, fillColor)
+fun circleCheck(tintColor: Color, fillColor: Color, size: Dp = 24.dp) {
+    circleCheck(FVectorData().apply {
+        this.tintColor = tintColor
+        this.fillColor = fillColor
+    }, size)
+}
+@Composable
+fun circlePlus(data: FVectorData, size: Dp = 24.dp) {
+    val circle = vectorCheck(data)
+    val plus = vectorPlus(data)
     val contentDescription: String? = null
     val tint = Color.Unspecified
     Box(contentAlignment = Alignment.Center) {
@@ -41,15 +49,29 @@ fun circlePlus(tintColor: Color, fillColor: Color, size: Dp = 24.dp) {
     }
 }
 @Composable
-fun circleCross(tintColor: Color, fillColor: Color, size: Dp = 24.dp) {
-    val circle = VectorCircle().vector(tintColor, fillColor)
-    val cross = VectorCross().vector(tintColor, fillColor)
+fun circlePlus(tintColor: Color, fillColor: Color, size: Dp = 24.dp) {
+    circlePlus(FVectorData().apply {
+        this.tintColor = tintColor
+        this.fillColor = fillColor
+    }, size)
+}
+@Composable
+fun circleCross(data: FVectorData, size: Dp = 24.dp) {
+    val circle = vectorCircle(data)
+    val cross = vectorCross(data)
     val contentDescription: String? = null
     val tint = Color.Unspecified
     Box(contentAlignment = Alignment.Center) {
         Icon(circle, contentDescription, Modifier.size(size), tint)
         Icon(cross, contentDescription, Modifier.size(size), tint)
     }
+}
+@Composable
+fun circleCross(tintColor: Color, fillColor: Color, size: Dp = 24.dp) {
+    circleCross(FVectorData().apply {
+        this.tintColor = tintColor
+        this.fillColor = fillColor
+    }, size)
 }
 
 @Preview

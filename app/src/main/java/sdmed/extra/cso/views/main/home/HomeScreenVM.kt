@@ -1,8 +1,8 @@
 package sdmed.extra.cso.views.main.home
 
-import androidx.multidex.MultiDexApplication
+import android.content.Context
 import sdmed.extra.cso.bases.FBaseViewModel
 
-class HomeScreenVM: FBaseViewModel() {
+class HomeScreenVM(applicationContext: Context? = null): FBaseViewModel(applicationContext) {
 
 }

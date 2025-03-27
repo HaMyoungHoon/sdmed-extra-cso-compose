@@ -57,7 +57,13 @@ class FMainApplication: Application(), DIAware {
         bindSingleton<IHospitalTempRepository>(IHospitalTempRepository::class) { HospitalTempRepository(RetrofitService.create(IHospitalTempService::class.java)) }
     }.di
 
-    fun isDebug() = 0 != applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE
+    fun isDebug(): Boolean {
+        return try {
+            0 != applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE
+        } catch (_: Exception) {
+            true
+        }
+    }
     fun getVersionCode(flags: Int = 0): Long {
         val pInfo = getPackageInfo(flags)
         return pInfo?.longVersionCode ?: 0

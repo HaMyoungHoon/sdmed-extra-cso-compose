@@ -27,7 +27,8 @@ import sdmed.extra.cso.models.menu.MenuList
 import sdmed.extra.cso.models.menu.NavigationContentType
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
-import sdmed.extra.cso.views.component.vector.VectorMenuOpen
+import sdmed.extra.cso.views.component.vector.FVectorData
+import sdmed.extra.cso.views.component.vector.vectorMenuOpen
 import sdmed.extra.cso.views.theme.FThemeUtil
 
 @Composable
@@ -47,7 +48,7 @@ fun modalDrawerNavigationBar(navDestination: NavDestination?,
                         textColor = color.cardParagraph
                     })
                     IconButton(drawerClick) {
-                        Icon(VectorMenuOpen().vector(color.cardBackground, color.cardForeground), stringResource(R.string.menu_my_desc))
+                        Icon(vectorMenuOpen(FVectorData(color.cardBackground, color.cardForeground)), stringResource(R.string.menu_my_desc))
                     }
                 }
             }

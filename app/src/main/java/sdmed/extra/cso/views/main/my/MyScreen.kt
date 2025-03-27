@@ -1,22 +1,20 @@
 package sdmed.extra.cso.views.main.my
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.window.layout.DisplayFeature
-import sdmed.extra.cso.interfaces.command.IAsyncEventListener
-import sdmed.extra.cso.models.command.AsyncRelayCommand
+import sdmed.extra.cso.bases.fBaseScreen
+import sdmed.extra.cso.models.menu.NavigationType
 import sdmed.extra.cso.models.menu.WindowPanelType
 
 @Composable
 fun myScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
              displayFeatures: List<DisplayFeature> = emptyList(),
-             dataContext: MyScreenVM = viewModel()) {
-    dataContext.relayCommand = AsyncRelayCommand()
-    dataContext.addEventListener(object: IAsyncEventListener {
-        override suspend fun onEvent(data: Any?) {
+             navigationType: NavigationType = NavigationType.BOTTOM) {
+    fBaseScreen<MyScreenVM>({ data, dataContext ->
             setThisCommand(data, dataContext)
-        }
-    })
+        },
+        null,
+        windowPanelType, navigationType)
 }
 private fun setThisCommand(data: Any?, dataContext: MyScreenVM) {
 

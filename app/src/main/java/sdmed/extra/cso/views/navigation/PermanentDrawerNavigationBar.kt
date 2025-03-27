@@ -27,7 +27,8 @@ import sdmed.extra.cso.models.menu.MenuList
 import sdmed.extra.cso.models.menu.NavigationContentType
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
-import sdmed.extra.cso.views.component.vector.VectorMenuOpen
+import sdmed.extra.cso.views.component.vector.FVectorData
+import sdmed.extra.cso.views.component.vector.vectorMenuOpen
 import sdmed.extra.cso.views.theme.FThemeUtil
 
 @Composable
@@ -49,7 +50,7 @@ fun permanentDrawerNavigationBar(navDestination: NavDestination?,
                         textColor = color.cardParagraph
                         textSize = FThemeUtil.textUnit(16F)
                     })
-                    IconButton(drawerClick) { Icon(VectorMenuOpen().vector(color.cardBackground, color.cardForeground), stringResource(R.string.menu_desc)) }
+                    IconButton(drawerClick) { Icon(vectorMenuOpen(FVectorData(color.cardBackground, color.cardForeground)), stringResource(R.string.menu_desc)) }
                 }
             }
             Column(Modifier.layoutId(MenuLayoutType.CONTENT),
@@ -79,6 +80,6 @@ fun permanentDrawerNavigationBar(navDestination: NavDestination?,
 
 @Preview
 @Composable
-fun previewScreen() {
+private fun previewScreen() {
     permanentDrawerNavigationBar(null, NavigationContentType.TOP, { })
 }

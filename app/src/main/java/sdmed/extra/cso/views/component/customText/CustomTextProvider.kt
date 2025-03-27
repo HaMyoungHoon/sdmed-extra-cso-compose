@@ -6,58 +6,58 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import sdmed.extra.cso.views.theme.DarkColor
-import sdmed.extra.cso.views.theme.LightColor
+import sdmed.extra.cso.views.theme.FDarkColor
+import sdmed.extra.cso.views.theme.FLightColor
 
 class CustomTextProvider: PreviewParameterProvider<CustomTextData> {
     val all = 2.dp
     override val values = sequenceOf(
         CustomTextData().apply {
             text = "라이트 텍스트"
-            textColor = LightColor.foreground
-            backgroundTint = LightColor.background
+            textColor = FLightColor.foreground
+            backgroundTint = FLightColor.background
             modifier = Modifier.padding(all)
         },
         CustomTextData().apply {
             text = "라이트 카드 텍스트"
-            textColor = LightColor.cardForeground
-            backgroundTint = LightColor.cardBackground
+            textColor = FLightColor.cardForeground
+            backgroundTint = FLightColor.cardBackground
             modifier = Modifier.padding(all)
         },
         CustomTextData().apply {
             text = "라이트 카드 헤드 텍스트"
-            textColor = LightColor.cardParagraph
-            backgroundTint = LightColor.cardBackground
+            textColor = FLightColor.cardParagraph
+            backgroundTint = FLightColor.cardBackground
             modifier = Modifier.padding(all)
         },
         CustomTextData().apply {
             text = "라이트 버튼 텍스트"
-            textColor = LightColor.buttonForeground
-            backgroundTint = LightColor.buttonBackground
+            textColor = FLightColor.buttonForeground
+            backgroundTint = FLightColor.buttonBackground
             modifier = Modifier.padding(all)
         },
         CustomTextData().apply {
             text = "다크 텍스트"
-            textColor = DarkColor.foreground
-            backgroundTint = DarkColor.background
+            textColor = FDarkColor.foreground
+            backgroundTint = FDarkColor.background
             modifier = Modifier.padding(all)
         },
         CustomTextData().apply {
             text = "다크 카드 텍스트"
-            textColor = DarkColor.cardForeground
-            backgroundTint = DarkColor.cardBackground
+            textColor = FDarkColor.cardForeground
+            backgroundTint = FDarkColor.cardBackground
             modifier = Modifier.padding(all)
         },
         CustomTextData().apply {
             text = "다크 카드 헤드 텍스트"
-            textColor = DarkColor.cardParagraph
-            backgroundTint = DarkColor.cardBackground
+            textColor = FDarkColor.cardParagraph
+            backgroundTint = FDarkColor.cardBackground
             modifier = Modifier.padding(all)
         },
         CustomTextData().apply {
             text = "다크 버튼 텍스트"
-            textColor = DarkColor.buttonForeground
-            backgroundTint = DarkColor.buttonBackground
+            textColor = FDarkColor.buttonForeground
+            backgroundTint = FDarkColor.buttonBackground
             modifier = Modifier.padding(all)
         },
     )
@@ -67,7 +67,7 @@ class CustomTextProvider: PreviewParameterProvider<CustomTextData> {
     fun previewCustomTextField() {
         customTextField(CustomTextFieldData().apply {
             text = "preview"
-            backgroundTint = LightColor.background
+            backgroundTint = FLightColor.background
         })
     }
 }

@@ -6,40 +6,39 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.net.toUri
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.window.layout.DisplayFeature
-import sdmed.extra.cso.interfaces.command.IAsyncEventListener
-import sdmed.extra.cso.models.command.AsyncRelayCommand
+import sdmed.extra.cso.bases.fBaseScreen
+import sdmed.extra.cso.models.menu.NavigationType
 import sdmed.extra.cso.models.menu.WindowPanelType
-import sdmed.extra.cso.views.dialog.message.MessageDialog
+import sdmed.extra.cso.views.dialog.message.MessageDialogVM
 
 @Composable
 fun landingScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
                   displayFeatures: List<DisplayFeature> = emptyList(),
-                  dataContext: LandingScreenVM = viewModel()) {
-    dataContext.relayCommand = AsyncRelayCommand()
-    dataContext.addEventListener(object: IAsyncEventListener {
-        override suspend fun onEvent(data: Any?) {
+                  navigationType: NavigationType = NavigationType.BOTTOM) {
+    fBaseScreen<LandingScreenVM>({ data, dataContext ->
             setThisCommand(data, dataContext)
             setUpDateCommand(data, dataContext)
-        }
-    })
-    val context = LocalContext.current
-    val loginVisible = dataContext.loginVisible.collectAsState()
-    if (loginVisible.value) {
-        LoginScreen().screen()
-    } else {
-        LandingScreenDetail().screen(dataContext)
-    }
+        },
+        { dataContext ->
+            val context = LocalContext.current
+            val loginVisible = dataContext.loginVisible.collectAsState()
+            if (loginVisible.value) {
+                loginScreen()
+            } else {
+                landingScreenDetail(dataContext)
+            }
 
-    LaunchedEffect(dataContext.loginVisible) {
-        if (dataContext.updateApp.value) {
-            context.startActivity(Intent(Intent.ACTION_VIEW).apply {
-                this.data = "market://details?id=${context.packageName}".toUri()
-            })
-            dataContext.updateApp.value = true
-        }
-    }
+            LaunchedEffect(dataContext.loginVisible) {
+                if (dataContext.updateApp.value) {
+                    context.startActivity(Intent(Intent.ACTION_VIEW).apply {
+                        this.data = "market://details?id=${context.packageName}".toUri()
+                    })
+                    dataContext.updateApp.value = true
+                }
+            }
+        },
+        windowPanelType, navigationType)
 }
 
 private fun setThisCommand(data: Any?, dataContext: LandingScreenVM) {
@@ -49,11 +48,11 @@ private fun setThisCommand(data: Any?, dataContext: LandingScreenVM) {
     }
 }
 private fun setUpDateCommand(data: Any?, dataContext: LandingScreenVM) {
-    val eventName = data as? MessageDialog.ClickEvent ?: return
+    val eventName = data as? MessageDialogVM.ClickEvent ?: return
     when (eventName) {
-        MessageDialog.ClickEvent.CLOSE -> dialogClose(dataContext)
-        MessageDialog.ClickEvent.LEFT -> dialogLeft(dataContext)
-        MessageDialog.ClickEvent.RIGHT -> dialogRight(dataContext)
+        MessageDialogVM.ClickEvent.CLOSE -> dialogClose(dataContext)
+        MessageDialogVM.ClickEvent.LEFT -> dialogLeft(dataContext)
+        MessageDialogVM.ClickEvent.RIGHT -> dialogRight(dataContext)
     }
 }
 private fun start(dataContext: LandingScreenVM) {

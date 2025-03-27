@@ -5,7 +5,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.ui.graphics.Color
 import sdmed.extra.cso.interfaces.theme.IBaseColor
 
-object DarkColor: IBaseColor {
+object FDarkColor: IBaseColor {
     override val primary = Color(0xFF8BD3DD)
     override val onPrimary = Color(0xFF003B3C)
     override val primaryContainer = Color(0xFF3A7C81)

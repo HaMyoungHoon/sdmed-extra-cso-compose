@@ -1,13 +1,8 @@
 package sdmed.extra.cso.utils
 
 import android.content.Context
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalInspectionMode
 import org.kodein.di.DI
 import org.kodein.di.DIAware
-import org.kodein.di.direct
 import org.kodein.di.instance
 import sdmed.extra.cso.bases.FMainApplication
 import sdmed.extra.cso.interfaces.repository.IAzureBlobRepository
@@ -31,9 +26,20 @@ import sdmed.extra.cso.models.services.FUIStateService
 import kotlin.getValue
 
 object FDI {
+    fun context(context: Context? = null): Context {
+        return try {
+            context ?: FMainApplication.ins
+        } catch (_: Exception) {
+            FMainApplication()
+        }
+    }
     fun di(context: Context? = null): DI {
         val context = context?: FMainApplication.ins
-        return (context.applicationContext as DIAware).di
+        return try {
+            (context.applicationContext as DIAware).di
+        } catch (_: Exception) {
+            FMainApplication().di
+        }
     }
 
     fun uiStateService(context: Context? = null): FUIStateService {

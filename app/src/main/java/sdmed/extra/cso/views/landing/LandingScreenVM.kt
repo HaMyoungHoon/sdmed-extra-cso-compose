@@ -1,12 +1,12 @@
 package sdmed.extra.cso.views.landing
 
-import androidx.multidex.MultiDexApplication
+import android.content.Context
 import kotlinx.coroutines.flow.MutableStateFlow
 import sdmed.extra.cso.bases.FBaseViewModel
 import sdmed.extra.cso.models.RestResultT
 import sdmed.extra.cso.models.retrofit.common.VersionCheckModel
 
-class LandingScreenVM: FBaseViewModel() {
+class LandingScreenVM(applicationContext: Context? = null): FBaseViewModel(applicationContext) {
     val startVisible = MutableStateFlow(false)
     val updateVisible = MutableStateFlow(false)
     val loginVisible = MutableStateFlow(false)

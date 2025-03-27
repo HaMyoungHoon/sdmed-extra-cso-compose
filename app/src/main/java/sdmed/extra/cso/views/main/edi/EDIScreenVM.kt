@@ -1,9 +1,9 @@
 package sdmed.extra.cso.views.main.edi
 
-import androidx.multidex.MultiDexApplication
+import android.content.Context
 import kotlinx.coroutines.flow.MutableStateFlow
-import org.kodein.di.instance
 import sdmed.extra.cso.bases.FBaseViewModel
+import sdmed.extra.cso.bases.FMainApplication
 import sdmed.extra.cso.interfaces.repository.IEDIListRepository
 import sdmed.extra.cso.models.RestResultT
 import sdmed.extra.cso.models.retrofit.edi.EDIState
@@ -14,7 +14,7 @@ import sdmed.extra.cso.utils.FExtensions
 import java.util.UUID
 import kotlin.getValue
 
-class EDIScreenVM: FBaseViewModel() {
+class EDIScreenVM(applicationContext: Context? = null): FBaseViewModel(applicationContext) {
     private val ediListRepository: IEDIListRepository by lazy {
         FDI.ediListRepository()
     }

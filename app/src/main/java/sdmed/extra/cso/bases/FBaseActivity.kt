@@ -21,7 +21,7 @@ import sdmed.extra.cso.models.retrofit.users.UserStatus
 import sdmed.extra.cso.utils.FAmhohwa
 import sdmed.extra.cso.utils.FCoroutineUtil
 import sdmed.extra.cso.utils.FStorage
-import sdmed.extra.cso.views.component.LoadingDialog
+import sdmed.extra.cso.views.component.loadingDialog
 
 abstract class FBaseActivity<T: FBaseViewModel>(val needRoles: UserRoles = UserRole.None.toS()): ComponentActivity() {
     protected abstract val dataContext: T
@@ -52,22 +52,22 @@ abstract class FBaseActivity<T: FBaseViewModel>(val needRoles: UserRoles = UserR
     }
 
     protected fun toast(@StringRes resId: Int, duration: Int = Toast.LENGTH_SHORT) = toast(resources.getString(resId), duration)
-    protected fun toast(msg: String?, duration: Int = Toast.LENGTH_SHORT) = dataContext.uiStateService.toast(msg, duration)
+    protected fun toast(msg: String?, duration: Int = Toast.LENGTH_SHORT) = dataContext.toast(msg, duration)
     protected fun loading(isVisible: Boolean = true, msg: String = "") {
-        dataContext.uiStateService.loading(isVisible, msg)
+        dataContext.loading(isVisible, msg)
     }
 
     @Composable
     protected fun setToast() {
-        val toastMessageModel by dataContext.uiStateService.toast.collectAsState()
+        val toastMessageModel by dataContext.uiStateService().toast.collectAsState()
         val toast = toastMessageModel as? ToastMessageModel.Visible ?: return
         Toast.makeText(LocalContext.current, toast.msg, toast.duration).show()
-        dataContext.uiStateService.unToast()
+        dataContext.unToastComposable()
     }
     @Composable
     protected fun setLoading() {
-        val loading by dataContext.uiStateService.isLoading.collectAsState()
-        LoadingDialog().screen(loading)
+        val loading by dataContext.uiStateService().isLoading.collectAsState()
+        loadingDialog(loading)
     }
 
     private suspend fun stateCheck() {

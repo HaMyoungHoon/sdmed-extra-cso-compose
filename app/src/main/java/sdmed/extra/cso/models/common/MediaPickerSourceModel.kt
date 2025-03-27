@@ -5,7 +5,6 @@ import android.os.Parcelable
 import android.view.View
 import kotlinx.parcelize.Parcelize
 import sdmed.extra.cso.bases.FDataModelClass
-import sdmed.extra.cso.interfaces.command.ICommand
 import sdmed.extra.cso.utils.FExtensions
 import java.util.UUID
 

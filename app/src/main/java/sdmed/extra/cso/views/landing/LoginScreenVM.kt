@@ -1,7 +1,7 @@
 package sdmed.extra.cso.views.landing
 
+import android.content.Context
 import androidx.lifecycle.viewModelScope
-import androidx.multidex.MultiDexApplication
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -10,7 +10,7 @@ import sdmed.extra.cso.bases.FBaseViewModel
 import sdmed.extra.cso.models.RestResultT
 import sdmed.extra.cso.models.retrofit.users.UserMultiLoginModel
 
-class LoginScreenVM: FBaseViewModel() {
+class LoginScreenVM(applicationContext: Context? = null): FBaseViewModel(applicationContext) {
     val id = MutableStateFlow("")
     val pw = MutableStateFlow("")
     val fillDataState = combine(id, pw) { id, pw ->

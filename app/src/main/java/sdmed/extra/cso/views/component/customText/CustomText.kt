@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.TextUnit
 import sdmed.extra.cso.views.component.shape.shapeRoundedBox
 import sdmed.extra.cso.views.theme.FThemeUtil
-import sdmed.extra.cso.views.theme.LightColor
+import sdmed.extra.cso.views.theme.FLightColor
 
 @Composable
 fun customText(data: CustomTextData) {
@@ -28,9 +28,9 @@ fun customText(data: CustomTextData) {
 @Composable
 fun customText(text: String,
                modifier: Modifier = Modifier,
-               textColor: Color = LightColor.foreground,
+               textColor: Color = FLightColor.foreground,
                textSize: TextUnit = FThemeUtil.textUnit(24F),
-               backgroundTint: Color = LightColor.transparent,
+               backgroundTint: Color = FLightColor.transparent,
                textAlign: TextAlign = TextAlign.Start,
                fontFamily: FontFamily = FontFamily(Font(R.font.nanum_gothic)),
                fontWeight: FontWeight = FontWeight.Normal,

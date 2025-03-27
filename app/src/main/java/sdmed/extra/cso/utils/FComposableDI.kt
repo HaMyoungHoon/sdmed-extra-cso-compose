@@ -2,12 +2,10 @@ package sdmed.extra.cso.utils
 
 import android.content.Context
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import org.kodein.di.DI
 import org.kodein.di.DIAware
-import org.kodein.di.direct
 import org.kodein.di.instance
 import sdmed.extra.cso.bases.FMainApplication
 import sdmed.extra.cso.interfaces.repository.IAzureBlobRepository

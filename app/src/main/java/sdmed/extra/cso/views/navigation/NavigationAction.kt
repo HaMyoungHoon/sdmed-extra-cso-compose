@@ -3,7 +3,6 @@ package sdmed.extra.cso.views.navigation
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import sdmed.extra.cso.models.menu.MenuItem
-import sdmed.extra.cso.utils.FLog
 
 class NavigationAction(private val navController: NavHostController) {
     fun navigateTo(menu: MenuItem) {

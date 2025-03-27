@@ -11,6 +11,17 @@ import androidx.compose.ui.graphics.vector.PathParser
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
+fun fVectorBase(data: FVectorData = FVectorData()): ImageVector.Builder {
+    return ImageVector.Builder(data.imageVectorName,
+        data.imageVectorDefaultWidth,
+        data.imageVectorDefaultHeight,
+        data.imageVectorViewportWidth,
+        data.imageVectorViewportHeight)
+}
+@Composable
+fun fVectorBase(imageVector: ImageVector, data: FVectorData = FVectorData(), size: Dp = 24.dp) {
+    Icon(imageVector, data.iconContentDescription, Modifier.size(size), data.iconTint)
+}
 open class FVectorBase {
     open var viewportWidth = 24F
     open var viewportHeight = 24F

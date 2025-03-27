@@ -24,7 +24,8 @@ import sdmed.extra.cso.models.menu.MenuList
 import sdmed.extra.cso.models.menu.NavigationContentType
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
-import sdmed.extra.cso.views.component.vector.VectorMenu
+import sdmed.extra.cso.views.component.vector.FVectorData
+import sdmed.extra.cso.views.component.vector.vectorMenuOpen
 import sdmed.extra.cso.views.theme.FThemeUtil
 
 @Composable
@@ -39,7 +40,7 @@ fun railNavigationBar(navDestination: NavDestination?,
                 Arrangement.spacedBy(4.dp),
                 Alignment.CenterHorizontally) {
                 NavigationRailItem(false, drawerClick, {
-                    Icon(VectorMenu().vector(color.cardBackground, color.cardForeground), stringResource(R.string.menu_my_desc))
+                    Icon(vectorMenuOpen(FVectorData(color.cardBackground, color.cardForeground)), stringResource(R.string.menu_my_desc))
                 })
             }
             Column(Modifier.layoutId(MenuLayoutType.CONTENT),

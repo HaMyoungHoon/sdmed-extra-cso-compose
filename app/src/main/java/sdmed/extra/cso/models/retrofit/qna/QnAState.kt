@@ -3,7 +3,6 @@ package sdmed.extra.cso.models.retrofit.qna
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import sdmed.extra.cso.views.theme.FThemeUtil
-import sdmed.extra.cso.views.theme.LightColor
 
 enum class QnAState(var index: Int, var desc: String) {
     None(0, "미지정"),

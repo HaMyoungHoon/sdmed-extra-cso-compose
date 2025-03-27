@@ -5,7 +5,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 import sdmed.extra.cso.interfaces.theme.IBaseColor
 
-object LightColor: IBaseColor {
+object FLightColor: IBaseColor {
     override val primary = Color(0xFF8C7851)
     override val onPrimary = Color(0xFFE0D5C6)
     override val primaryContainer = Color(0xFFF1E0C6)
