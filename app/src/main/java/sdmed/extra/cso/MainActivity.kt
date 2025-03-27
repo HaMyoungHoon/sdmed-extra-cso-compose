@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -25,7 +26,7 @@ import sdmed.extra.cso.models.common.NotifyIndex
 import sdmed.extra.cso.models.menu.Route
 import sdmed.extra.cso.models.retrofit.FRetrofitVariable
 import sdmed.extra.cso.utils.FCoroutineUtil
-import sdmed.extra.cso.views.landing.landingScreen
+import sdmed.extra.cso.views.main.landing.landingScreen
 import sdmed.extra.cso.views.navigation.getFoldingDevicePosture
 import sdmed.extra.cso.views.navigation.getWindowPaneType
 import sdmed.extra.cso.views.navigation.thisApp
@@ -53,7 +54,7 @@ class MainActivity: FBaseActivity<MainActivityVM>() {
                     checkToken()
                 }
                 Box(Modifier
-//                    .windowInsetsPadding(WindowInsets.statusBars.only(WindowInsetsSides.Top))
+                    .windowInsetsPadding(WindowInsets.statusBars.only(WindowInsetsSides.Top))
                     .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Bottom))
                     .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Horizontal))
                     ) {

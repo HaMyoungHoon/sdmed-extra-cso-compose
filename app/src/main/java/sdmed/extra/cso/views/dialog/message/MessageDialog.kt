@@ -109,9 +109,9 @@ fun messageDialogDetail(dataContext: MessageDialogVM) {
     }
 }
 
-@Preview
+//@Preview
 @Composable
-fun previewMessageDialog() {
+private fun previewMessageDialog() {
     messageDialog(MessageDialogData().apply {
         title = "프리뷰 타이틀"
         leftBtnText = "왼쪽버튼"

@@ -25,8 +25,9 @@ fun vectorDelete(data: FVectorData = FVectorData()): ImageVector {
 fun vectorDelete(data: FVectorData = FVectorData(), size: Dp) {
     fVectorBase(vectorDelete(data), data, size)
 }
-@Preview
+
+//@Preview
 @Composable
-fun previewDelete(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
+private fun previewDelete(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     Surface { vectorDelete(FVectorData(data.first, data.second), 24.dp) }
 }

@@ -31,7 +31,7 @@ fun loadingDialog(loading: LoadingMessageModel) {
 private fun spinnerDialogBox(customTextData: CustomTextData) {
     val color = FThemeUtil.safeColor()
     Box(Modifier.fillMaxSize()
-        .background(Color.Black.copy(alpha = 0.5F))
+        .background(color.transparent)
         .zIndex(1000F)) {
         Column(Modifier.align(Alignment.Companion.Center), Arrangement.Center, Alignment.CenterHorizontally) {
             CircularProgressIndicator(Modifier, color.primary)
@@ -40,9 +40,9 @@ private fun spinnerDialogBox(customTextData: CustomTextData) {
     }
 }
 
-@Preview
+//@Preview
 @Composable
-fun previewLoadingDialog() {
+private fun previewLoadingDialog() {
     spinnerDialogBox(CustomTextData().apply {
         text = "loading"
         textColor = FLightColor.primary

@@ -30,7 +30,7 @@ fun vectorCircle(data: FVectorData = FVectorData(), size: Dp) {
     fVectorBase(vectorCircle(data), data, size)
 }
 
-@Preview
+//@Preview
 @Composable
 private fun previewScreen(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     Surface { vectorCircle(FVectorData().apply {

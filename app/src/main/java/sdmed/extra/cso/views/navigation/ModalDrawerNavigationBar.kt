@@ -80,10 +80,8 @@ fun modalDrawerNavigationBar(navDestination: NavDestination?,
     }
 }
 
-
-
-@Preview
+//@Preview
 @Composable
-fun previewDrawerNavigationBar() {
+private fun previewDrawerNavigationBar() {
     modalDrawerNavigationBar(null, NavigationContentType.TOP, {})
 }

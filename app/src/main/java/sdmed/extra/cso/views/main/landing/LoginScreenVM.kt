@@ -1,4 +1,4 @@
-package sdmed.extra.cso.views.landing
+package sdmed.extra.cso.views.main.landing
 
 import android.content.Context
 import androidx.lifecycle.viewModelScope

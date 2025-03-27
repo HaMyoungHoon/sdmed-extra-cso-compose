@@ -59,14 +59,14 @@ abstract class FBaseActivity<T: FBaseViewModel>(val needRoles: UserRoles = UserR
 
     @Composable
     protected fun setToast() {
-        val toastMessageModel by dataContext.uiStateService().toast.collectAsState()
+        val toastMessageModel by dataContext.uiStateService.toast.collectAsState()
         val toast = toastMessageModel as? ToastMessageModel.Visible ?: return
         Toast.makeText(LocalContext.current, toast.msg, toast.duration).show()
         dataContext.unToastComposable()
     }
     @Composable
     protected fun setLoading() {
-        val loading by dataContext.uiStateService().isLoading.collectAsState()
+        val loading by dataContext.uiStateService.isLoading.collectAsState()
         loadingDialog(loading)
     }
 

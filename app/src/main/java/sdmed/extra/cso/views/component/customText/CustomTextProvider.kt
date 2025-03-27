@@ -62,7 +62,8 @@ class CustomTextProvider: PreviewParameterProvider<CustomTextData> {
         },
     )
 
-    @Preview
+
+//    @Preview
     @Composable
     fun previewCustomTextField() {
         customTextField(CustomTextFieldData().apply {

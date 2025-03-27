@@ -2,7 +2,10 @@ package sdmed.extra.cso.utils
 
 import android.content.Context
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,12 +31,14 @@ object FCoil {
         }
         .build()
     @Composable
-    fun load(blobUrl: String? = null, blobMimeType: String? = null, blobFilename: String? = null) {
+    fun load(blobUrl: String? = null, blobMimeType: String? = null, blobFilename: String? = null, contentScale: ContentScale = ContentScale.Crop) {
         val context = LocalContext.current
         val mimeType = FContentsType.getExtMimeType(blobMimeType)
         if (blobUrl.isNullOrEmpty() || !FImageUtils.isImage(mimeType)) {
             Image(painterResource(FImageUtils.getDefaultImage(blobMimeType)),
-                blobFilename)
+                blobFilename,
+                Modifier.fillMaxSize(),
+                contentScale = contentScale)
         } else {
             AsyncImage(ImageRequest.Builder(context)
                 .data(blobUrl)
@@ -41,23 +46,27 @@ object FCoil {
                 .memoryCachePolicy(CachePolicy.ENABLED)
                 .build(),
                 blobFilename,
-                imageLoader(context))
+                imageLoader(context),
+                Modifier.fillMaxSize(),
+                contentScale = contentScale)
         }
     }
 }
 
-@Preview
+//@Preview
 @Composable
-fun previewNullImage() {
+private fun previewNullImage() {
     FCoil.load()
 }
-@Preview
+
+//@Preview
 @Composable
-fun previewExcelImage() {
+private fun previewExcelImage() {
     FCoil.load("", FContentsType.type_xlsx)
 }
-@Preview
+
+//@Preview
 @Composable
-fun previewPdf() {
+private fun previewPdf() {
     FCoil.load("", FContentsType.type_pdf)
 }

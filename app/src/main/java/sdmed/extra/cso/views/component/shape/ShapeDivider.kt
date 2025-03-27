@@ -23,12 +23,12 @@ fun dividerVertical(color: Color) {
     Box(Modifier.fillMaxHeight().width(1.dp).background(color))
 }
 
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 @Composable
 fun previewHorizontal(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     dividerHorizontal(data.second)
 }
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 @Composable
 fun previewVertical(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     dividerVertical(data.second)

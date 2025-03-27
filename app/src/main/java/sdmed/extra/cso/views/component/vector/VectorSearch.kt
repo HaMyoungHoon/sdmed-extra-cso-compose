@@ -28,8 +28,8 @@ fun vectorSearch(data: FVectorData = FVectorData(), size: Dp) {
     fVectorBase(vectorSearch(data), data, size)
 }
 
-@Preview
+//@Preview
 @Composable
-fun previewSearch(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
+private fun previewSearch(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     Surface { vectorSearch(FVectorData(data.first, data.second), 24.dp) }
 }

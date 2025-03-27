@@ -78,7 +78,8 @@ fun permanentDrawerNavigationBar(navDestination: NavDestination?,
     }
 }
 
-@Preview
+
+//@Preview
 @Composable
 private fun previewScreen() {
     permanentDrawerNavigationBar(null, NavigationContentType.TOP, { })

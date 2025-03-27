@@ -21,7 +21,8 @@ fun vectorCross(data: FVectorData = FVectorData()): ImageVector {
 fun vectorCross(data: FVectorData = FVectorData(), size: Dp) {
     fVectorBase(vectorCross(data), data, size)
 }
-@Preview
+
+//@Preview
 @Composable
 private fun previewScreen(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     Surface { vectorCross(FVectorData().apply {

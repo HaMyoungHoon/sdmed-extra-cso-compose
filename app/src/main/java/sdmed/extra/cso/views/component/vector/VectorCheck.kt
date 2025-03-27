@@ -26,7 +26,7 @@ fun vectorCheck(data: FVectorData = FVectorData(), size: Dp) {
     fVectorBase(vectorCheck(data), data, size)
 }
 
-@Preview
+//@Preview
 @Composable
 private fun previewScreen(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     Surface { vectorCheck(FVectorData().apply {

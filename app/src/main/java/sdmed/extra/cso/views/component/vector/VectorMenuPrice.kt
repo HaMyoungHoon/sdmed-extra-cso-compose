@@ -35,8 +35,9 @@ fun vectorMenuPrice(data: FVectorData = FVectorData()): ImageVector {
 fun vectorMenuPrice(data: FVectorData = FVectorData(), size: Dp) {
     fVectorBase(vectorMenuPrice(data), data, size)
 }
-@Preview
+
+//@Preview
 @Composable
-fun previewMenuPrice(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
+private fun previewMenuPrice(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     Surface { vectorMenuPrice(FVectorData(data.first, data.second), 24.dp) }
 }

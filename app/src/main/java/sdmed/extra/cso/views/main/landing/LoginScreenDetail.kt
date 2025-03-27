@@ -1,4 +1,4 @@
-package sdmed.extra.cso.views.landing
+package sdmed.extra.cso.views.main.landing
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sdmed.extra.cso.R
 import sdmed.extra.cso.interfaces.theme.IBaseColor
@@ -30,13 +29,13 @@ import sdmed.extra.cso.views.theme.FThemeUtil
 
 private val headerHeight = 48.dp
 @Composable
-fun loginScreenDetail(viewModel: LoginScreenVM) {
+fun loginScreenDetail(dataContext: LoginScreenVM) {
     val color = FThemeUtil.safeColor()
     Box(Modifier.fillMaxSize().background(color.background)) {
         loginHeader()
-        loginBody(viewModel)
+        loginBody(dataContext)
         Box(Modifier.align(Alignment.BottomCenter)) {
-            loginTail(viewModel)
+            loginTail(dataContext)
         }
     }
 }
@@ -52,10 +51,10 @@ private fun loginHeader() {
     }
 }
 @Composable
-private fun loginBody(viewModel: LoginScreenVM) {
-    val id = viewModel.id.collectAsState()
-    val pw = viewModel.pw.collectAsState()
-    val multiSignItems = viewModel.multiSignItems.collectAsState()
+private fun loginBody(dataContext: LoginScreenVM) {
+    val id = dataContext.id.collectAsState()
+    val pw = dataContext.pw.collectAsState()
+    val multiSignItems = dataContext.multiSignItems.collectAsState()
     val color = FThemeUtil.safeColor()
     Box(Modifier.fillMaxWidth().padding(top = headerHeight * 2)) {
         Column(Modifier.fillMaxWidth()) {
@@ -71,7 +70,7 @@ private fun loginBody(viewModel: LoginScreenVM) {
                     modifier = Modifier.padding(10.dp)
                     onValueChange = {
                         if (it.length <= 20) {
-                            viewModel.id.value = it
+                            dataContext.id.value = it
                         }
                     }
                     decorationBox = { idDecorationBox(it, id.value, color) }
@@ -89,7 +88,7 @@ private fun loginBody(viewModel: LoginScreenVM) {
                     modifier = Modifier.padding(10.dp)
                     onValueChange = {
                         if (it.length <= 20) {
-                            viewModel.pw.value = it
+                            dataContext.pw.value = it
                         }
                     }
                     decorationBox = { pwDecorationBox(it, pw.value, color) }
@@ -101,7 +100,7 @@ private fun loginBody(viewModel: LoginScreenVM) {
                 shapeRoundedBox(ShapeRoundedBoxData().apply {
                     backgroundColor = color.quinary
                     modifier = Modifier.align(Alignment.End).padding(top = 12.dp, start = 16.dp, end = 16.dp)
-                        .clickable { viewModel.relayCommand.execute(LoginScreenVM.ClickEvent.MULTI_LOGIN) }
+                        .clickable { dataContext.relayCommand.execute(LoginScreenVM.ClickEvent.MULTI_LOGIN) }
                 }) {
                     customText(CustomTextData().apply {
                         text = stringResource(R.string.multi_login)
@@ -115,14 +114,14 @@ private fun loginBody(viewModel: LoginScreenVM) {
     }
 }
 @Composable
-private fun loginTail(viewModel: LoginScreenVM) {
-    val fillDataState = viewModel.fillDataState.collectAsState()
+private fun loginTail(dataContext: LoginScreenVM) {
+    val fillDataState = dataContext.fillDataState.collectAsState()
     val color = FThemeUtil.safeColor()
     Box(Modifier.fillMaxWidth()) {
         shapeRoundedBox(ShapeRoundedBoxData().apply {
             backgroundColor = if (fillDataState.value) color.buttonBackground else color.disableBackGray
             modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp, start = 16.dp, end = 16.dp)
-                .clickable { viewModel.relayCommand.execute(LoginScreenVM.ClickEvent.SIGN_IN)}
+                .clickable { dataContext.relayCommand.execute(LoginScreenVM.ClickEvent.SIGN_IN)}
         }) {
             customText(CustomTextData().apply {
                 text = stringResource(R.string.login_btn_desc)
@@ -166,8 +165,7 @@ private fun pwDecorationBox(innerTextField: @Composable () -> Unit, text: String
     }
 }
 
-
-@Preview
+//@Preview
 @Composable
 private fun previewScreen() {
     loginScreenDetail(LoginScreenVM().apply {

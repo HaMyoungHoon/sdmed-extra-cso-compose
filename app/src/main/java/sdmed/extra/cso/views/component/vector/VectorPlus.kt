@@ -26,9 +26,9 @@ fun vectorPlus(data: FVectorData = FVectorData(), size: Dp) {
     fVectorBase(vectorPlus(data), data, size)
 }
 
-@Preview
+//@Preview
 @Composable
-fun previewPlus(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
+private fun previewPlus(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     Surface { vectorPlus(FVectorData().apply {
         tintColor = data.first
         fillColor = data.second

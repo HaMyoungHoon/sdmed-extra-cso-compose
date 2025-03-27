@@ -74,18 +74,20 @@ fun circleCross(tintColor: Color, fillColor: Color, size: Dp = 24.dp) {
     }, size)
 }
 
-@Preview
+//@Preview
 @Composable
-fun previewCheck(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
+private fun previewCheck(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     Surface { circleCheck(data.first, data.second, 24.dp) }
 }
-@Preview
+
+//@Preview
 @Composable
-fun previewPlus(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
+private fun previewPlus(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     Surface { circlePlus(data.first, data.second, 24.dp) }
 }
-@Preview
+
+//@Preview
 @Composable
-fun previewCross(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
+private fun previewCross(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     Surface { circleCross(data.first, data.second, 24.dp) }
 }

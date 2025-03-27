@@ -26,9 +26,9 @@ fun vectorFile(data: FVectorData = FVectorData(), size: Dp) {
     fVectorBase(vectorFile(data), data, size)
 }
 
-@Preview
+//@Preview
 @Composable
-fun previewFile(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
+private fun previewFile(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     Surface { vectorFile(FVectorData().apply {
         tintColor = data.first
         fillColor = data.second

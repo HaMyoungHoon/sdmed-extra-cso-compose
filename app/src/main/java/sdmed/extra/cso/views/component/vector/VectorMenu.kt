@@ -30,7 +30,7 @@ fun vectorMenu(data: FVectorData = FVectorData(), size: Dp) {
     fVectorBase(vectorMenu(data), data, size)
 }
 
-@Preview
+//@Preview
 @Composable
 private fun previewVectorMenu(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     Surface { vectorMenu(FVectorData().apply {

@@ -15,25 +15,16 @@ import sdmed.extra.cso.models.RestResultT
 import sdmed.extra.cso.models.command.AsyncRelayCommand
 import sdmed.extra.cso.models.retrofit.users.UserStatus
 import sdmed.extra.cso.models.services.FUIStateService
-import sdmed.extra.cso.utils.FComposableDI
 import sdmed.extra.cso.utils.FDI
 
 abstract class FBaseViewModel(applicationContext: Context? = null): ViewModel() {
     val context: Context by lazy {
         FMainApplication.ins
     }
-    private val _uiStateService: FUIStateService = FDI.uiStateService(applicationContext)
-    protected val azureBlobRepository: IAzureBlobRepository = FDI.azureBlobRepository(applicationContext)
-    protected val commonRepository: ICommonRepository = FDI.commonRepository(applicationContext)
+    val uiStateService: FUIStateService by FDI.di(applicationContext).instance(FUIStateService::class)
+    protected val azureBlobRepository: IAzureBlobRepository by FDI.di(applicationContext).instance(IAzureBlobRepository::class)
+    protected val commonRepository: ICommonRepository by FDI.di(applicationContext).instance(ICommonRepository::class)
 
-    @Composable
-    fun uiStateService(): FUIStateService {
-        return if (LocalInspectionMode.current) {
-            FComposableDI.uiStateService()
-        } else {
-            _uiStateService
-        }
-    }
     suspend fun getMyState(): RestResultT<UserStatus> {
         return commonRepository.getMyState()
     }
@@ -44,15 +35,15 @@ abstract class FBaseViewModel(applicationContext: Context? = null): ViewModel() 
         return commonRepository.tokenRefresh()
     }
 
-    fun toast(msg: String?, duration: Int = Toast.LENGTH_SHORT) = _uiStateService.toast(msg, duration)
+    fun toast(msg: String?, duration: Int = Toast.LENGTH_SHORT) = uiStateService.toast(msg, duration)
     @Composable
-    fun toastComposable(msg: String?, duration: Int = Toast.LENGTH_SHORT) = uiStateService().toast(msg, duration)
-    fun unToast() = _uiStateService.unToast()
+    fun toastComposable(msg: String?, duration: Int = Toast.LENGTH_SHORT) = uiStateService.toast(msg, duration)
+    fun unToast() = uiStateService.unToast()
     @Composable
-    fun unToastComposable() = uiStateService().unToast()
-    fun loading(isVisible: Boolean = true, msg: String = "") = _uiStateService.loading(isVisible, msg)
+    fun unToastComposable() = uiStateService.unToast()
+    fun loading(isVisible: Boolean = true, msg: String = "") = uiStateService.loading(isVisible, msg)
     @Composable
-    fun loadingComposable(isVisible: Boolean = true, msg: String = "") = uiStateService().loading(isVisible, msg)
+    fun loadingComposable(isVisible: Boolean = true, msg: String = "") = uiStateService.loading(isVisible, msg)
 
     var relayCommand: ICommand = AsyncRelayCommand({})
     fun addEventListener(listener: IAsyncEventListener) {

@@ -42,7 +42,7 @@ fun vectorMenuMy(data: FVectorData = FVectorData(), size: Dp) {
     fVectorBase(vectorMenuMy(data), data, size)
 }
 
-@Preview
+//@Preview
 @Composable
 private fun previewMenuMy(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     Surface { vectorMenuMy(FVectorData(data.first, data.second), 24.dp) }

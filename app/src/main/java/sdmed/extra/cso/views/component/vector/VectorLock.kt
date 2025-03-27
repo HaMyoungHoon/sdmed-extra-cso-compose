@@ -26,9 +26,10 @@ fun vectorLock(data: FVectorData = FVectorData()): ImageVector {
 fun vectorLock(data: FVectorData = FVectorData(), size: Dp) {
     fVectorBase(vectorLock(data), data, size)
 }
-@Preview
+
+//@Preview
 @Composable
-fun previewLock(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
+private fun previewLock(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     Surface { vectorLock(FVectorData().apply {
         tintColor = data.first
         fillColor = data.second

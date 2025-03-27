@@ -31,7 +31,8 @@ fun vectorMenuOpen(data: FVectorData = FVectorData()): ImageVector {
 fun vectorMenuOpen(data: FVectorData = FVectorData(), size: Dp) {
     fVectorBase(vectorMenuOpen(data), data, size)
 }
-@Preview
+
+//@Preview
 @Composable
 private fun previewVectorMenuOpen(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     Surface { vectorMenuOpen(FVectorData(data.first, data.second), 24.dp) }

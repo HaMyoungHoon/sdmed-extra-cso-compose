@@ -94,8 +94,8 @@ fun ediListScreenTopContainer(startDate: String,
 }
 @Composable
 fun ediListScreenEdiList(ediItems: List<EDIUploadModel>,
-                           lazyListState: LazyListState,
-                           relayCommand: ICommand? = null) {
+                         lazyListState: LazyListState,
+                         relayCommand: ICommand? = null) {
     val color = FThemeUtil.safeColor()
     LazyColumn(Modifier.fillMaxWidth().background(color.background),
         lazyListState) {
@@ -167,12 +167,13 @@ private fun cardSelectColor(isSelected: Boolean): CardColors {
     )
 }
 
-@Preview
+//@Preview
 @Composable
 private fun previewTop() {
     ediListScreenTopContainer("2025-01-01", "2025-01-31")
 }
-@Preview
+
+//@Preview
 @Composable
 private fun previewItem() {
     itemContainer(EDIUploadModel().apply {
@@ -184,7 +185,8 @@ private fun previewItem() {
         isSelected.value = true
     })
 }
-@Preview
+
+//@Preview
 @Composable
 private fun previewList() {
     val list = mutableListOf<EDIUploadModel>()

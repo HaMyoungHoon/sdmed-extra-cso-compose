@@ -21,7 +21,8 @@ fun vectorClose(data: FVectorData = FVectorData()): ImageVector {
 fun vectorClose(data: FVectorData = FVectorData(), size: Dp) {
     fVectorBase(vectorClose(data), data, size)
 }
-@Preview
+
+//@Preview
 @Composable
 private fun previewScreen(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     Surface { vectorClose(FVectorData().apply {

@@ -29,9 +29,10 @@ fun vectorMenuEDI(data: FVectorData = FVectorData()): ImageVector {
 fun vectorMenuEDI(data: FVectorData = FVectorData(), size: Dp) {
     fVectorBase(vectorMenuEDI(data), data, size)
 }
-@Preview
+
+//@Preview
 @Composable
-fun previewMenuEDI(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
+private fun previewMenuEDI(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     Surface { vectorMenuEDI(FVectorData().apply {
         tintColor = data.first
         fillColor = data.second

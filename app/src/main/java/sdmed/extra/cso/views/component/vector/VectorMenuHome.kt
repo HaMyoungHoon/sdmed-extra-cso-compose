@@ -32,8 +32,8 @@ fun vectorMenuHome(data: FVectorData = FVectorData(), size: Dp) {
     fVectorBase(vectorMenuHome(data), data, size)
 }
 
-@Preview
+//@Preview
 @Composable
-fun previewMenuHome(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
+private fun previewMenuHome(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     Surface { vectorMenuHome(FVectorData(data.first, data.second), 24.dp) }
 }

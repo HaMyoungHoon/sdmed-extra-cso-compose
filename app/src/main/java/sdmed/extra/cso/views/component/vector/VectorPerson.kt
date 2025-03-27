@@ -24,8 +24,9 @@ fun vectorPerson(data: FVectorData = FVectorData()): ImageVector {
 fun vectorPerson(data: FVectorData = FVectorData(), size: Dp) {
     fVectorBase(vectorPerson(data), data, size)
 }
-@Preview
+
+//@Preview
 @Composable
-fun previewPerson(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
+private fun previewPerson(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     Surface { vectorPerson(FVectorData(data.first, data.second), 24.dp) }
 }

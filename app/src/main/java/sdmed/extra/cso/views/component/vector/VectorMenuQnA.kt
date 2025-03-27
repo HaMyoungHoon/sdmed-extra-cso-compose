@@ -33,8 +33,9 @@ fun vectorMenuQnA(data: FVectorData = FVectorData()): ImageVector {
 fun vectorMenuQnA(data: FVectorData = FVectorData(), size: Dp) {
     fVectorBase(vectorMenuQnA(data), data, size)
 }
-@Preview
+
+//@Preview
 @Composable
-fun previewMenuQnA(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
+private fun previewMenuQnA(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     Surface { vectorMenuQnA(FVectorData(data.first, data.second), 24.dp) }
 }

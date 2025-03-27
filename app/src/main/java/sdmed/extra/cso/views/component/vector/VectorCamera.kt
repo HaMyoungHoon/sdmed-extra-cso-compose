@@ -25,7 +25,8 @@ fun vectorCamera(data: FVectorData = FVectorData()): ImageVector {
 fun vectorCamera(data: FVectorData = FVectorData(), size: Dp) {
     fVectorBase(vectorCamera(data), data, size)
 }
-@Preview
+
+//@Preview
 @Composable
 private fun previewScreen(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     Surface { vectorCamera(FVectorData().apply {

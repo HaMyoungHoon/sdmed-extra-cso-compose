@@ -70,8 +70,9 @@ fun railNavigationBar(navDestination: NavDestination?,
     }
 }
 
-@Preview
+
+//@Preview
 @Composable
-fun previewRailNavigationBar() {
+private fun previewRailNavigationBar() {
     railNavigationBar(null, NavigationContentType.TOP, { })
 }

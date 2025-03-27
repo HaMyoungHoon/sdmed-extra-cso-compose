@@ -65,8 +65,16 @@ fun navigationWrapper(navDestination: NavDestination?,
         NavigationSuiteScaffoldLayout({
             when (navLayoutType) {
                 NavigationSuiteType.NavigationBar -> bottomNavigationBar(navDestination, navigate)
-                NavigationSuiteType.NavigationRail -> railNavigationBar(navDestination, navContentPosition, navigate)
-                NavigationSuiteType.NavigationDrawer -> permanentDrawerNavigationBar(navDestination, navContentPosition, navigate)
+                NavigationSuiteType.NavigationRail -> railNavigationBar(navDestination, navContentPosition, navigate, {
+                    coroutineScope.launch {
+                        drawerState.open()
+                    }
+                })
+                NavigationSuiteType.NavigationDrawer -> railNavigationBar(navDestination, navContentPosition, navigate, {
+                    coroutineScope.launch {
+                        drawerState.close()
+                    }
+                })
             }
         }, navLayoutType) {
             NavSuiteScope(navLayoutType).content()

@@ -25,7 +25,8 @@ fun vectorArrowUp(data: FVectorData = FVectorData()): ImageVector {
 fun vectorArrowUp(data: FVectorData = FVectorData(), size: Dp) {
     fVectorBase(vectorArrowUp(data), data, size)
 }
-@Preview
+
+//@Preview
 @Composable
 private fun previewScreen(@PreviewParameter(PreviewColorProvider::class) data: Pair<Color, Color>) {
     Surface { vectorArrowUp(FVectorData().apply {

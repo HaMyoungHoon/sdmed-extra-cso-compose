@@ -52,16 +52,15 @@ fun customText(text: String,
         maxLines)
 }
 
-
-@Preview
+//@Preview
 @Composable
-fun previewCustomText(@PreviewParameter(CustomTextProvider::class) data: CustomTextData) {
+private fun previewCustomText(@PreviewParameter(CustomTextProvider::class) data: CustomTextData) {
     customText(data)
 }
 
-@Preview
+//@Preview
 @Composable
-fun previewCustomBoxText(@PreviewParameter(CustomTextProvider::class) data: CustomTextData) {
+private fun previewCustomBoxText(@PreviewParameter(CustomTextProvider::class) data: CustomTextData) {
     shapeRoundedBox(data.backgroundTint, data.textColor) {
         customText(data)
     }
