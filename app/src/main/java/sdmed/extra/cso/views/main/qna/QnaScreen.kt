@@ -10,12 +10,10 @@ import sdmed.extra.cso.models.menu.WindowPanelType
 fun qnaScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
               displayFeatures: List<DisplayFeature> = emptyList(),
               navigationType: NavigationType = NavigationType.BOTTOM) {
-    fBaseScreen<QnaScreenVM>({ data, dataContext ->
-            setThisCommand(data, dataContext)
-        },
+    fBaseScreen<QnaScreenVM>({ data, dataContext -> setLayoutCommand(data, dataContext) },
         null,
         windowPanelType, navigationType)
 }
-private fun setThisCommand(data: Any?, dataContext: QnaScreenVM) {
+private fun setLayoutCommand(data: Any?, dataContext: QnaScreenVM) {
 
 }

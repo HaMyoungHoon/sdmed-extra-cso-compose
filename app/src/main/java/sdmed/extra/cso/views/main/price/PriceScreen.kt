@@ -10,12 +10,10 @@ import sdmed.extra.cso.models.menu.WindowPanelType
 fun priceScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
                 displayFeatures: List<DisplayFeature> = emptyList(),
                 navigationType: NavigationType = NavigationType.BOTTOM) {
-    fBaseScreen<PriceScreenVM>({ data, dataContext ->
-            setThisCommand(data, dataContext)
-        },
+    fBaseScreen<PriceScreenVM>({ data, dataContext -> setLayoutCommand(data, dataContext) },
         null,
         windowPanelType, navigationType)
 }
-private fun setThisCommand(data: Any?, dataContext: PriceScreenVM) {
+private fun setLayoutCommand(data: Any?, dataContext: PriceScreenVM) {
 
 }

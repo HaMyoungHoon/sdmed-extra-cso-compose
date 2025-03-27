@@ -71,7 +71,7 @@ fun getWindowPaneType(windowSize: WindowSizeClass, foldingDevicePosture: IDevice
     else -> WindowPanelType.SINGLE_PANE
 }
 
-private fun NavigationSuiteType.toNavType() = when (this) {
+fun NavigationSuiteType.toNavType() = when (this) {
     NavigationSuiteType.NavigationBar -> NavigationType.BOTTOM
     NavigationSuiteType.NavigationRail -> NavigationType.RAIL
     NavigationSuiteType.NavigationDrawer -> NavigationType.DRAWER

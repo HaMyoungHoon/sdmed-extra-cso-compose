@@ -8,7 +8,7 @@ import sdmed.extra.cso.models.menu.NavigationType
 import sdmed.extra.cso.models.menu.WindowPanelType
 
 @Composable
-inline fun <reified T: FBaseViewModel> fBaseScreen(crossinline setThisCommand: (Any?, T) -> Unit = { x, y -> },
+inline fun <reified T: FBaseViewModel> fBaseScreen(crossinline setLayoutCommand: (Any?, T) -> Unit = { x, y -> },
                                                    noinline content: @Composable ((T) -> Unit)? = null,
                                                    windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
                                                    navigationType: NavigationType = NavigationType.BOTTOM,
@@ -19,7 +19,7 @@ inline fun <reified T: FBaseViewModel> fBaseScreen(crossinline setThisCommand: (
     dataContext.relayCommand = AsyncRelayCommand()
     dataContext.addEventListener(object: IAsyncEventListener {
         override suspend fun onEvent(data: Any?) {
-            setThisCommand(data, dataContext)
+            setLayoutCommand(data, dataContext)
         }
     })
     if (content != null) {

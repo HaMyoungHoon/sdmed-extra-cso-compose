@@ -21,16 +21,14 @@ import sdmed.extra.cso.views.theme.FThemeUtil
 fun ediScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
               displayFeatures: List<DisplayFeature> = emptyList(),
               navigationType: NavigationType = NavigationType.BOTTOM) {
-    fBaseScreen<EDIScreenVM>( { data, dataContext ->
-            setThisCommand(data, dataContext)
-        },
+    fBaseScreen<EDIScreenVM>( { data, dataContext -> setLayoutCommand(data, dataContext) },
         null,
         windowPanelType, navigationType,
         { twoPaneScreen(displayFeatures, it)},
         { phoneScreen(it) },
         { tabletScreen(it) })
 }
-private fun setThisCommand(data: Any?, dataContext: EDIScreenVM) {
+private fun setLayoutCommand(data: Any?, dataContext: EDIScreenVM) {
 
 }
 @Composable

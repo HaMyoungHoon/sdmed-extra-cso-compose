@@ -4,14 +4,27 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowSize
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.window.core.layout.WindowWidthSizeClass
+import androidx.window.layout.DisplayFeature
 import kotlinx.coroutines.flow.MutableStateFlow
+import sdmed.extra.cso.interfaces.command.IAsyncEventListener
+import sdmed.extra.cso.models.command.AsyncRelayCommand
 import sdmed.extra.cso.models.common.ToastMessageModel
+import sdmed.extra.cso.models.menu.NavigationType
+import sdmed.extra.cso.models.menu.WindowPanelType
 import sdmed.extra.cso.models.retrofit.FRetrofitVariable
 import sdmed.extra.cso.models.retrofit.users.UserMultiLoginModel
 import sdmed.extra.cso.models.retrofit.users.UserRole
@@ -22,6 +35,10 @@ import sdmed.extra.cso.utils.FAmhohwa
 import sdmed.extra.cso.utils.FCoroutineUtil
 import sdmed.extra.cso.utils.FStorage
 import sdmed.extra.cso.views.component.loadingDialog
+import sdmed.extra.cso.views.navigation.getFoldingDevicePosture
+import sdmed.extra.cso.views.navigation.getWindowPaneType
+import sdmed.extra.cso.views.navigation.isCompact
+import sdmed.extra.cso.views.navigation.toNavType
 
 abstract class FBaseActivity<T: FBaseViewModel>(val needRoles: UserRoles = UserRole.None.toS()): ComponentActivity() {
     protected abstract val dataContext: T
@@ -49,6 +66,50 @@ abstract class FBaseActivity<T: FBaseViewModel>(val needRoles: UserRoles = UserR
     override fun onDestroy() {
         super.onDestroy()
         loading(false)
+    }
+
+    protected fun initCommand() {
+        dataContext.relayCommand = AsyncRelayCommand()
+        dataContext.addEventListener(object: IAsyncEventListener {
+            override suspend fun onEvent(data: Any?) {
+                setLayoutCommand(data)
+            }
+        })
+    }
+    @Composable
+    protected fun calcScreen(windowSize: WindowSizeClass, displayFeatures: List<DisplayFeature> = emptyList()) {
+        val foldingDevicePosture = getFoldingDevicePosture(displayFeatures)
+        val windowPanelType = getWindowPaneType(windowSize, foldingDevicePosture)
+        val adaptiveInfo = currentWindowAdaptiveInfo()
+        val windowSize = with(LocalDensity.current) { currentWindowSize().toSize().toDpSize() }
+        val navLayoutType = when {
+            adaptiveInfo.windowPosture.isTabletop -> NavigationSuiteType.NavigationBar
+            adaptiveInfo.windowSizeClass.isCompact() -> NavigationSuiteType.NavigationBar
+            adaptiveInfo.windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED &&
+                    windowSize.width >= 1200.dp -> NavigationSuiteType.NavigationDrawer
+            else -> NavigationSuiteType.NavigationRail
+        }
+        when (windowPanelType) {
+            WindowPanelType.SINGLE_PANE -> {
+                if (navLayoutType.toNavType() == NavigationType.BOTTOM) {
+                    phone(dataContext)
+                } else {
+                    tablet(dataContext)
+                }
+            }
+            WindowPanelType.DUAL_PANE -> twoPane(dataContext, displayFeatures)
+        }
+    }
+    @Composable
+    open fun phone(dataContext: T) {
+    }
+    @Composable
+    open fun tablet(dataContext: T) {
+    }
+    @Composable
+    open fun twoPane(dataContext: T, displayFeatures: List<DisplayFeature>) {
+    }
+    open fun setLayoutCommand(data: Any?) {
     }
 
     protected fun toast(@StringRes resId: Int, duration: Int = Toast.LENGTH_SHORT) = toast(resources.getString(resId), duration)

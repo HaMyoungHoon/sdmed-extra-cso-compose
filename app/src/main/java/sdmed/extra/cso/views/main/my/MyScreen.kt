@@ -15,9 +15,7 @@ import java.util.ArrayList
 fun myScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
              displayFeatures: List<DisplayFeature> = emptyList(),
              navigationType: NavigationType = NavigationType.BOTTOM) {
-    fBaseScreen<MyScreenVM>({ data, dataContext ->
-            setThisCommand(data, dataContext)
-        },
+    fBaseScreen<MyScreenVM>({ data, dataContext -> setLayoutCommand(data, dataContext) },
         null,
         windowPanelType, navigationType,
         { dataContext -> myScreenDual(dataContext, displayFeatures) },
@@ -34,12 +32,12 @@ fun getMyScreenData(dataContext: MyScreenVM) {
         }
     })
 }
-private fun setThisCommand(data: Any?, dataContext: MyScreenVM) {
-    setMyScreenCommand(data, dataContext)
+private fun setLayoutCommand(data: Any?, dataContext: MyScreenVM) {
+    setThisCommand(data, dataContext)
     setHospitalCommand(data, dataContext)
 }
 
-private fun setMyScreenCommand(data: Any?, dataContext: MyScreenVM) {
+private fun setThisCommand(data: Any?, dataContext: MyScreenVM) {
     val eventName = data as? MyScreenVM.ClickEvent ?: return
     when (eventName) {
         MyScreenVM.ClickEvent.LOGOUT -> logout(dataContext)

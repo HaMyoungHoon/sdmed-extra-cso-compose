@@ -1,4 +1,7 @@
 package sdmed.extra.cso.views.login
 
-class LoginActivityVM {
+import android.content.Context
+import sdmed.extra.cso.bases.FBaseViewModel
+
+class LoginActivityVM(applicationContext: Context? = null): FBaseViewModel(applicationContext) {
 }

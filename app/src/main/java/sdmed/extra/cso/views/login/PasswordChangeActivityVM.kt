@@ -1,4 +1,7 @@
 package sdmed.extra.cso.views.login
 
-class PasswordChangeActivityVM {
+import android.content.Context
+import sdmed.extra.cso.bases.FBaseViewModel
+
+class PasswordChangeActivityVM(applicationContext: Context? = null): FBaseViewModel(applicationContext) {
 }

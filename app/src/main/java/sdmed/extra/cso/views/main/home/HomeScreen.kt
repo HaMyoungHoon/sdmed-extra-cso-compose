@@ -10,12 +10,10 @@ import sdmed.extra.cso.models.menu.WindowPanelType
 fun homeScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
                displayFeatures: List<DisplayFeature> = emptyList(),
                navigationType: NavigationType = NavigationType.BOTTOM) {
-    fBaseScreen<HomeScreenVM>({ data, dataContext ->
-            setThisCommand(data, dataContext)
-        },
+    fBaseScreen<HomeScreenVM>({ data, dataContext -> setLayoutCommand(data, dataContext) },
         null,
         windowPanelType, navigationType)
 }
-private fun setThisCommand(data: Any?, dataContext: HomeScreenVM) {
+private fun setLayoutCommand(data: Any?, dataContext: HomeScreenVM) {
 
 }

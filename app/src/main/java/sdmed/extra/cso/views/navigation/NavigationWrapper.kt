@@ -84,4 +84,4 @@ fun navigationWrapper(navDestination: NavDestination?,
 
 class NavSuiteScope(val navSuiteType: NavigationSuiteType)
 fun NavDestination?.hasRoute(dest: MenuItem) = this?.hasRoute(dest.route::class) ?: false
-private fun WindowSizeClass.isCompact() = windowWidthSizeClass == WindowWidthSizeClass.COMPACT || windowHeightSizeClass == WindowHeightSizeClass.COMPACT
+fun WindowSizeClass.isCompact() = windowWidthSizeClass == WindowWidthSizeClass.COMPACT || windowHeightSizeClass == WindowHeightSizeClass.COMPACT

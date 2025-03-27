@@ -14,13 +14,13 @@ import sdmed.extra.cso.utils.FStorage
 fun loginScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
                 displayFeatures: List<DisplayFeature> = emptyList(),
                 navigationType: NavigationType = NavigationType.BOTTOM) {
-    fBaseScreen<LoginScreenVM>({ data, dataContext -> setThisCommand(data, dataContext)},
+    fBaseScreen<LoginScreenVM>({ data, dataContext -> setLayoutCommand(data, dataContext) },
         { dataContext ->
             loginScreenDetail(dataContext)
         },
         windowPanelType, navigationType)
 }
-private fun setThisCommand(data: Any?, dataContext: LoginScreenVM) {
+private fun setLayoutCommand(data: Any?, dataContext: LoginScreenVM) {
     val eventName = data as? LoginScreenVM.ClickEvent ?: return
     when (eventName) {
         LoginScreenVM.ClickEvent.FORGOT_ID -> { }

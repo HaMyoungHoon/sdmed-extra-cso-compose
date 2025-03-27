@@ -16,10 +16,7 @@ import sdmed.extra.cso.views.dialog.message.MessageDialogVM
 fun landingScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
                   displayFeatures: List<DisplayFeature> = emptyList(),
                   navigationType: NavigationType = NavigationType.BOTTOM) {
-    fBaseScreen<LandingScreenVM>({ data, dataContext ->
-            setThisCommand(data, dataContext)
-            setUpDateCommand(data, dataContext)
-        },
+    fBaseScreen<LandingScreenVM>({ data, dataContext -> setLayoutCommand(data, dataContext) },
         { dataContext ->
             val context = LocalContext.current
             val loginVisible = dataContext.loginVisible.collectAsState()
@@ -41,6 +38,10 @@ fun landingScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE
         windowPanelType, navigationType)
 }
 
+private fun setLayoutCommand(data: Any?, dataContext: LandingScreenVM) {
+    setThisCommand(data, dataContext)
+    setUpDateCommand(data, dataContext)
+}
 private fun setThisCommand(data: Any?, dataContext: LandingScreenVM) {
     val eventName = data as? LandingScreenVM.ClickEvent ?: return
     when (eventName) {
