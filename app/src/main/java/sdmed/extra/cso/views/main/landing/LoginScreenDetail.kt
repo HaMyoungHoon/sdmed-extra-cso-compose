@@ -168,7 +168,5 @@ private fun pwDecorationBox(innerTextField: @Composable () -> Unit, text: String
 //@Preview
 @Composable
 private fun previewScreen() {
-    loginScreenDetail(LoginScreenVM().apply {
-        fakeInit()
-    })
+    loginScreenDetail(LoginScreenVM().apply { fakeInit() })
 }

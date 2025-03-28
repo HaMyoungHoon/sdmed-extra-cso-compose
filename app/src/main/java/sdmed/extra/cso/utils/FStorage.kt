@@ -32,8 +32,6 @@ object FStorage {
     fun getAuthToken(context: Context) = getString(context, FConstants.AUTH_TOKEN)
     fun setAuthToken(context: Context, data: String?) = data?.let { putString(context, FConstants.AUTH_TOKEN, it) }
     fun removeAuthToken(context: Context) = removeData(context, FConstants.AUTH_TOKEN)
-    fun getRefreshing(context: Context) = getBool(context, FConstants.TOKEN_REFRESHING)
-    fun setRefreshing(context: Context, data: Boolean?) = data?.let { putBool(context, FConstants.TOKEN_REFRESHING, it) }
     fun getHomeMenuIndex(context: Context) = getInt(context, FConstants.HOME_MENU_INDEX)
     fun setHomeMenuIndex(context: Context, data: Int?) = data?.let { putInt(context, FConstants.HOME_MENU_INDEX, it) }
     fun getGoogleMapStyleIndex(context: Context) = getInt(context, FConstants.GOOGLE_MAP_STYLE_INDEX)

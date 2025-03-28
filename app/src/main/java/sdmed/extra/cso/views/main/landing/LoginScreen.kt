@@ -1,8 +1,13 @@
 package sdmed.extra.cso.views.main.landing
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.window.layout.DisplayFeature
 import sdmed.extra.cso.bases.fBaseScreen
+import sdmed.extra.cso.models.menu.MenuItem
+import sdmed.extra.cso.models.menu.MenuList
 import sdmed.extra.cso.models.menu.NavigationType
 import sdmed.extra.cso.models.menu.WindowPanelType
 import sdmed.extra.cso.models.retrofit.FRetrofitVariable
@@ -13,10 +18,15 @@ import sdmed.extra.cso.utils.FStorage
 @Composable
 fun loginScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
                 displayFeatures: List<DisplayFeature> = emptyList(),
-                navigationType: NavigationType = NavigationType.BOTTOM) {
+                navigationType: NavigationType = NavigationType.BOTTOM,
+                navigate: (MenuItem, Boolean) -> Unit) {
     fBaseScreen<LoginScreenVM>({ data, dataContext -> setLayoutCommand(data, dataContext) },
         { dataContext ->
+            val loginEnd by dataContext.loginEnd.collectAsState()
             loginScreenDetail(dataContext)
+            if (loginEnd) {
+                navigate(MenuList.menuEDI(), true)
+            }
         },
         windowPanelType, navigationType)
 }
@@ -41,6 +51,7 @@ private fun login(dataContext: LoginScreenVM) {
             FRetrofitVariable.token.value = ret.data
             FStorage.setAuthToken(context, ret.data)
             FAmhohwa.addMultiLoginData(context)
+            dataContext.loginEnd.value = true
             return@coroutineScope
         }
         dataContext.toast(ret.msg)

@@ -1,20 +1,27 @@
 package sdmed.extra.cso.views.main.my
 
+import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.window.layout.DisplayFeature
+import sdmed.extra.cso.bases.FConstants
 import sdmed.extra.cso.bases.fBaseScreen
+import sdmed.extra.cso.models.common.MediaViewParcelModel
+import sdmed.extra.cso.models.menu.MenuItem
 import sdmed.extra.cso.models.menu.NavigationType
 import sdmed.extra.cso.models.menu.WindowPanelType
 import sdmed.extra.cso.models.retrofit.hospitals.HospitalModel
 import sdmed.extra.cso.utils.FAmhohwa
 import sdmed.extra.cso.utils.FCoroutineUtil
 import sdmed.extra.cso.utils.FStorage
+import sdmed.extra.cso.utils.FStorage.putParcelableList
+import sdmed.extra.cso.views.media.listView.MediaListViewActivity
 import java.util.ArrayList
 
 @Composable
 fun myScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
              displayFeatures: List<DisplayFeature> = emptyList(),
-             navigationType: NavigationType = NavigationType.BOTTOM) {
+             navigationType: NavigationType = NavigationType.BOTTOM,
+             navigate: (MenuItem, Boolean) -> Unit) {
     fBaseScreen<MyScreenVM>({ data, dataContext -> setLayoutCommand(data, dataContext) },
         null,
         windowPanelType, navigationType,
@@ -77,13 +84,21 @@ private fun multiLogin(dataContext: MyScreenVM) {
 
 }
 private fun training(dataContext: MyScreenVM) {
-
+    val blobUrl = dataContext.thisData.value.trainingUrl
+    if (blobUrl != null) {
+        val ret = arrayListOf<MediaViewParcelModel>()
+        dataContext.thisData.value.trainingList.forEach { x ->
+            ret.add(MediaViewParcelModel().parse(x))
+        }
+        dataContext.context.startActivity(Intent(dataContext.context, MediaListViewActivity::class.java).apply {
+            putParcelableList(FConstants.MEDIA_LIST, ret)
+        })
+    }
 }
 private fun trainingCertificateAdd(dataContext: MyScreenVM) {
 
 }
 private fun taxpayer(dataContext: MyScreenVM) {
-
 }
 private fun bankAccount(dataContext: MyScreenVM) {
 

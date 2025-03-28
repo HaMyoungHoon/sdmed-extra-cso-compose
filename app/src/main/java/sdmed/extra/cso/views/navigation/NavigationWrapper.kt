@@ -1,5 +1,6 @@
 package sdmed.extra.cso.views.navigation
 
+import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.material3.DrawerValue
@@ -23,11 +24,13 @@ import androidx.window.core.layout.WindowWidthSizeClass
 import kotlinx.coroutines.launch
 import sdmed.extra.cso.models.menu.MenuItem
 import sdmed.extra.cso.models.menu.NavigationContentType
+import sdmed.extra.cso.models.menu.RouteParser
+import sdmed.extra.cso.utils.FLog
 import sdmed.extra.cso.views.theme.FThemeUtil
 
 @Composable
 fun navigationWrapper(navDestination: NavDestination?,
-                      navigate: (MenuItem) -> Unit,
+                      navigate: (MenuItem, Boolean) -> Unit,
                       content: @Composable NavSuiteScope.() -> Unit) {
     val adaptiveInfo = currentWindowAdaptiveInfo()
     val windowSize = with(LocalDensity.current) { currentWindowSize().toSize().toDpSize() }
@@ -55,6 +58,7 @@ fun navigationWrapper(navDestination: NavDestination?,
         }
     }
 
+    val navigation = RouteParser.routeToClass(navDestination?.route).data.navigation
     ModalNavigationDrawer({
         modalDrawerNavigationBar(navDestination, navContentPosition, navigate, {
             coroutineScope.launch {
@@ -63,18 +67,20 @@ fun navigationWrapper(navDestination: NavDestination?,
         })},
         Modifier.background(color.background), drawerState, gesturesEnabled) {
         NavigationSuiteScaffoldLayout({
-            when (navLayoutType) {
-                NavigationSuiteType.NavigationBar -> bottomNavigationBar(navDestination, navigate)
-                NavigationSuiteType.NavigationRail -> railNavigationBar(navDestination, navContentPosition, navigate, {
-                    coroutineScope.launch {
-                        drawerState.open()
-                    }
-                })
-                NavigationSuiteType.NavigationDrawer -> railNavigationBar(navDestination, navContentPosition, navigate, {
-                    coroutineScope.launch {
-                        drawerState.close()
-                    }
-                })
+            if (navigation) {
+                when (navLayoutType) {
+                    NavigationSuiteType.NavigationBar -> bottomNavigationBar(navDestination, navigate)
+                    NavigationSuiteType.NavigationRail -> railNavigationBar(navDestination, navContentPosition, navigate, {
+                        coroutineScope.launch {
+                            drawerState.open()
+                        }
+                    })
+                    NavigationSuiteType.NavigationDrawer -> railNavigationBar(navDestination, navContentPosition, navigate, {
+                        coroutineScope.launch {
+                            drawerState.close()
+                        }
+                    })
+                }
             }
         }, navLayoutType) {
             NavSuiteScope(navLayoutType).content()
@@ -83,5 +89,5 @@ fun navigationWrapper(navDestination: NavDestination?,
 }
 
 class NavSuiteScope(val navSuiteType: NavigationSuiteType)
-fun NavDestination?.hasRoute(dest: MenuItem) = this?.hasRoute(dest.route::class) ?: false
+fun NavDestination?.hasRoute(dest: MenuItem) = dest.route.data.thisMyRoute(this?.route)
 fun WindowSizeClass.isCompact() = windowWidthSizeClass == WindowWidthSizeClass.COMPACT || windowHeightSizeClass == WindowHeightSizeClass.COMPACT

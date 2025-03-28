@@ -30,7 +30,7 @@ import sdmed.extra.cso.views.theme.FThemeUtil
 fun thisApp(
     windowPanelType: WindowPanelType,
     displayFeatures: List<DisplayFeature>,
-    startDest: Route = Route.EDI()) {
+    startDest: String = Route.LANDING.Main.data.path) {
     val context = LocalContext.current
     val navHostController = rememberNavController()
     val navigationActions = remember(navHostController) {
@@ -46,7 +46,8 @@ fun thisApp(
             navigationWrapper(dest, navigationActions::navigateTo) {
                 appNavHost(navHostController, windowPanelType, displayFeatures,
                     navSuiteType.toNavType(),
-                    startDestination = startDest)
+                    navigationActions::navigateTo,
+                    startDest)
             }
         }
     }

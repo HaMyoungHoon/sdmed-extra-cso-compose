@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -18,8 +19,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import sdmed.extra.cso.bases.FMainApplication
+import sdmed.extra.cso.models.menu.MenuItem
+import sdmed.extra.cso.models.menu.MenuList
 import sdmed.extra.cso.models.retrofit.FRetrofitVariable
+import sdmed.extra.cso.utils.FAmhohwa
 import sdmed.extra.cso.utils.FCoroutineUtil
+import sdmed.extra.cso.utils.FExtensions
 import sdmed.extra.cso.utils.FVersionControl
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
@@ -30,10 +35,13 @@ import sdmed.extra.cso.views.dialog.message.messageDialog
 import sdmed.extra.cso.views.theme.FThemeUtil
 
 @Composable
-fun landingScreenDetail(dataContext: LandingScreenVM) {
-    val startVisible = dataContext.startVisible.collectAsState()
-    val updateVisible = dataContext.updateVisible.collectAsState()
-    versionCheck(dataContext)
+fun landingScreenDetail(dataContext: LandingScreenVM, navigate: (MenuItem, Boolean)-> Unit) {
+    val startVisible by dataContext.startVisible.collectAsState()
+    val tokenCheck by dataContext.tokenCheck.collectAsState()
+    tokenCheck(dataContext)
+    if (tokenCheck) {
+        navigate(MenuList.menuEDI(), true)
+    }
     val color = FThemeUtil.safeColor()
     Box(Modifier.fillMaxSize()) {
         Image(painterResource(R.drawable.landing_background),
@@ -42,16 +50,6 @@ fun landingScreenDetail(dataContext: LandingScreenVM) {
             Alignment.Center,
             ContentScale.Crop
         )
-
-        if (updateVisible.value) {
-            messageDialog(MessageDialogData().apply {
-                title = stringResource(R.string.new_version_update_desc)
-                leftBtnText = stringResource(R.string.update_desc)
-                rightBtnText = ""
-                isCancel = false
-                relayCommand = dataContext.relayCommand
-            })
-        }
 
         customText(CustomTextData().apply {
             text = stringResource(R.string.app_name)
@@ -62,7 +60,7 @@ fun landingScreenDetail(dataContext: LandingScreenVM) {
             modifier = Modifier.fillMaxWidth().padding(top = 40.dp)
         })
 
-        if (startVisible.value) {
+        if (startVisible) {
             shapeRoundedBox(ShapeRoundedBoxData().apply {
                 backgroundColor = color.background
                 modifier = Modifier.fillMaxWidth().padding(bottom = 36.dp, start = 16.dp, end = 16.dp)
@@ -80,42 +78,22 @@ fun landingScreenDetail(dataContext: LandingScreenVM) {
         }
     }
 }
-
-private fun versionCheck(dataContext: LandingScreenVM) {
-    if (dataContext.checking) {
-        return
-    }
-    dataContext.loading()
-    dataContext.checking = true
-    FCoroutineUtil.coroutineScope({
-        val ret = dataContext.versionCheck()
-        dataContext.loading(false)
-        dataContext.checking = false
-        if (ret.result != true) {
-            dataContext.toast(ret.msg)
-            return@coroutineScope
-        }
-        if (!ret.data.isNullOrEmpty()) {
-            val versionModel = ret.data?.firstOrNull { it.able } ?: return@coroutineScope
-            val currentVersion = FMainApplication.ins.getVersionNameString()
-            val check = FVersionControl.checkVersion(versionModel, currentVersion)
-            if (check == FVersionControl.VersionResultType.NEED_UPDATE) {
-                dataContext.updateVisible.value = true
-                return@coroutineScope
+private fun tokenCheck(dataContext: LandingScreenVM) {
+    if (!FAmhohwa.tokenCheck(dataContext)) {
+        FAmhohwa.tokenRefresh(dataContext, { ret ->
+            if (ret.result == true) {
+                dataContext.tokenCheck.value = true
+            } else {
+                dataContext.startVisible.value = true
             }
-            versionCheckEnd(dataContext)
-        }
-    })
-}
-private fun versionCheckEnd(dataContext: LandingScreenVM) {
-    if (FRetrofitVariable.token.value.isNullOrBlank()) {
-        dataContext.startVisible.value = true
-        return
+        })
+    } else {
+        dataContext.tokenCheck.value = true
     }
 }
 
 //@Preview
 @Composable
 private fun previewLandingDetail() {
-    landingScreenDetail(LandingScreenVM())
+    landingScreenDetail(LandingScreenVM(), {a, b -> })
 }

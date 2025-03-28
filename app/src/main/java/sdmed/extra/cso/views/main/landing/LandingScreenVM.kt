@@ -8,13 +8,9 @@ import sdmed.extra.cso.models.retrofit.common.VersionCheckModel
 
 class LandingScreenVM(applicationContext: Context? = null): FBaseViewModel(applicationContext) {
     val startVisible = MutableStateFlow(false)
-    val updateVisible = MutableStateFlow(false)
     val loginVisible = MutableStateFlow(false)
-    val updateApp = MutableStateFlow(false)
+    val tokenCheck = MutableStateFlow(false)
     var checking = false
-    suspend fun versionCheck(): RestResultT<List<VersionCheckModel>> {
-        return commonRepository.versionCheck()
-    }
 
     enum class ClickEvent(var index: Int) {
         START(0)

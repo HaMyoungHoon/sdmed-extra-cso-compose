@@ -24,43 +24,50 @@ object MenuList {
     @Composable
     fun menuEDI(): MenuItem {
         val color = FThemeUtil.safeColor()
-        return MenuItem(Route.EDI(),
+        return MenuItem(Route.EDI.Main,
+            stringResource(R.string.menu_edi_desc),
             vectorMenuEDI(FVectorData(color.cardBackground, color.primary)),
-            vectorMenuEDI(FVectorData(color.cardBackground, color.gray)),
-            stringResource(R.string.menu_edi_desc))
+            vectorMenuEDI(FVectorData(color.cardBackground, color.gray)))
     }
     @Composable
     fun menuPrice(): MenuItem {
         val color = FThemeUtil.safeColor()
-        return MenuItem(Route.PRICE(),
+        return MenuItem(Route.PRICE.Main,
+            stringResource(R.string.menu_price_desc),
             vectorMenuPrice(FVectorData(color.cardBackground, color.primary)),
-            vectorMenuPrice(FVectorData(color.cardBackground, color.gray)),
-            stringResource(R.string.menu_price_desc))
+            vectorMenuPrice(FVectorData(color.cardBackground, color.gray)))
     }
     @Composable
     fun menuHome(): MenuItem {
         val color = FThemeUtil.safeColor()
-        return MenuItem(Route.HOME(),
+        return MenuItem(Route.HOME.Main,
+            stringResource(R.string.menu_home_desc),
             vectorMenuHome(FVectorData(color.background, color.primary)),
-            vectorMenuHome(FVectorData(color.background, color.gray)),
-            stringResource(R.string.menu_home_desc))
+            vectorMenuHome(FVectorData(color.background, color.gray)))
     }
     @Composable
     fun menuQNA(): MenuItem {
         val color = FThemeUtil.safeColor()
-        return MenuItem(Route.QNA(),
+        return MenuItem(Route.QNA.Main,
+            stringResource(R.string.menu_qna_desc),
             vectorMenuQnA(FVectorData(color.cardBackground, color.primary)),
-            vectorMenuQnA(FVectorData(color.cardBackground, color.gray)),
-            stringResource(R.string.menu_qna_desc))
+            vectorMenuQnA(FVectorData(color.cardBackground, color.gray)))
     }
     @Composable
     fun menuMY(): MenuItem {
         val color = FThemeUtil.safeColor()
-        return MenuItem(Route.MY(),
+        return MenuItem(Route.MY.Main,
+            stringResource(R.string.menu_my_desc),
             vectorMenuMy(FVectorData(color.background, color.primary)),
-            vectorMenuMy(FVectorData(color.background, color.gray)),
-            stringResource(R.string.menu_my_desc))
+            vectorMenuMy(FVectorData(color.background, color.gray)))
     }
+
+    @Composable
+    fun menuLanding() = MenuItem(Route.LANDING.Main,
+        stringResource(R.string.landing_desc))
+    @Composable
+    fun menuLogin() = MenuItem(Route.LOGIN.Main,
+        stringResource(R.string.login_title_desc))
     fun navigationBarItemColors(): NavigationBarItemColors {
         return NavigationBarItemColors(Color.Transparent,
             Color.Transparent,

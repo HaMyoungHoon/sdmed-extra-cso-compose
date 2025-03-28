@@ -17,11 +17,11 @@ import sdmed.extra.cso.models.menu.MenuList
 import sdmed.extra.cso.views.theme.FThemeUtil
 
 @Composable
-fun bottomNavigationBar(navDestination: NavDestination?, click: (MenuItem) -> Unit) {
+fun bottomNavigationBar(navDestination: NavDestination?, click: (MenuItem, Boolean) -> Unit) {
     val color = FThemeUtil.safeColor()
     NavigationBar(Modifier.fillMaxWidth().height(50.dp), color.cardBackground) {
         MenuList.getMenuList().forEach { x ->
-            NavigationBarItem(navDestination.hasRoute(x), { click(x) }, {
+            NavigationBarItem(navDestination.hasRoute(x), { click(x, false) }, {
                 if (navDestination.hasRoute(x)) {
                     Icon(x.selectedIcon, x.contentDescription, tint = Color.Unspecified)
                 } else {
@@ -35,6 +35,5 @@ fun bottomNavigationBar(navDestination: NavDestination?, click: (MenuItem) -> Un
 //@Preview
 @Composable
 private fun previewBottomNavigationBar() {
-    bottomNavigationBar(null) {
-    }
+    bottomNavigationBar(null) { a,b -> }
 }

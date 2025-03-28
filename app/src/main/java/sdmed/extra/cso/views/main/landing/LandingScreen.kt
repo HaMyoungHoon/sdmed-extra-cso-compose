@@ -4,10 +4,13 @@ import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.net.toUri
 import androidx.window.layout.DisplayFeature
 import sdmed.extra.cso.bases.fBaseScreen
+import sdmed.extra.cso.models.menu.MenuItem
+import sdmed.extra.cso.models.menu.MenuList
 import sdmed.extra.cso.models.menu.NavigationType
 import sdmed.extra.cso.models.menu.WindowPanelType
 import sdmed.extra.cso.views.dialog.message.MessageDialogVM
@@ -15,24 +18,15 @@ import sdmed.extra.cso.views.dialog.message.MessageDialogVM
 @Composable
 fun landingScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
                   displayFeatures: List<DisplayFeature> = emptyList(),
-                  navigationType: NavigationType = NavigationType.BOTTOM) {
+                  navigationType: NavigationType = NavigationType.BOTTOM,
+                  navigate: (MenuItem, Boolean) -> Unit) {
     fBaseScreen<LandingScreenVM>({ data, dataContext -> setLayoutCommand(data, dataContext) },
         { dataContext ->
             val context = LocalContext.current
-            val loginVisible = dataContext.loginVisible.collectAsState()
-            if (loginVisible.value) {
-                loginScreen()
-            } else {
-                landingScreenDetail(dataContext)
-            }
-
-            LaunchedEffect(dataContext.loginVisible) {
-                if (dataContext.updateApp.value) {
-                    context.startActivity(Intent(Intent.ACTION_VIEW).apply {
-                        this.data = "market://details?id=${context.packageName}".toUri()
-                    })
-                    dataContext.updateApp.value = true
-                }
+            val loginVisible by dataContext.loginVisible.collectAsState()
+            landingScreenDetail(dataContext, navigate)
+            if (loginVisible) {
+                navigate(MenuList.menuLogin(), false)
             }
         },
         windowPanelType, navigationType)
@@ -40,7 +34,6 @@ fun landingScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE
 
 private fun setLayoutCommand(data: Any?, dataContext: LandingScreenVM) {
     setThisCommand(data, dataContext)
-    setUpDateCommand(data, dataContext)
 }
 private fun setThisCommand(data: Any?, dataContext: LandingScreenVM) {
     val eventName = data as? LandingScreenVM.ClickEvent ?: return
@@ -48,23 +41,6 @@ private fun setThisCommand(data: Any?, dataContext: LandingScreenVM) {
         LandingScreenVM.ClickEvent.START -> start(dataContext)
     }
 }
-private fun setUpDateCommand(data: Any?, dataContext: LandingScreenVM) {
-    val eventName = data as? MessageDialogVM.ClickEvent ?: return
-    when (eventName) {
-        MessageDialogVM.ClickEvent.CLOSE -> dialogClose(dataContext)
-        MessageDialogVM.ClickEvent.LEFT -> dialogLeft(dataContext)
-        MessageDialogVM.ClickEvent.RIGHT -> dialogRight(dataContext)
-    }
-}
 private fun start(dataContext: LandingScreenVM) {
     dataContext.loginVisible.value = true
-}
-private fun dialogClose(dataContext: LandingScreenVM) {
-    dataContext.updateVisible.value = false
-}
-private fun dialogLeft(dataContext: LandingScreenVM) {
-    dataContext.updateApp.value = true
-}
-private fun dialogRight(dataContext: LandingScreenVM) {
-    dataContext.updateApp.value = true
 }

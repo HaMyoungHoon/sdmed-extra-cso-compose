@@ -51,6 +51,27 @@ object FCoil {
                 contentScale = contentScale)
         }
     }
+    @Composable
+    fun load(blobUrl: String? = null, blobMimeType: String? = null, blobFilename: String? = null, modifier: Modifier, contentScale: ContentScale = ContentScale.Crop) {
+        val context = LocalContext.current
+        val mimeType = FContentsType.getExtMimeType(blobMimeType)
+        if (blobUrl.isNullOrEmpty() || !FImageUtils.isImage(mimeType)) {
+            Image(painterResource(FImageUtils.getDefaultImage(blobMimeType)),
+                blobFilename,
+                modifier,
+                contentScale = contentScale)
+        } else {
+            AsyncImage(ImageRequest.Builder(context)
+                .data(blobUrl)
+                .diskCachePolicy(CachePolicy.ENABLED)
+                .memoryCachePolicy(CachePolicy.ENABLED)
+                .build(),
+                blobFilename,
+                imageLoader(context),
+                modifier,
+                contentScale = contentScale)
+        }
+    }
 }
 
 //@Preview

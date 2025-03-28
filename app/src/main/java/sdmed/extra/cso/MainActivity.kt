@@ -1,5 +1,6 @@
 package sdmed.extra.cso
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
@@ -15,18 +16,22 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.core.net.toUri
 import com.google.accompanist.adaptive.calculateDisplayFeatures
 import sdmed.extra.cso.bases.FBaseActivity
 import sdmed.extra.cso.bases.FConstants
+import sdmed.extra.cso.bases.FMainApplication
 import sdmed.extra.cso.models.common.NotifyIndex
 import sdmed.extra.cso.models.menu.Route
-import sdmed.extra.cso.models.retrofit.FRetrofitVariable
 import sdmed.extra.cso.utils.FCoroutineUtil
-import sdmed.extra.cso.views.main.landing.landingScreen
+import sdmed.extra.cso.utils.FVersionControl
+import sdmed.extra.cso.views.dialog.message.MessageDialogData
+import sdmed.extra.cso.views.dialog.message.MessageDialogVM
+import sdmed.extra.cso.views.dialog.message.messageDialog
 import sdmed.extra.cso.views.navigation.getFoldingDevicePosture
 import sdmed.extra.cso.views.navigation.getWindowPaneType
 import sdmed.extra.cso.views.navigation.thisApp
@@ -38,8 +43,9 @@ class MainActivity: FBaseActivity<MainActivityVM>() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
-        checkToken()
         super.onCreate(savedInstanceState)
+        versionCheck(dataContext)
+        notificationCheck()
         setContent {
             FThemeUtil.thisTheme {
                 setToast()
@@ -48,22 +54,30 @@ class MainActivity: FBaseActivity<MainActivityVM>() {
                 val displayFeatures = calculateDisplayFeatures(this)
                 val foldingDevicePosture = getFoldingDevicePosture(displayFeatures)
                 val windowPanelType = getWindowPaneType(windowSize, foldingDevicePosture)
-                val require = requireLogin.collectAsState()
-                val token by FRetrofitVariable.token.collectAsState()
-                LaunchedEffect(token) {
-                    checkToken()
-                }
+                val updateVisible by dataContext.updateVisible.collectAsState()
+                val updateApp by dataContext.updateApp.collectAsState()
                 Box(Modifier
                     .windowInsetsPadding(WindowInsets.statusBars.only(WindowInsetsSides.Top))
                     .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Bottom))
                     .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Horizontal))
                     ) {
-                    if (require.value) {
-                        landingScreen(windowPanelType, displayFeatures)
-                    } else {
-                        val startDest = openPage()
-                        thisApp(windowPanelType, displayFeatures, startDest)
+
+                    if (updateVisible) {
+                        messageDialog(MessageDialogData().apply {
+                            title = stringResource(R.string.new_version_update_desc)
+                            leftBtnText = stringResource(R.string.update_desc)
+                            rightBtnText = ""
+                            isCancel = false
+                            relayCommand = dataContext.relayCommand
+                        })
                     }
+                    if (updateApp) {
+                        startActivity(Intent(Intent.ACTION_VIEW).apply {
+                            this.data = "market://details?id=${packageName}".toUri()
+                        })
+                    }
+                    val dest = openPage()
+                    thisApp(windowPanelType, displayFeatures, dest)
                 }
                 mqttInit()
             }
@@ -71,18 +85,43 @@ class MainActivity: FBaseActivity<MainActivityVM>() {
         setBackPressed()
     }
 
-    private fun openPage(): Route {
+    private fun openPage(): String {
         val notifyIndex = NotifyIndex.parseIndex(intent.getIntExtra(FConstants.NOTIFY_INDEX, 0))
         val thisPK = intent.getStringExtra(FConstants.NOTIFY_PK) ?: ""
         val route = when (notifyIndex) {
+            NotifyIndex.EDI_UPLOAD,
+            NotifyIndex.EDI_FILE_UPLOAD,
+            NotifyIndex.EDI_FILE_REMOVE,
+            NotifyIndex.EDI_RESPONSE -> Route.EDI.Main
             NotifyIndex.QNA_UPLOAD,
             NotifyIndex.QNA_FILE_UPLOAD,
-            NotifyIndex.QNA_RESPONSE -> return Route.QNA(thisPK)
-            NotifyIndex.USER_FILE_UPLOAD -> return Route.MY()
-            else -> Route.EDI(thisPK)
+            NotifyIndex.QNA_RESPONSE -> Route.QNA.Main
+            NotifyIndex.USER_FILE_UPLOAD -> Route.MY.Main
+            else -> Route.LANDING.Main
         }
 
-        return route
+        return route.data.path
+    }
+
+    private fun versionCheck(dataContext: MainActivityVM) {
+        dataContext.loading()
+        FCoroutineUtil.coroutineScope({
+            val ret = dataContext.versionCheck()
+            dataContext.loading(false)
+            if (ret.result != true) {
+                dataContext.toast(ret.msg)
+                return@coroutineScope
+            }
+            if (!ret.data.isNullOrEmpty()) {
+                val versionModel = ret.data?.firstOrNull { it.able } ?: return@coroutineScope
+                val currentVersion = FMainApplication.ins.getVersionNameString()
+                val check = FVersionControl.checkVersion(versionModel, currentVersion)
+                if (check == FVersionControl.VersionResultType.NEED_UPDATE) {
+                    dataContext.updateVisible.value = true
+                    return@coroutineScope
+                }
+            }
+        })
     }
 
     private fun mqttInit() {
@@ -97,5 +136,37 @@ class MainActivity: FBaseActivity<MainActivityVM>() {
             }
         }
         this.onBackPressedDispatcher.addCallback(this, _backPressed!!)
+    }
+
+    override fun setLayoutCommand(data: Any?) {
+        setUpDateCommand(data)
+    }
+    private fun setUpDateCommand(data: Any?) {
+        val eventName = data as? MessageDialogVM.ClickEvent ?: return
+        when (eventName) {
+            MessageDialogVM.ClickEvent.CLOSE -> dialogClose()
+            MessageDialogVM.ClickEvent.LEFT -> dialogLeft()
+            MessageDialogVM.ClickEvent.RIGHT -> dialogRight()
+        }
+    }
+    private fun dialogClose() {
+        dataContext.updateVisible.value = false
+    }
+    private fun dialogLeft() {
+        dataContext.updateApp.value = true
+    }
+    private fun dialogRight() {
+        dataContext.updateApp.value = true
+    }
+    private fun notificationCheck() {
+        if (!hasNotificationGranted()) {
+            requestNotificationGranted()
+        }
+    }
+    private fun hasNotificationGranted(): Boolean {
+        return hasPermissionsGranted(FConstants.NOTIFICATION_PERMISSION)
+    }
+    private fun requestNotificationGranted() {
+        requestPermissions(FConstants.NOTIFICATION_PERMISSION, FConstants.Permit.LOCATION.index)
     }
 }

@@ -1,4 +1,4 @@
-package sdmed.extra.cso.views.media
+package sdmed.extra.cso.views.media.picker
 
 import android.content.Context
 import sdmed.extra.cso.bases.FBaseViewModel

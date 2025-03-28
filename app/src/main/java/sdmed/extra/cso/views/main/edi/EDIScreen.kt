@@ -13,6 +13,7 @@ import androidx.window.layout.DisplayFeature
 import com.google.accompanist.adaptive.HorizontalTwoPaneStrategy
 import com.google.accompanist.adaptive.TwoPane
 import sdmed.extra.cso.bases.fBaseScreen
+import sdmed.extra.cso.models.menu.MenuItem
 import sdmed.extra.cso.models.menu.NavigationType
 import sdmed.extra.cso.models.menu.WindowPanelType
 import sdmed.extra.cso.views.theme.FThemeUtil
@@ -20,7 +21,8 @@ import sdmed.extra.cso.views.theme.FThemeUtil
 @Composable
 fun ediScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
               displayFeatures: List<DisplayFeature> = emptyList(),
-              navigationType: NavigationType = NavigationType.BOTTOM) {
+              navigationType: NavigationType = NavigationType.BOTTOM,
+              navigate: (MenuItem, Boolean) -> Unit) {
     fBaseScreen<EDIScreenVM>( { data, dataContext -> setLayoutCommand(data, dataContext) },
         null,
         windowPanelType, navigationType,

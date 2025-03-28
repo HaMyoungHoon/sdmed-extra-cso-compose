@@ -34,7 +34,7 @@ import sdmed.extra.cso.views.theme.FThemeUtil
 @Composable
 fun permanentDrawerNavigationBar(navDestination: NavDestination?,
                                  navigationContentType: NavigationContentType,
-                                 menuClick: (MenuItem) -> Unit,
+                                 menuClick: (MenuItem, Boolean) -> Unit,
                                  drawerClick: () -> Unit = {}) {
     val color = FThemeUtil.safeColor()
     ModalDrawerSheet {
@@ -63,7 +63,7 @@ fun permanentDrawerNavigationBar(navDestination: NavDestination?,
                             textColor = color.cardForeground
                             textSize = FThemeUtil.textUnit(16F)
                         })
-                    }, navDestination.hasRoute(x), { menuClick }, Modifier, {
+                    }, navDestination.hasRoute(x), { menuClick(x, false) }, Modifier, {
                         if (navDestination.hasRoute(x)) {
                             Icon(x.selectedIcon, x.contentDescription, tint = Color.Unspecified)
                         } else {
@@ -82,5 +82,5 @@ fun permanentDrawerNavigationBar(navDestination: NavDestination?,
 //@Preview
 @Composable
 private fun previewScreen() {
-    permanentDrawerNavigationBar(null, NavigationContentType.TOP, { })
+    permanentDrawerNavigationBar(null, NavigationContentType.TOP,  { a,b -> })
 }

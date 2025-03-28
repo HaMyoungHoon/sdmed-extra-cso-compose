@@ -31,7 +31,7 @@ import sdmed.extra.cso.views.theme.FThemeUtil
 @Composable
 fun railNavigationBar(navDestination: NavDestination?,
                       navigationContentType: NavigationContentType,
-                      menuClick: (MenuItem) -> Unit,
+                      menuClick: (MenuItem, Boolean) -> Unit,
                       drawerClick: () -> Unit = {}) {
     val color = FThemeUtil.safeColor()
     NavigationRail(Modifier.fillMaxHeight(), color.cardBackground) {
@@ -48,7 +48,7 @@ fun railNavigationBar(navDestination: NavDestination?,
                 Alignment.CenterHorizontally) {
                 MenuList.getMenuList().forEach { x ->
                     NavigationRailItem(navDestination.hasRoute(x),
-                        { menuClick(x) },
+                        { menuClick(x, false) },
                         {
                             if (navDestination.hasRoute(x)) {
                                 Icon(x.selectedIcon, x.contentDescription, tint = Color.Unspecified)
@@ -74,5 +74,5 @@ fun railNavigationBar(navDestination: NavDestination?,
 //@Preview
 @Composable
 private fun previewRailNavigationBar() {
-    railNavigationBar(null, NavigationContentType.TOP, { })
+    railNavigationBar(null, NavigationContentType.TOP,  { a,b -> })
 }

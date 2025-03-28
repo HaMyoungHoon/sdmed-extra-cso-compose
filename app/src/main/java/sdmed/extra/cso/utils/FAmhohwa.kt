@@ -3,8 +3,10 @@ package sdmed.extra.cso.utils
 import android.content.Context
 import com.auth0.android.jwt.JWT
 import com.google.gson.Gson
+import sdmed.extra.cso.bases.FBaseViewModel
 import sdmed.extra.cso.bases.FConstants
 import sdmed.extra.cso.fDate.FDateTime2
+import sdmed.extra.cso.models.RestResultT
 import sdmed.extra.cso.models.retrofit.FRetrofitVariable
 import sdmed.extra.cso.models.retrofit.users.UserMultiLoginModel
 import java.net.URLDecoder
@@ -116,5 +118,64 @@ object FAmhohwa {
     }
     fun urlEncoder(data: String): String {
         return URLEncoder.encode(data)
+    }
+
+    fun tokenCheck(dataContext: FBaseViewModel): Boolean {
+        val context = dataContext.context
+        if (FRetrofitVariable.token.value == null) {
+            FRetrofitVariable.token.value = FStorage.getAuthToken(context)
+        }
+        if (FRetrofitVariable.token.value.isNullOrBlank()) {
+            return false
+        }
+        return checkInvalidToken(context)
+    }
+    fun tokenRefresh(dataContext: FBaseViewModel, ret: ((RestResultT<String>) -> Unit)? = null) {
+        if (FRetrofitVariable.refreshing.get()) {
+            return
+        }
+        FRetrofitVariable.refreshing.set(true)
+        if (FRetrofitVariable.token.value.isNullOrBlank()) {
+            ret?.invoke(RestResultT<String>().setFail())
+            return
+        }
+        val context = dataContext.context
+        FCoroutineUtil.coroutineScope({
+            val buff = dataContext.tokenRefresh()
+            FRetrofitVariable.refreshing.set(false)
+            if (buff.result == true) {
+                val newToken = buff.data ?: ""
+                if (rhsTokenIsMost(newToken)) {
+                    FStorage.setAuthToken(context, newToken)
+                    addLoginData(context)
+                }
+                FRetrofitVariable.token.value = FStorage.getAuthToken(context)
+            } else {
+                if (buff.code == -10002) {
+                    delLoginData(context)
+                }
+                FStorage.removeAuthToken(context)
+                FRetrofitVariable.token.value = null
+            }
+            ret?.invoke(buff)
+        })
+    }
+    fun addLoginData(context: Context) {
+        FStorage.addMultiLoginData(context, UserMultiLoginModel().apply {
+            thisPK = getThisPK(context)
+            id = getTokenID(context)
+            name = getTokenName(context)
+            token = FStorage.getAuthToken(context) ?: ""
+            isLogin = true
+        })
+    }
+    fun delLoginData(context: Context) {
+        FStorage.delMultiLoginData(context, UserMultiLoginModel().apply {
+            thisPK = getThisPK(context)
+            id = getUserID(context)
+            name = getUserName(context)
+            token = FStorage.getAuthToken(context) ?: ""
+            isLogin = true
+        })
     }
 }

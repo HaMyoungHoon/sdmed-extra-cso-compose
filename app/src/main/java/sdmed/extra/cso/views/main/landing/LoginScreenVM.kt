@@ -13,6 +13,7 @@ import sdmed.extra.cso.models.retrofit.users.UserMultiLoginModel
 class LoginScreenVM(applicationContext: Context? = null): FBaseViewModel(applicationContext) {
     val id = MutableStateFlow("")
     val pw = MutableStateFlow("")
+    val loginEnd = MutableStateFlow(false)
     val fillDataState = combine(id, pw) { id, pw ->
         id.length >= 3 && pw.length >= 4
     }.stateIn(viewModelScope, SharingStarted.Lazily, false)
