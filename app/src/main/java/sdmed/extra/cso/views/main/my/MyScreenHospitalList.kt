@@ -35,7 +35,7 @@ import sdmed.extra.cso.views.theme.FThemeUtil
 
 @Composable
 fun myScreenHospitalList(dataContext: MyScreenVM, heightMax: Dp = Dp.Unspecified) {
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     val hospitalList by dataContext.hosList.collectAsState()
     val selectHospital by dataContext.selectedHos.collectAsState()
     LaunchedEffect(selectHospital) {
@@ -62,7 +62,7 @@ private fun LazyListScope.hospitalItems(hospitalModel: MutableList<HospitalModel
 
 @Composable
 private fun itemContainer(data: HospitalModel, select: Boolean = false, relayCommand: ICommand) {
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     data.relayCommand = relayCommand
     Card(Modifier.fillMaxWidth()
         .semantics { selected = select }
@@ -94,7 +94,7 @@ private fun itemContainer(data: HospitalModel, select: Boolean = false, relayCom
 
 @Composable
 private fun cardSelectColor(isSelected: Boolean): CardColors {
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     return CardDefaults.cardColors(
         containerColor = if (isSelected) color.septenary
         else color.cardBackground

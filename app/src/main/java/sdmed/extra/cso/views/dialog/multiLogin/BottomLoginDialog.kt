@@ -5,9 +5,7 @@ import sdmed.extra.cso.bases.fBaseScreen
 
 @Composable
 fun bottomLoginDialog(data: BottomLoginDialogData) {
-    fBaseScreen<BottomLoginDialogVM>({ data, dataContext ->
+    val dataContext = fBaseScreen<BottomLoginDialogVM>({ data, dataContext ->
 
-    }, { dataContext ->
-
-    })
+    }, { dataContext -> })
 }

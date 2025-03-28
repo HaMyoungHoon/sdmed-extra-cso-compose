@@ -18,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import sdmed.extra.cso.bases.fBaseScreen
@@ -32,18 +31,16 @@ import sdmed.extra.cso.views.theme.FThemeUtil
 
 @Composable
 fun messageDialog(data: MessageDialogData) {
-    fBaseScreen<MessageDialogVM>({ data, dataContext ->
+    val dataContext = fBaseScreen<MessageDialogVM>({ data, dataContext ->
 
-        }, { dataContext ->
-            dataContext.data.value = data
-            messageDialogDetail(dataContext)
-        })
+        }, { dataContext -> messageDialogDetail(dataContext) })
+    dataContext.data.value = data
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun messageDialogDetail(dataContext: MessageDialogVM) {
     val data by dataContext.data.collectAsState()
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     BasicAlertDialog({ data.relayCommand?.execute(MessageDialogVM.ClickEvent.CLOSE) },
         Modifier,
         DialogProperties(dismissOnBackPress = data.isCancel, dismissOnClickOutside = data.isCancel)) {

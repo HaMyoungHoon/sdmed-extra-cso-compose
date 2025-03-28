@@ -12,7 +12,7 @@ fun priceScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
                 displayFeatures: List<DisplayFeature> = emptyList(),
                 navigationType: NavigationType = NavigationType.BOTTOM,
                 navigate: (MenuItem, Boolean) -> Unit) {
-    fBaseScreen<PriceScreenVM>({ data, dataContext -> setLayoutCommand(data, dataContext) },
+    val dataContext = fBaseScreen<PriceScreenVM>({ data, dataContext -> setLayoutCommand(data, dataContext) },
         null,
         windowPanelType, navigationType)
 }

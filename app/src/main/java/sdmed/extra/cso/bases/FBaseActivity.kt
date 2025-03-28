@@ -150,9 +150,4 @@ abstract class FBaseActivity<T: FBaseViewModel>(val needRoles: UserRoles = UserR
             toast(ret.msg)
         }
     }
-
-    protected fun shouldShowRequestPermissionRationale(permissions: Array<String>) = permissions.any { ActivityCompat.shouldShowRequestPermissionRationale(this, it) }
-    protected fun hasPermissionsGranted(permissions: Array<String>) = permissions.none {
-        ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
-    }
 }

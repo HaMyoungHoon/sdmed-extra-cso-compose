@@ -9,7 +9,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -19,6 +24,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import sdmed.extra.cso.R
 import sdmed.extra.cso.interfaces.theme.IBaseColor
+import sdmed.extra.cso.models.menu.MenuItem
+import sdmed.extra.cso.models.menu.MenuList
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.CustomTextFieldData
 import sdmed.extra.cso.views.component.customText.customText
@@ -29,8 +36,18 @@ import sdmed.extra.cso.views.theme.FThemeUtil
 
 private val headerHeight = 48.dp
 @Composable
-fun loginScreenDetail(dataContext: LoginScreenVM) {
-    val color = FThemeUtil.safeColor()
+fun loginScreenDetail(dataContext: LoginScreenVM,
+                      navigate: (MenuItem, Boolean) -> Unit) {
+    val color = FThemeUtil.safeColorC()
+    val loginEnd by dataContext.loginEnd.collectAsState()
+    var navigateCalled by remember { mutableStateOf(false) }
+    LaunchedEffect(loginEnd) {
+        if (loginEnd && !navigateCalled) {
+            navigateCalled = true
+            dataContext.reSet()
+            navigate(MenuList.menuEDI(), true)
+        }
+    }
     Box(Modifier.fillMaxSize().background(color.background)) {
         loginHeader()
         loginBody(dataContext)
@@ -55,7 +72,7 @@ private fun loginBody(dataContext: LoginScreenVM) {
     val id = dataContext.id.collectAsState()
     val pw = dataContext.pw.collectAsState()
     val multiSignItems = dataContext.multiSignItems.collectAsState()
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     Box(Modifier.fillMaxWidth().padding(top = headerHeight * 2)) {
         Column(Modifier.fillMaxWidth()) {
             shapeRoundedBox(ShapeRoundedBoxData().apply {
@@ -116,7 +133,7 @@ private fun loginBody(dataContext: LoginScreenVM) {
 @Composable
 private fun loginTail(dataContext: LoginScreenVM) {
     val fillDataState = dataContext.fillDataState.collectAsState()
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     Box(Modifier.fillMaxWidth()) {
         shapeRoundedBox(ShapeRoundedBoxData().apply {
             backgroundColor = if (fillDataState.value) color.buttonBackground else color.disableBackGray
@@ -168,5 +185,5 @@ private fun pwDecorationBox(innerTextField: @Composable () -> Unit, text: String
 //@Preview
 @Composable
 private fun previewScreen() {
-    loginScreenDetail(LoginScreenVM().apply { fakeInit() })
+    loginScreenDetail(LoginScreenVM().apply { fakeInit() }, { a, b -> })
 }

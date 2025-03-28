@@ -12,7 +12,7 @@ fun qnaScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
               displayFeatures: List<DisplayFeature> = emptyList(),
               navigationType: NavigationType = NavigationType.BOTTOM,
               navigate: (MenuItem, Boolean) -> Unit) {
-    fBaseScreen<QnaScreenVM>({ data, dataContext -> setLayoutCommand(data, dataContext) },
+    val dataContext = fBaseScreen<QnaScreenVM>({ data, dataContext -> setLayoutCommand(data, dataContext) },
         null,
         windowPanelType, navigationType)
 }

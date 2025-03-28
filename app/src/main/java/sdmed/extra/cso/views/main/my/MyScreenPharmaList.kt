@@ -33,7 +33,7 @@ import sdmed.extra.cso.views.theme.FThemeUtil
 
 @Composable
 fun myScreenPharmaList(dataContext: MyScreenVM, heightMax: Dp = Dp.Unspecified) {
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     val pharmaList by dataContext.pharmaList.collectAsState()
     Column(Modifier.padding(5.dp)) {
         customText(CustomTextData().apply {
@@ -56,7 +56,7 @@ private fun LazyListScope.pharmaItems(pharmaModel: MutableList<PharmaModel>) {
 
 @Composable
 private fun itemContainer(data: PharmaModel) {
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     Card(Modifier.fillMaxWidth()
         .semantics { selected = false }
         .clip(RoundedCornerShape(5.dp))
@@ -87,7 +87,7 @@ private fun itemContainer(data: PharmaModel) {
 
 @Composable
 private fun cardSelectColor(): CardColors {
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     return CardDefaults.cardColors(
         containerColor = color.cardBackground
     )

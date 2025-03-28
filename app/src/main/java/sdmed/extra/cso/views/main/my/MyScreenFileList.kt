@@ -18,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sdmed.extra.cso.utils.FCoil
 import sdmed.extra.cso.views.component.customText.CustomTextData
@@ -29,7 +28,7 @@ import sdmed.extra.cso.views.theme.FThemeUtil
 
 @Composable
 fun myScreenFileList(dataContext: MyScreenVM) {
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     val thisData by dataContext.thisData.collectAsState()
     LazyRow(Modifier.fillMaxWidth().background(color.background).padding(5.dp),
         horizontalArrangement = Arrangement.spacedBy(20.dp)) {

@@ -13,9 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import sdmed.extra.cso.bases.FMainApplication
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
 import sdmed.extra.cso.views.component.shape.ShapeRoundedBoxData
@@ -24,7 +22,7 @@ import sdmed.extra.cso.views.theme.FThemeUtil
 
 @Composable
 fun myScreenTopContainer(dataContext: MyScreenVM) {
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     val thisData by dataContext.thisData.collectAsState()
     Row(Modifier.fillMaxWidth().background(color.background)) {
         customText(CustomTextData().apply {

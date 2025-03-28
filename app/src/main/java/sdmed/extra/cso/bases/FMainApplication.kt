@@ -36,6 +36,7 @@ class FMainApplication: Application(), DIAware {
 
     override val di = DI.direct {
         import(androidXModule(this@FMainApplication))
+        bindSingleton<FPermissionService>(FPermissionService::class) { FPermissionService(applicationContext) }
         bindSingleton<FUIStateService>(FUIStateService::class) { FUIStateService() }
         bindSingleton<FNotificationService>(FNotificationService::class) { FNotificationService(applicationContext) }
         bindSingleton<FMqttService>(FMqttService::class) { FMqttService(applicationContext) }

@@ -1,6 +1,7 @@
 package sdmed.extra.cso
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
@@ -159,14 +160,16 @@ class MainActivity: FBaseActivity<MainActivityVM>() {
         dataContext.updateApp.value = true
     }
     private fun notificationCheck() {
-        if (!hasNotificationGranted()) {
-            requestNotificationGranted()
-        }
-    }
-    private fun hasNotificationGranted(): Boolean {
-        return hasPermissionsGranted(FConstants.NOTIFICATION_PERMISSION)
+        requestNotificationGranted()
     }
     private fun requestNotificationGranted() {
-        requestPermissions(FConstants.NOTIFICATION_PERMISSION, FConstants.Permit.LOCATION.index)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            return
+        }
+        if (!dataContext.permissionService.hasPermissionsGranted(this, FConstants.NOTIFICATION_PERMISSION)) {
+            return
+        }
+        dataContext.permissionService.requestPermissions(FConstants.NOTIFICATION_PERMISSION, { x ->
+        })
     }
 }

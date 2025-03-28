@@ -1,6 +1,5 @@
 package sdmed.extra.cso.views.navigation
 
-import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.material3.DrawerValue
@@ -17,7 +16,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.window.core.layout.WindowHeightSizeClass
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
@@ -25,7 +23,6 @@ import kotlinx.coroutines.launch
 import sdmed.extra.cso.models.menu.MenuItem
 import sdmed.extra.cso.models.menu.NavigationContentType
 import sdmed.extra.cso.models.menu.RouteParser
-import sdmed.extra.cso.utils.FLog
 import sdmed.extra.cso.views.theme.FThemeUtil
 
 @Composable
@@ -50,7 +47,7 @@ fun navigationWrapper(navDestination: NavDestination?,
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
     val gesturesEnabled = drawerState.isOpen || navLayoutType == NavigationSuiteType.NavigationRail
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
 
     BackHandler(drawerState.isOpen) {
         coroutineScope.launch {

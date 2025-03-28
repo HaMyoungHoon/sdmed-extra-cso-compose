@@ -15,7 +15,7 @@ import sdmed.extra.cso.views.theme.FThemeUtil
 
 @Composable
 fun myScreenSingle(dataContext: MyScreenVM) {
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     val thisData by dataContext.thisData.collectAsState()
     val scrollState = rememberScrollState()
     LaunchedEffect(thisData) {
@@ -29,8 +29,6 @@ fun myScreenSingle(dataContext: MyScreenVM) {
         myScreenHospitalList(dataContext, 500.dp)
         myScreenPharmaList(dataContext, 500.dp)
     }
-
-    getMyScreenData(dataContext)
 }
 
 //@Preview

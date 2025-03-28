@@ -8,8 +8,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -18,31 +22,39 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import sdmed.extra.cso.bases.FMainApplication
 import sdmed.extra.cso.models.menu.MenuItem
 import sdmed.extra.cso.models.menu.MenuList
-import sdmed.extra.cso.models.retrofit.FRetrofitVariable
 import sdmed.extra.cso.utils.FAmhohwa
-import sdmed.extra.cso.utils.FCoroutineUtil
-import sdmed.extra.cso.utils.FExtensions
-import sdmed.extra.cso.utils.FVersionControl
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
 import sdmed.extra.cso.views.component.shape.shapeRoundedBox
 import sdmed.extra.cso.views.component.shape.ShapeRoundedBoxData
-import sdmed.extra.cso.views.dialog.message.MessageDialogData
-import sdmed.extra.cso.views.dialog.message.messageDialog
 import sdmed.extra.cso.views.theme.FThemeUtil
 
 @Composable
 fun landingScreenDetail(dataContext: LandingScreenVM, navigate: (MenuItem, Boolean)-> Unit) {
     val startVisible by dataContext.startVisible.collectAsState()
     val tokenCheck by dataContext.tokenCheck.collectAsState()
-    tokenCheck(dataContext)
-    if (tokenCheck) {
-        navigate(MenuList.menuEDI(), true)
+    var navigateCalled by remember { mutableStateOf(false) }
+    LaunchedEffect(tokenCheck) {
+        if (tokenCheck && !navigateCalled) {
+            navigateCalled = true
+            dataContext.reSet()
+            navigate(MenuList.menuEDI(), true)
+        }
+        if (!tokenCheck) {
+            tokenCheck(dataContext)
+        }
     }
-    val color = FThemeUtil.safeColor()
+    val loginClick by dataContext.loginClick.collectAsState()
+    LaunchedEffect(loginClick) {
+        if (loginClick && !navigateCalled) {
+            navigateCalled = true
+            dataContext.reSet()
+            navigate(MenuList.menuLogin(), true)
+        }
+    }
+    val color = FThemeUtil.safeColorC()
     Box(Modifier.fillMaxSize()) {
         Image(painterResource(R.drawable.landing_background),
             stringResource(R.string.landing_desc),
@@ -95,5 +107,5 @@ private fun tokenCheck(dataContext: LandingScreenVM) {
 //@Preview
 @Composable
 private fun previewLandingDetail() {
-    landingScreenDetail(LandingScreenVM(), {a, b -> })
+    landingScreenDetail(LandingScreenVM(), { a, b -> })
 }

@@ -3,7 +3,6 @@ package sdmed.extra.cso.views.main.landing
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.window.layout.DisplayFeature
 import sdmed.extra.cso.bases.fBaseScreen
 import sdmed.extra.cso.models.menu.MenuItem
@@ -20,15 +19,10 @@ fun loginScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
                 displayFeatures: List<DisplayFeature> = emptyList(),
                 navigationType: NavigationType = NavigationType.BOTTOM,
                 navigate: (MenuItem, Boolean) -> Unit) {
-    fBaseScreen<LoginScreenVM>({ data, dataContext -> setLayoutCommand(data, dataContext) },
-        { dataContext ->
-            val loginEnd by dataContext.loginEnd.collectAsState()
-            loginScreenDetail(dataContext)
-            if (loginEnd) {
-                navigate(MenuList.menuEDI(), true)
-            }
-        },
+    val dataContext = fBaseScreen<LoginScreenVM>({ data, dataContext -> setLayoutCommand(data, dataContext) },
+        { dataContext -> loginScreenDetail(dataContext, navigate) },
         windowPanelType, navigationType)
+    dataContext.gatheringMultiSign()
 }
 private fun setLayoutCommand(data: Any?, dataContext: LoginScreenVM) {
     val eventName = data as? LoginScreenVM.ClickEvent ?: return

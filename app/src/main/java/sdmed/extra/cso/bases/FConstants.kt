@@ -13,6 +13,8 @@ object FConstants {
     const val NOTIFICATION_CHANNEL_ID = "notify_channel_sdmed_extra_cso"
     const val NOTIFICATION_CHANNEL_NAME = "NotifyChannelSDMedExtraCSO"
 
+    const val PERMISSION = "permission"
+    const val PERMISSIONS = "permission"
     const val APP_COLOR = "appColor"
     const val AUTH_TOKEN = "token"
     const val NOTIFY_INDEX = "notifyIndex"
@@ -67,19 +69,18 @@ object FConstants {
         Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.ACCESS_FINE_LOCATION
     )
-    val ALARM_PERMISSION = arrayOf(Manifest.permission.SCHEDULE_EXACT_ALARM)
-    val NOTIFICATION_PERMISSION = arrayOf(Manifest.permission.POST_NOTIFICATIONS)
-    val CAMERA_PERMISSION = arrayOf(Manifest.permission.CAMERA)
-    val READ_EXTERNAL_PERMISSION_32 = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+    @RequiresApi(Build.VERSION_CODES.S)
+    val ALARM_PERMISSION = Manifest.permission.SCHEDULE_EXACT_ALARM
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    val NOTIFICATION_PERMISSION = Manifest.permission.POST_NOTIFICATIONS
+    val CAMERA_PERMISSION = Manifest.permission.CAMERA
+    val READ_EXTERNAL_PERMISSION_32 = Manifest.permission.READ_EXTERNAL_STORAGE
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 //    val READ_EXTERNAL_PERMISSION_33 = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO)
-    val READ_EXTERNAL_PERMISSION_33 = arrayOf(Manifest.permission.READ_MEDIA_IMAGES)
+    val READ_EXTERNAL_PERMISSION_33 = Manifest.permission.READ_MEDIA_IMAGES
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 //    val READ_EXTERNAL_PERMISSION_34 = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED)
-    val READ_EXTERNAL_PERMISSION_34 = arrayOf(
-        Manifest.permission.READ_MEDIA_IMAGES,
-        Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
-    )
+    val READ_EXTERNAL_PERMISSION_34 = arrayOf(Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED)
     enum class Permit(val index: Int) {
         LOCATION(1),
         ALARM(2),

@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import sdmed.extra.cso.models.menu.MenuItem
@@ -34,9 +33,9 @@ import sdmed.extra.cso.views.theme.FThemeUtil
 @Composable
 fun permanentDrawerNavigationBar(navDestination: NavDestination?,
                                  navigationContentType: NavigationContentType,
-                                 menuClick: (MenuItem, Boolean) -> Unit,
+                                 navigateTo: (MenuItem, Boolean) -> Unit,
                                  drawerClick: () -> Unit = {}) {
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     ModalDrawerSheet {
         Layout({
             Column(Modifier.layoutId(MenuLayoutType.HEADER),
@@ -63,7 +62,7 @@ fun permanentDrawerNavigationBar(navDestination: NavDestination?,
                             textColor = color.cardForeground
                             textSize = FThemeUtil.textUnit(16F)
                         })
-                    }, navDestination.hasRoute(x), { menuClick(x, false) }, Modifier, {
+                    }, navDestination.hasRoute(x), { navigateTo(x, false) }, Modifier, {
                         if (navDestination.hasRoute(x)) {
                             Icon(x.selectedIcon, x.contentDescription, tint = Color.Unspecified)
                         } else {
@@ -82,5 +81,5 @@ fun permanentDrawerNavigationBar(navDestination: NavDestination?,
 //@Preview
 @Composable
 private fun previewScreen() {
-    permanentDrawerNavigationBar(null, NavigationContentType.TOP,  { a,b -> })
+    permanentDrawerNavigationBar(null, NavigationContentType.TOP,  { a, b -> })
 }

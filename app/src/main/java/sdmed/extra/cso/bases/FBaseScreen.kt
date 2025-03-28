@@ -14,7 +14,7 @@ inline fun <reified T: FBaseViewModel> fBaseScreen(crossinline setLayoutCommand:
                                                    navigationType: NavigationType = NavigationType.BOTTOM,
                                                    twoPane: @Composable (T) -> Unit = { },
                                                    phone: @Composable (T) -> Unit = { },
-                                                   tablet: @Composable (T) -> Unit = { }) {
+                                                   tablet: @Composable (T) -> Unit = { }): T {
     val dataContext: T = viewModel(T::class)
     dataContext.relayCommand = AsyncRelayCommand()
     dataContext.addEventListener(object: IAsyncEventListener {
@@ -23,10 +23,11 @@ inline fun <reified T: FBaseViewModel> fBaseScreen(crossinline setLayoutCommand:
         }
     })
     if (content != null) {
-        return content(dataContext)
+        content(dataContext)
+        return dataContext
     }
 
-    return when (windowPanelType) {
+    when (windowPanelType) {
         WindowPanelType.SINGLE_PANE -> {
             if (navigationType == NavigationType.BOTTOM) {
                 phone(dataContext)
@@ -36,4 +37,5 @@ inline fun <reified T: FBaseViewModel> fBaseScreen(crossinline setLayoutCommand:
         }
         WindowPanelType.DUAL_PANE -> twoPane(dataContext)
     }
+    return dataContext
 }

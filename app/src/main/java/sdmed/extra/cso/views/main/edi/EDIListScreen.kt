@@ -29,7 +29,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import sdmed.extra.cso.interfaces.command.ICommand
 import sdmed.extra.cso.models.retrofit.edi.EDIState
@@ -46,7 +45,7 @@ import java.util.UUID
 fun ediListScreenTopContainer(startDate: String,
                                 endDate: String,
                                 relayCommand: ICommand? = null) {
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     Row(Modifier.fillMaxWidth().background(color.background)) {
         Column(Modifier.clickable { relayCommand?.execute(EDIScreenVM.ClickEvent.START_DATE) }) {
             Card(Modifier.semantics { selected = false }
@@ -96,7 +95,7 @@ fun ediListScreenTopContainer(startDate: String,
 fun ediListScreenEdiList(ediItems: List<EDIUploadModel>,
                          lazyListState: LazyListState,
                          relayCommand: ICommand? = null) {
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     LazyColumn(Modifier.fillMaxWidth().background(color.background),
         lazyListState) {
         items(ediItems, { it.thisPK }) { x -> itemContainer(x, relayCommand) }
@@ -106,7 +105,7 @@ fun ediListScreenEdiList(ediItems: List<EDIUploadModel>,
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun itemContainer(data: EDIUploadModel, relayCommand: ICommand? = null) {
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     data.relayCommand = relayCommand
     Card(Modifier.fillMaxWidth()
         .semantics { selected = data.isSelected.value }
@@ -160,7 +159,7 @@ private fun itemContainer(data: EDIUploadModel, relayCommand: ICommand? = null) 
 
 @Composable
 private fun cardSelectColor(isSelected: Boolean): CardColors {
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     return CardDefaults.cardColors(
         containerColor = if (isSelected) color.senary
         else color.cardBackground

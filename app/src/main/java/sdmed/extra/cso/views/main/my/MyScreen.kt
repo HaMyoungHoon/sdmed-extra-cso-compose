@@ -2,6 +2,11 @@ package sdmed.extra.cso.views.main.my
 
 import android.content.Intent
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.window.layout.DisplayFeature
 import sdmed.extra.cso.bases.FConstants
 import sdmed.extra.cso.bases.fBaseScreen
@@ -22,12 +27,20 @@ fun myScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
              displayFeatures: List<DisplayFeature> = emptyList(),
              navigationType: NavigationType = NavigationType.BOTTOM,
              navigate: (MenuItem, Boolean) -> Unit) {
-    fBaseScreen<MyScreenVM>({ data, dataContext -> setLayoutCommand(data, dataContext) },
+    var navigateCalled by remember { mutableStateOf(false) }
+    val dataContext = fBaseScreen<MyScreenVM>({ data, dataContext -> setLayoutCommand(data, dataContext) },
         null,
         windowPanelType, navigationType,
         { dataContext -> myScreenDual(dataContext, displayFeatures) },
         { dataContext -> myScreenSingle(dataContext) },
         { dataContext -> myScreenDual(dataContext, displayFeatures) })
+    LaunchedEffect(navigateCalled) {
+        if (!navigateCalled) {
+            navigateCalled = true
+            checkExternalStorage(dataContext)
+            getMyScreenData(dataContext)
+        }
+    }
 }
 fun getMyScreenData(dataContext: MyScreenVM) {
     dataContext.loading()
@@ -96,9 +109,32 @@ private fun training(dataContext: MyScreenVM) {
     }
 }
 private fun trainingCertificateAdd(dataContext: MyScreenVM) {
+    checkCamera(dataContext) {
+        checkReadStorage(dataContext) {
 
+        }
+    }
 }
 private fun taxpayer(dataContext: MyScreenVM) {
+//    val context = dataContext.context
+//    val blobUrl = dataContext.thisData.value.taxPayerUrl
+//    if (blobUrl != null) {
+//        context.startActivity((Intent(context, MediaViewActivity::class.java).apply {
+//            putParcelable(FConstants.MEDIA_ITEM, MediaViewParcelModel().apply {
+//                this.blobUrl = blobUrl
+//                this.mimeType = dataContext.thisData.value.taxPayerMimeType ?: ""
+//            })
+//        }))
+//        return
+//    }
+//    checkCamera(dataContext) {
+//        checkReadStorage(dataContext) {
+//            _imagePickerResult?.launch(Intent(contextBuff, MediaPickerActivity::class.java).apply {
+//                putExtra(FConstants.MEDIA_TARGET_PK, UserFileType.Taxpayer.index.toString())
+//                putExtra(FConstants.MEDIA_MAX_COUNT, 1)
+//            })
+//        }
+//    }
 }
 private fun bankAccount(dataContext: MyScreenVM) {
 
@@ -108,4 +144,14 @@ private fun csoReport(dataContext: MyScreenVM) {
 }
 private fun marketingContract(dataContext: MyScreenVM) {
 
+}
+
+private fun checkCamera(dataContext: MyScreenVM, callback: (Boolean) -> Unit) {
+    dataContext.permissionService.requestCameraPermissions(callback)
+}
+private fun checkExternalStorage(dataContext: MyScreenVM) {
+    dataContext.permissionService.externalStorage()
+}
+private fun checkReadStorage(dataContext: MyScreenVM, callback: (Boolean) -> Unit) {
+    dataContext.permissionService.requestReadExternalPermissions(callback)
 }

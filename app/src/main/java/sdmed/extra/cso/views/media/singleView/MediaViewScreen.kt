@@ -34,7 +34,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import sdmed.extra.cso.bases.FConstants
@@ -48,7 +47,7 @@ import sdmed.extra.cso.views.theme.FThemeUtil
 
 @Composable
 fun mediaViewScreen(dataContext: MediaViewActivityVM) {
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     val item by dataContext.item.collectAsState()
     Column(Modifier.windowInsetsPadding(WindowInsets.statusBars.only(WindowInsetsSides.Top))
         .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Bottom))
@@ -65,7 +64,7 @@ fun mediaViewScreen(dataContext: MediaViewActivityVM) {
 
 @Composable
 private fun mediaViewTopContainer(dataContext: MediaViewActivityVM) {
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     Row(Modifier.fillMaxWidth().padding(5.dp)) {
         Icon(vectorArrowLeft(FVectorData().apply {
             this.tintColor = color.background
@@ -83,7 +82,7 @@ private fun mediaViewTopContainer(dataContext: MediaViewActivityVM) {
 
 @Composable
 private fun mediaViewImageView(dataContext: MediaViewActivityVM) {
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     val item by dataContext.item.collectAsState()
     var scale by remember { mutableStateOf(1F) }
     var offset by remember { mutableStateOf(Offset.Zero) }

@@ -15,7 +15,7 @@ enum class QnAState(var index: Int, var desc: String) {
     }
     @Composable
     fun parseQnAColor(): Color {
-        val color = FThemeUtil.safeColor()
+        val color = FThemeUtil.safeColorC()
         return when (this) {
             None -> color.qnaStateNone
             OK -> color.qnaStateOk
@@ -25,7 +25,7 @@ enum class QnAState(var index: Int, var desc: String) {
     }
     @Composable
     fun parseQnABackColor(): Color {
-        val color = FThemeUtil.safeColor()
+        val color = FThemeUtil.safeColorC()
         return when (this) {
             None -> color.qnaBackStateNone
             OK -> color.qnaBackStateOk

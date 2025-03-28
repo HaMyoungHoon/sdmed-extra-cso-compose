@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.stateIn
 import sdmed.extra.cso.bases.FBaseViewModel
 import sdmed.extra.cso.models.RestResultT
 import sdmed.extra.cso.models.retrofit.users.UserMultiLoginModel
+import sdmed.extra.cso.utils.FStorage
 
 class LoginScreenVM(applicationContext: Context? = null): FBaseViewModel(applicationContext) {
     val id = MutableStateFlow("")
@@ -19,6 +20,17 @@ class LoginScreenVM(applicationContext: Context? = null): FBaseViewModel(applica
     }.stateIn(viewModelScope, SharingStarted.Lazily, false)
     val multiSignItems = MutableStateFlow(mutableListOf<UserMultiLoginModel>())
 
+    fun gatheringMultiSign() {
+        FStorage.getMultiLoginData(context)?.let {
+            multiSignItems.value = it.toMutableList()
+        }
+    }
+    fun reSet() {
+        id.value = ""
+        pw.value = ""
+        loginEnd.value = false
+        gatheringMultiSign()
+    }
     suspend fun signIn(): RestResultT<String> {
         val ret = commonRepository.signIn(id.value, pw.value)
         return ret

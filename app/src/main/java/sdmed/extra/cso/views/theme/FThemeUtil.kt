@@ -1,6 +1,8 @@
 package sdmed.extra.cso.views.theme
 
 import android.app.Activity
+import android.app.UiModeManager
+import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -15,6 +17,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.core.view.WindowCompat
 import sdmed.extra.cso.bases.FMainApplication
 import sdmed.extra.cso.interfaces.theme.IBaseColor
+import sdmed.extra.cso.utils.FDI
 
 object FThemeUtil {
     const val LIGHT_MODE = "light"
@@ -22,8 +25,22 @@ object FThemeUtil {
     const val DEFAULT_MODE = "default"
 
     @Composable
-    fun baseColor(darkTheme: Boolean = isSystemInDarkTheme()): IBaseColor {
+    fun baseColorC(darkTheme: Boolean = isSystemInDarkTheme()): IBaseColor {
         val appColor = FMainApplication.appColor.value
+        return if (appColor == LIGHT_MODE) {
+            FLightColor
+        } else if (appColor == DARK_MODE) {
+            FDarkColor
+        } else if (darkTheme) {
+            FDarkColor
+        } else {
+            FLightColor
+        }
+    }
+    fun baseColor(): IBaseColor {
+        val appColor = FMainApplication.appColor.value
+        val uiModeManager = FDI.context().getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
+        val darkTheme = (uiModeManager.nightMode == UiModeManager.MODE_NIGHT_YES)
         return if (appColor == LIGHT_MODE) {
             FLightColor
         } else if (appColor == DARK_MODE) {
@@ -36,10 +53,11 @@ object FThemeUtil {
     }
 
     @Composable
-    fun safeColor(isDark: Boolean = false, darkTheme: Boolean = isSystemInDarkTheme()) =
+    fun safeColorC(isDark: Boolean = false, darkTheme: Boolean = isSystemInDarkTheme()) =
         if (LocalInspectionMode.current)
             if (isDark) FDarkColor else FLightColor
-        else baseColor(darkTheme)
+        else baseColorC(darkTheme)
+    fun safeColor(isDark: Boolean = false) = baseColor()
 
     fun applyTheme(mode: FThemeMode? = null) {
         AppCompatDelegate.setDefaultNightMode(when (mode) {
@@ -55,10 +73,10 @@ object FThemeUtil {
     @Composable
     fun thisTheme(darkTheme: Boolean = isSystemInDarkTheme(),
                   content: @Composable() () -> Unit) {
-        val colorScheme = safeColor(darkTheme).materialTheme()
+        val colorScheme = safeColorC(darkTheme).materialTheme()
         val view = LocalView.current
         if (!view.isInEditMode) {
-            val statusBarColor = safeColor().cardBackground.toArgb()
+            val statusBarColor = safeColorC().cardBackground.toArgb()
             SideEffect {
                 val window = (view.context as Activity).window
                 window.statusBarColor = statusBarColor
@@ -69,5 +87,4 @@ object FThemeUtil {
     }
 
     fun textUnit(size: Float, unitType: TextUnitType = TextUnitType.Sp) = TextUnit(size, unitType)
-
 }

@@ -12,7 +12,7 @@ fun homeScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
                displayFeatures: List<DisplayFeature> = emptyList(),
                navigationType: NavigationType = NavigationType.BOTTOM,
                navigate: (MenuItem, Boolean) -> Unit) {
-    fBaseScreen<HomeScreenVM>({ data, dataContext -> setLayoutCommand(data, dataContext) },
+    val dataContext = fBaseScreen<HomeScreenVM>({ data, dataContext -> setLayoutCommand(data, dataContext) },
         null,
         windowPanelType, navigationType)
 }

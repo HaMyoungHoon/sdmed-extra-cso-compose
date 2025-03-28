@@ -27,7 +27,7 @@ class FCameraUtil(var context: Context, private var cameraResult: ActivityResult
                     .setDeniedTitle(context.getString(R.string.cancel_desc))
                     .setDeniedMessage(context.getString(R.string.permit_denied))
                     .setGotoSettingButtonText(context.getString(R.string.permit_setting))
-                    .setPermissions(*FConstants.CAMERA_PERMISSION)
+                    .setPermissions(FConstants.CAMERA_PERMISSION)
                     .check()
 
                 if (!permissionResult.isGranted) {

@@ -23,12 +23,12 @@ fun ediScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
               displayFeatures: List<DisplayFeature> = emptyList(),
               navigationType: NavigationType = NavigationType.BOTTOM,
               navigate: (MenuItem, Boolean) -> Unit) {
-    fBaseScreen<EDIScreenVM>( { data, dataContext -> setLayoutCommand(data, dataContext) },
+    val dataContext = fBaseScreen<EDIScreenVM>( { data, dataContext -> setLayoutCommand(data, dataContext) },
         null,
         windowPanelType, navigationType,
-        { twoPaneScreen(displayFeatures, it)},
-        { phoneScreen(it) },
-        { tabletScreen(it) })
+        { dataContext -> twoPaneScreen(displayFeatures, dataContext) },
+        { dataContext -> phoneScreen(dataContext) },
+        { dataContext -> tabletScreen(dataContext) })
 }
 private fun setLayoutCommand(data: Any?, dataContext: EDIScreenVM) {
 
@@ -45,7 +45,7 @@ private fun twoPaneScreen(displayFeatures: List<DisplayFeature>, dataContext: ED
 @Composable
 private fun phoneScreen(dataContext: EDIScreenVM) {
     val lazyListState = rememberLazyListState()
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     Box(Modifier.background(color.background)) {
         Column(Modifier.fillMaxWidth()) {
             Row {
@@ -64,7 +64,7 @@ private fun phoneScreen(dataContext: EDIScreenVM) {
 @Composable
 private fun tabletScreen(dataContext: EDIScreenVM) {
     val lazyListState = rememberLazyListState()
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     Box(Modifier.background(color.background)) {
         Column(Modifier.fillMaxWidth()) {
             Row {

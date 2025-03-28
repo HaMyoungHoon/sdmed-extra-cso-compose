@@ -39,7 +39,7 @@ fun thisApp(
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
     val dest = navBackStackEntry?.destination
     val navVisible = FComposableDI.uiStateService(context).isNavigationVisible.collectAsState()
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
 
     Surface(Modifier.background(color.background)) {
         if (navVisible.value) {

@@ -50,7 +50,7 @@ import sdmed.extra.cso.views.theme.FThemeUtil
 
 @Composable
 fun mediaListViewScreen(dataContext: MediaListViewActivityVM) {
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     Column(Modifier.windowInsetsPadding(WindowInsets.statusBars.only(WindowInsetsSides.Top))
         .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Bottom))
         .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Horizontal))
@@ -62,7 +62,7 @@ fun mediaListViewScreen(dataContext: MediaListViewActivityVM) {
 
 @Composable
 private fun mediaListViewScreenTopContainer(dataContext: MediaListViewActivityVM) {
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     Row(Modifier.fillMaxWidth().padding(5.dp)) {
         Icon(vectorArrowLeft(FVectorData().apply {
             this.tintColor = color.background
@@ -94,7 +94,7 @@ private fun mediaListViewScreenItemContainer(dataContext: MediaListViewActivityV
 
 @Composable
 private fun mediaListViewScreenImageView(item: MediaViewModel) {
-    val color = FThemeUtil.safeColor()
+    val color = FThemeUtil.safeColorC()
     var scale by remember { mutableStateOf(1F) }
     var offset by remember { mutableStateOf(Offset.Zero) }
     Box(Modifier.fillMaxSize().background(color.gray).pointerInput(Unit) {

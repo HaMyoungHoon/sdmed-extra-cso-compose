@@ -16,7 +16,7 @@ enum class EDIState(var index: Int, var desc: String) {
     }
     @Composable
     fun parseEDIColor(): Color {
-        val color = FThemeUtil.safeColor()
+        val color = FThemeUtil.safeColorC()
         return when (this) {
             None -> color.ediStateNone
             OK -> color.ediStateOk
@@ -27,7 +27,7 @@ enum class EDIState(var index: Int, var desc: String) {
     }
     @Composable
     fun parseEDIBackColor(): Color {
-        val color = FThemeUtil.safeColor()
+        val color = FThemeUtil.safeColorC()
         return when (this) {
             None -> color.ediBackStateNone
             OK -> color.ediBackStateOk

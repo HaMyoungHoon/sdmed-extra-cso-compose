@@ -37,7 +37,11 @@ class FNotificationService(applicationContext: Context): FBaseService(applicatio
     }
 
     fun checkPermission(context: Context, fn: () -> Unit) {
-        if (ActivityCompat.checkSelfPermission(context, FConstants.NOTIFICATION_PERMISSION[0]) != PackageManager.PERMISSION_GRANTED) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            fn()
+            return
+        }
+        if (ActivityCompat.checkSelfPermission(context, FConstants.NOTIFICATION_PERMISSION) != PackageManager.PERMISSION_GRANTED) {
             FCoroutineUtil.coroutineScope({
                 TedPermission.create()
                     .setRationaleTitle(R.string.permit_title)
@@ -45,7 +49,7 @@ class FNotificationService(applicationContext: Context): FBaseService(applicatio
                     .setDeniedTitle(R.string.cancel_desc)
                     .setDeniedMessage(R.string.permit_require)
                     .setGotoSettingButtonText(R.string.permit_setting)
-                    .setPermissions(*FConstants.NOTIFICATION_PERMISSION)
+                    .setPermissions(FConstants.NOTIFICATION_PERMISSION)
                     .check()
             }, { if (it.isGranted) fn() })
         } else {

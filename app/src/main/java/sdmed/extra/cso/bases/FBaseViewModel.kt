@@ -14,6 +14,7 @@ import sdmed.extra.cso.interfaces.repository.ICommonRepository
 import sdmed.extra.cso.models.RestResultT
 import sdmed.extra.cso.models.command.AsyncRelayCommand
 import sdmed.extra.cso.models.retrofit.users.UserStatus
+import sdmed.extra.cso.models.services.FPermissionService
 import sdmed.extra.cso.models.services.FUIStateService
 import sdmed.extra.cso.utils.FDI
 
@@ -21,6 +22,7 @@ abstract class FBaseViewModel(applicationContext: Context? = null): ViewModel() 
     val context: Context by lazy {
         FMainApplication.ins
     }
+    val permissionService: FPermissionService by FDI.di(applicationContext).instance(FPermissionService::class)
     val uiStateService: FUIStateService by FDI.di(applicationContext).instance(FUIStateService::class)
     protected val azureBlobRepository: IAzureBlobRepository by FDI.di(applicationContext).instance(IAzureBlobRepository::class)
     protected val commonRepository: ICommonRepository by FDI.di(applicationContext).instance(ICommonRepository::class)
