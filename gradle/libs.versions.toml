@@ -78,6 +78,7 @@ kodein-framework = { group = "org.kodein.di", name = "kodein-di-framework-androi
 kodein-generic = { group = "org.kodein.di", name = "kodein-di-generic-jvm", version.ref = "kodein-generic" }
 
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+coil-gif = { group = "io.coil-kt", name = "coil-gif", version.ref = "coil" }
 
 fasterxml-jacson = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin", version.ref = "fasterxml"}
 hivemq-client = { group = "com.hivemq", name = "hivemq-mqtt-client", version.ref = "hivemq" }

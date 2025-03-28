@@ -11,6 +11,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import coil.ImageLoader
 import coil.compose.AsyncImage
+import coil.decode.ImageDecoderDecoder
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
 import coil.request.CachePolicy
@@ -28,6 +29,9 @@ object FCoil {
             MemoryCache.Builder(context)
                 .maxSizePercent(0.25)
                 .build()
+        }
+        .components {
+            add(ImageDecoderDecoder.Factory())
         }
         .build()
     @Composable

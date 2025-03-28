@@ -45,6 +45,7 @@ class MainActivity: FBaseActivity<MainActivityVM>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        initCommand()
         versionCheck(dataContext)
         notificationCheck()
         setContent {

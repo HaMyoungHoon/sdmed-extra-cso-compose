@@ -126,6 +126,7 @@ dependencies {
     implementation(libs.kodein.framework)
 
     implementation(libs.coil)
+    implementation(libs.coil.gif)
 
     implementation(libs.fasterxml.jacson)
     implementation(libs.hivemq.client)

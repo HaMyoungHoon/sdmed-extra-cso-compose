@@ -18,6 +18,7 @@ class MediaListViewActivity: FBaseActivity<MediaListViewActivityVM>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        initCommand()
         setContent {
             FThemeUtil.thisTheme {
                 setToast()

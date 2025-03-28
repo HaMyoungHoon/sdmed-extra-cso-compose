@@ -4,6 +4,7 @@
     <string name="sample_txt">hello world!</string>
     <string name="expired_token">expired authentication</string>
     <string name="do_logout">has been logout</string>
+    <string name="close_desc">close</string>
     <string name="left_desc">left</string>
     <string name="right_desc">right</string>
     <string name="new_version_update_desc">plz need to update</string>

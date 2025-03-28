@@ -19,7 +19,7 @@ class MediaViewActivityVM(applicationContext: Context? = null): FBaseViewModel(a
 
     override fun fakeInit() {
         item.value = MediaViewModel().apply {
-            blobUrl.value = FConstants.TEST_BLOB_URL
+//            blobUrl.value = FConstants.TEST_BLOB_URL
             mimeType.value = FContentsType.type_pdf
             originalFilename.value = "파일 이름 asd lk fj aasadfsdf safssdasfsldfkjsdfkljl sdkfjslkdjasjdflkasd.xlsx"
         }

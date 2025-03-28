@@ -4,6 +4,7 @@
     <string name="sample_txt">hello world!</string>
     <string name="expired_token">인증이 만료 되었습니다.</string>
     <string name="do_logout">로그아웃 되었습니다.</string>
+    <string name="close_desc">닫기</string>
     <string name="left_desc">왼쪽</string>
     <string name="right_desc">오른쪽</string>
     <string name="new_version_update_desc">업데이트가 필요합니다</string>

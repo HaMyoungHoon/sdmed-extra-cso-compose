@@ -105,6 +105,7 @@ private fun training(dataContext: MyScreenVM) {
         }
         dataContext.context.startActivity(Intent(dataContext.context, MediaListViewActivity::class.java).apply {
             putParcelableList(FConstants.MEDIA_LIST, ret)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
         })
     }
 }
