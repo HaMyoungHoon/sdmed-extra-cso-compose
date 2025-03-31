@@ -7,7 +7,6 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.Signature
 import android.os.Build
-import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.kodein.di.DI
 import org.kodein.di.DIAware
@@ -44,7 +43,7 @@ class FMainApplication: Application(), DIAware {
         bindSingleton<FBackgroundEDIRequestNewUploadService>(FBackgroundEDIRequestNewUploadService::class) { FBackgroundEDIRequestNewUploadService(applicationContext) }
         bindSingleton<FBackgroundEDIFileUpload>(FBackgroundEDIFileUpload::class) { FBackgroundEDIFileUpload(applicationContext) }
         bindSingleton<FBackgroundQnAUpload>(FBackgroundQnAUpload::class) { FBackgroundQnAUpload(applicationContext) }
-        bindSingleton<FBackgroundUserFileUploadService>(FBackgroundUserFileUploadService::class) { FBackgroundUserFileUploadService(applicationContext) }
+        bindSingleton<FBackgroundUserFileUpload>(FBackgroundUserFileUpload::class) { FBackgroundUserFileUpload(applicationContext) }
 
         bindSingleton<IAzureBlobRepository>(IAzureBlobRepository::class) { AzureBlobRepository(RetrofitService.create(IAzureBlobService::class.java)) }
         bindSingleton<ICommonRepository>(ICommonRepository::class) { CommonRepository(RetrofitService.create(ICommonService::class.java)) }

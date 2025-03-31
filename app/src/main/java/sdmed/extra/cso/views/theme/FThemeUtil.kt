@@ -6,9 +6,14 @@ import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.DatePickerColors
+import androidx.compose.material3.DatePickerDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalView
@@ -87,4 +92,38 @@ object FThemeUtil {
     }
 
     fun textUnit(size: Float, unitType: TextUnitType = TextUnitType.Sp) = TextUnit(size, unitType)
+
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun datePickerColors(): DatePickerColors {
+        val color = safeColorC()
+        return DatePickerDefaults.colors().copy(
+            containerColor = color.primaryContainer,
+            titleContentColor = color.primary,
+            headlineContentColor = color.primary,
+            weekdayContentColor = color.primary,
+            subheadContentColor = color.primary,
+            navigationContentColor = color.primary,
+            yearContentColor = color.primary,
+            disabledYearContentColor = color.disableForeGray,
+            currentYearContentColor = color.primary,
+            selectedYearContentColor = color.primary,
+            disabledSelectedYearContentColor = color.disableForeGray,
+            selectedYearContainerColor = color.primaryContainer,
+            disabledSelectedYearContainerColor = color.disableBackGray,
+            dayContentColor = color.primary,
+            disabledDayContentColor = color.disableForeGray,
+            selectedDayContentColor = color.primary,
+            disabledSelectedDayContentColor = color.disableForeGray,
+            selectedDayContainerColor = color.primaryContainer,
+            disabledSelectedDayContainerColor = color.disableBackGray,
+            todayContentColor = color.primary,
+            todayDateBorderColor = color.primary,
+            dayInSelectionRangeContentColor = color.primary,
+            dayInSelectionRangeContainerColor = color.primaryContainer,
+            dividerColor = color.secondary,
+            dateTextFieldColors = null
+        )
+    }
 }

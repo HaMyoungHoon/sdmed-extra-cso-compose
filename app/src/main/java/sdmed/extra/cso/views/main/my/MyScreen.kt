@@ -33,6 +33,8 @@ import sdmed.extra.cso.utils.FStorage
 import sdmed.extra.cso.utils.FStorage.getParcelableList
 import sdmed.extra.cso.utils.FStorage.putParcelable
 import sdmed.extra.cso.utils.FStorage.putParcelableList
+import sdmed.extra.cso.views.component.loginDialog.loginDialog
+import sdmed.extra.cso.views.component.multiLogin.multiLoginDialog
 import sdmed.extra.cso.views.media.listView.MediaListViewActivity
 import sdmed.extra.cso.views.media.picker.MediaPickerActivity
 import sdmed.extra.cso.views.media.singleView.MediaViewActivity
@@ -44,13 +46,62 @@ fun myScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
              navigationType: NavigationType = NavigationType.BOTTOM,
              navigate: (MenuItem, Boolean) -> Unit) {
     var navigateCalled by remember { mutableStateOf(false) }
-    val context = LocalContext.current
     val dataContext = fBaseScreen<MyScreenVM>({ data, dataContext -> setLayoutCommand(data, dataContext, navigate) },
         null,
         windowPanelType, navigationType,
         { dataContext -> myScreenDual(dataContext, displayFeatures) },
         { dataContext -> myScreenSingle(dataContext) },
         { dataContext -> myScreenDual(dataContext, displayFeatures) })
+    multiLogin(dataContext, windowPanelType, displayFeatures, navigationType)
+    loginDialog(dataContext, windowPanelType, displayFeatures, navigationType)
+    passwordChangeDialog(dataContext)
+    userFileSelect(dataContext)
+    trainingCertificateAdd(dataContext, windowPanelType, displayFeatures, navigationType)
+    LaunchedEffect(navigateCalled) {
+        if (!navigateCalled) {
+            navigateCalled = true
+            checkExternalStorage(dataContext)
+            getMyScreenData(dataContext)
+        }
+    }
+}
+@Composable
+fun multiLogin(dataContext: MyScreenVM,
+               windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
+               displayFeatures: List<DisplayFeature> = emptyList(),
+               navigationType: NavigationType = NavigationType.BOTTOM) {
+    val multiLogin by dataContext.multiLogin.collectAsState()
+    if (multiLogin) {
+        multiLoginDialog(windowPanelType, displayFeatures, navigationType, true, {
+            dataContext.addLogin.value = true
+        }) {
+            dataContext.multiLogin.value = false
+        }
+    }
+}
+@Composable
+fun loginDialog(dataContext: MyScreenVM,
+                windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
+                displayFeatures: List<DisplayFeature> = emptyList(),
+                navigationType: NavigationType = NavigationType.BOTTOM) {
+    val addLogin by dataContext.addLogin.collectAsState()
+    if (addLogin) {
+        loginDialog(windowPanelType, displayFeatures, navigationType) {
+            dataContext.addLogin.value = false
+        }
+    }
+}
+@Composable
+fun passwordChangeDialog(dataContext: MyScreenVM) {
+    val passwordChange by dataContext.passwordChange.collectAsState()
+    if (passwordChange) {
+
+
+    }
+}
+@Composable
+private fun userFileSelect(dataContext: MyScreenVM) {
+    val context = LocalContext.current
     val userFileSelect by dataContext.userFileSelect.collectAsState()
     val activityResult = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode != Activity.RESULT_OK) {
@@ -62,13 +113,6 @@ fun myScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
         if (mediaList.isEmpty()) return@rememberLauncherForActivityResult
         dataContext.loading()
         dataContext.userFileUpload(mediaTypeIndex, mediaList)
-    }
-    LaunchedEffect(navigateCalled) {
-        if (!navigateCalled) {
-            navigateCalled = true
-            checkExternalStorage(dataContext)
-            getMyScreenData(dataContext)
-        }
     }
     LaunchedEffect(userFileSelect) {
         if (userFileSelect == UserFileType.Taxpayer.index) {
@@ -82,7 +126,19 @@ fun myScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
         }
     }
 }
-fun taxImageSelect(dataContext: MyScreenVM, context: Context, activityResult: ManagedActivityResultLauncher<Intent, ActivityResult>) {
+@Composable
+private fun trainingCertificateAdd(dataContext: MyScreenVM,
+                                   windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
+                                   displayFeatures: List<DisplayFeature> = emptyList(),
+                                   navigationType: NavigationType = NavigationType.BOTTOM) {
+    val trainingCertificateAdd by dataContext.trainingCertificateAdd.collectAsState()
+    if (trainingCertificateAdd) {
+        myScreenTrainingCertificate(dataContext.thisData.value.trainingList, windowPanelType, displayFeatures, navigationType, {
+            dataContext.trainingCertificateAdd.value = false
+        })
+    }
+}
+private fun taxImageSelect(dataContext: MyScreenVM, context: Context, activityResult: ManagedActivityResultLauncher<Intent, ActivityResult>) {
     if (dataContext.userFileSelect.value != UserFileType.Taxpayer.index) {
         return
     }
@@ -92,7 +148,7 @@ fun taxImageSelect(dataContext: MyScreenVM, context: Context, activityResult: Ma
     })
     dataContext.userFileSelect.value = -1
 }
-fun bankAccountSelect(dataContext: MyScreenVM, context: Context, activityResult: ManagedActivityResultLauncher<Intent, ActivityResult>) {
+private fun bankAccountSelect(dataContext: MyScreenVM, context: Context, activityResult: ManagedActivityResultLauncher<Intent, ActivityResult>) {
     if (dataContext.userFileSelect.value != UserFileType.BankAccount.index) {
         return
     }
@@ -102,7 +158,7 @@ fun bankAccountSelect(dataContext: MyScreenVM, context: Context, activityResult:
     })
     dataContext.userFileSelect.value = -1
 }
-fun csoReportSelect(dataContext: MyScreenVM, context: Context, activityResult: ManagedActivityResultLauncher<Intent, ActivityResult>) {
+private fun csoReportSelect(dataContext: MyScreenVM, context: Context, activityResult: ManagedActivityResultLauncher<Intent, ActivityResult>) {
     if (dataContext.userFileSelect.value != UserFileType.CsoReport.index) {
         return
     }
@@ -112,7 +168,7 @@ fun csoReportSelect(dataContext: MyScreenVM, context: Context, activityResult: M
     })
     dataContext.userFileSelect.value = -1
 }
-fun marketingContractSelect(dataContext: MyScreenVM, context: Context, activityResult: ManagedActivityResultLauncher<Intent, ActivityResult>) {
+private fun marketingContractSelect(dataContext: MyScreenVM, context: Context, activityResult: ManagedActivityResultLauncher<Intent, ActivityResult>) {
     if (dataContext.userFileSelect.value != UserFileType.MarketingContract.index) {
         return
     }
@@ -122,7 +178,7 @@ fun marketingContractSelect(dataContext: MyScreenVM, context: Context, activityR
     })
     dataContext.userFileSelect.value = -1
 }
-fun getMyScreenData(dataContext: MyScreenVM) {
+private fun getMyScreenData(dataContext: MyScreenVM) {
     dataContext.loading()
     FCoroutineUtil.coroutineScope({
         val ret = dataContext.getData()
@@ -172,10 +228,10 @@ private fun logout(dataContext: MyScreenVM, navigate: (MenuItem, Boolean) -> Uni
     navigate(MenuList.menuLanding(), true)
 }
 private fun passwordChange(dataContext: MyScreenVM) {
-
+    dataContext.passwordChange.value = true
 }
 private fun multiLogin(dataContext: MyScreenVM) {
-
+    dataContext.multiLogin.value = true
 }
 private fun training(dataContext: MyScreenVM) {
     val context = dataContext.context
@@ -193,7 +249,7 @@ private fun training(dataContext: MyScreenVM) {
 }
 private fun trainingCertificateAdd(dataContext: MyScreenVM) {
     checkReadStorage(dataContext) {
-
+        dataContext.trainingCertificateAdd.value = true
     }
 }
 private fun taxpayer(dataContext: MyScreenVM) {

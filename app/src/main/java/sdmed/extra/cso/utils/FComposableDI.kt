@@ -22,7 +22,7 @@ import sdmed.extra.cso.models.services.FBackgroundEDIFileUpload
 import sdmed.extra.cso.models.services.FBackgroundEDIRequestNewUploadService
 import sdmed.extra.cso.models.services.FBackgroundEDIRequestUpload
 import sdmed.extra.cso.models.services.FBackgroundQnAUpload
-import sdmed.extra.cso.models.services.FBackgroundUserFileUploadService
+import sdmed.extra.cso.models.services.FBackgroundUserFileUpload
 import sdmed.extra.cso.models.services.FMqttService
 import sdmed.extra.cso.models.services.FNotificationService
 import sdmed.extra.cso.models.services.FUIStateService
@@ -80,9 +80,9 @@ object FComposableDI {
         return ret
     }
     @Composable
-    fun backgroundUserFileUploadService(context: Context? = null): FBackgroundUserFileUploadService {
+    fun backgroundUserFileUploadService(context: Context? = null): FBackgroundUserFileUpload {
         val di = di(context)
-        val ret: FBackgroundUserFileUploadService by di.instance(FBackgroundUserFileUploadService::class)
+        val ret: FBackgroundUserFileUpload by di.instance(FBackgroundUserFileUpload::class)
         return ret
     }
 

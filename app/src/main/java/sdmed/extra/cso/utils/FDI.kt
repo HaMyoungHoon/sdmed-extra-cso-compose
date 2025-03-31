@@ -19,7 +19,7 @@ import sdmed.extra.cso.models.services.FBackgroundEDIFileUpload
 import sdmed.extra.cso.models.services.FBackgroundEDIRequestNewUploadService
 import sdmed.extra.cso.models.services.FBackgroundEDIRequestUpload
 import sdmed.extra.cso.models.services.FBackgroundQnAUpload
-import sdmed.extra.cso.models.services.FBackgroundUserFileUploadService
+import sdmed.extra.cso.models.services.FBackgroundUserFileUpload
 import sdmed.extra.cso.models.services.FMqttService
 import sdmed.extra.cso.models.services.FNotificationService
 import sdmed.extra.cso.models.services.FUIStateService
@@ -70,8 +70,8 @@ object FDI {
         val ret: FBackgroundQnAUpload by di(context).instance(FBackgroundQnAUpload::class)
         return ret
     }
-    fun backgroundUserFileUploadService(context: Context? = null): FBackgroundUserFileUploadService {
-        val ret: FBackgroundUserFileUploadService by di(context).instance(FBackgroundUserFileUploadService::class)
+    fun backgroundUserFileUploadService(context: Context? = null): FBackgroundUserFileUpload {
+        val ret: FBackgroundUserFileUpload by di(context).instance(FBackgroundUserFileUpload::class)
         return ret
     }
 

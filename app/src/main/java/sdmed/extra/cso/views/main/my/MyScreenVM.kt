@@ -3,7 +3,6 @@ package sdmed.extra.cso.views.main.my
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kodein.di.instance
 import sdmed.extra.cso.bases.FBaseViewModel
@@ -18,22 +17,27 @@ import sdmed.extra.cso.models.retrofit.users.UserDataModel
 import sdmed.extra.cso.models.retrofit.users.UserFileModel
 import sdmed.extra.cso.models.retrofit.users.UserFileType
 import sdmed.extra.cso.models.retrofit.users.UserTrainingModel
-import sdmed.extra.cso.models.services.FBackgroundUserFileUploadService
+import sdmed.extra.cso.models.services.FBackgroundUserFileUpload
 import sdmed.extra.cso.utils.FContentsType
 import sdmed.extra.cso.utils.FDI
 import sdmed.extra.cso.utils.FEventBus
 import java.util.Date
 
 class MyScreenVM(applicationContext: Context? = null): FBaseViewModel(applicationContext) {
-    private val backgroundService: FBackgroundUserFileUploadService by FDI.di(applicationContext).instance(FBackgroundUserFileUploadService::class)
+    private val backgroundService: FBackgroundUserFileUpload by FDI.di(applicationContext).instance(FBackgroundUserFileUpload::class)
     private val myInfoRepository: IMyInfoRepository by FDI.di(applicationContext).instance(IMyInfoRepository::class)
     private val eventChannel = FEventBus.createEventChannel<EventList.UserFileUploadEvent>()
+    private val multiLoginChannel = FEventBus.createEventChannel<EventList.MultiLoginEvent>()
 
     val thisData = MutableStateFlow(UserDataModel())
     val hosList = MutableStateFlow(mutableListOf<HospitalModel>())
     val selectedHos = MutableStateFlow<HospitalModel>(HospitalModel())
     val pharmaList = MutableStateFlow(mutableListOf<PharmaModel>())
 
+    val passwordChange = MutableStateFlow(false)
+    val multiLogin = MutableStateFlow(false)
+    val addLogin = MutableStateFlow(false)
+    val trainingCertificateAdd = MutableStateFlow(false)
     val userFileSelect = MutableStateFlow(-1)
     init {
         viewModelScope.launch {
@@ -42,6 +46,12 @@ class MyScreenVM(applicationContext: Context? = null): FBaseViewModel(applicatio
                 if (event.thisPK.isNotEmpty()) {
                     getData()
                 }
+            }
+        }
+        viewModelScope.launch {
+            for (event in multiLoginChannel) {
+                loading(false)
+                getData()
             }
         }
     }
