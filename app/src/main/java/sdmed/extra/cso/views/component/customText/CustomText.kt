@@ -29,7 +29,7 @@ fun customText(data: CustomTextData) {
 fun customText(text: String,
                modifier: Modifier = Modifier,
                textColor: Color = FLightColor.foreground,
-               textSize: TextUnit = FThemeUtil.textUnit(24F),
+               textSize: TextUnit = FThemeUtil.textUnit(18F),
                backgroundTint: Color = FLightColor.transparent,
                textAlign: TextAlign = TextAlign.Start,
                fontFamily: FontFamily = FontFamily(Font(R.font.nanum_gothic)),

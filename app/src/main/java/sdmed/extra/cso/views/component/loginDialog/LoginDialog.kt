@@ -43,25 +43,10 @@ fun loginDialog(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
                 navigationType: NavigationType = NavigationType.BOTTOM,
                 onDismissRequest: () -> Unit) {
     val dataContext = fBaseScreen<LoginDialogVM>( { data, dataContext -> setLayoutCommand(data, dataContext, onDismissRequest) },
-        null,
-        windowPanelType, navigationType,
-        { dataContext -> loginDialogTwoPane(dataContext, displayFeatures, onDismissRequest) },
         { dataContext -> loginDialogPhone(dataContext, onDismissRequest) },
-        { dataContext -> loginDialogTablet(dataContext, onDismissRequest) })
+        windowPanelType, navigationType)
 }
 
-@Composable
-private fun loginDialogTwoPane(dataContext: LoginDialogVM, displayFeatures: List<DisplayFeature>, onDismissRequest: () -> Unit) {
-    Dialog(onDismissRequest) {
-        loginBody(dataContext)
-    }
-}
-@Composable
-private fun loginDialogTablet(dataContext: LoginDialogVM, onDismissRequest: () -> Unit) {
-    Dialog(onDismissRequest) {
-        loginBody(dataContext)
-    }
-}
 @Composable
 private fun loginDialogPhone(dataContext: LoginDialogVM, onDismissRequest: () -> Unit) {
     Dialog(onDismissRequest) {

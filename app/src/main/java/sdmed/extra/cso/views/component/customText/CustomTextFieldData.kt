@@ -22,7 +22,7 @@ data class CustomTextFieldData(
     var enable: Boolean = true,
     var readonly: Boolean = false,
     var textColor: Color = Color.Black,
-    var textSize: TextUnit = FThemeUtil.textUnit(24F),
+    var textSize: TextUnit = FThemeUtil.textUnit(18F),
     var fontWeight: FontWeight = FontWeight.Normal,
     var fontStyle: FontStyle = FontStyle.Normal,
     var fontFamily: FontFamily = FontFamily(Font(R.font.nanum_gothic)),

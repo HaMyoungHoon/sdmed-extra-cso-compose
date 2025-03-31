@@ -19,7 +19,7 @@ data class CustomTextData(
     var text: String = "",
     var modifier: Modifier = Modifier.padding(0.dp),
     var textColor: Color = Color.Black,
-    var textSize: TextUnit = FThemeUtil.textUnit(24F),
+    var textSize: TextUnit = FThemeUtil.textUnit(18F),
     var backgroundTint: Color = Color.Transparent,
     var textAlign: TextAlign = TextAlign.Start,
     var fontFamily: FontFamily = FontFamily(Font(R.font.nanum_gothic)),

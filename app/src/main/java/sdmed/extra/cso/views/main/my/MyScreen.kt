@@ -35,6 +35,7 @@ import sdmed.extra.cso.utils.FStorage.putParcelable
 import sdmed.extra.cso.utils.FStorage.putParcelableList
 import sdmed.extra.cso.views.component.loginDialog.loginDialog
 import sdmed.extra.cso.views.component.multiLogin.multiLoginDialog
+import sdmed.extra.cso.views.component.passwordChange.passwordChangeDialog
 import sdmed.extra.cso.views.media.listView.MediaListViewActivity
 import sdmed.extra.cso.views.media.picker.MediaPickerActivity
 import sdmed.extra.cso.views.media.singleView.MediaViewActivity
@@ -54,7 +55,7 @@ fun myScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
         { dataContext -> myScreenDual(dataContext, displayFeatures) })
     multiLogin(dataContext, windowPanelType, displayFeatures, navigationType)
     loginDialog(dataContext, windowPanelType, displayFeatures, navigationType)
-    passwordChangeDialog(dataContext)
+    passwordChangeDialog(dataContext, windowPanelType, displayFeatures, navigationType)
     userFileSelect(dataContext)
     trainingCertificateAdd(dataContext, windowPanelType, displayFeatures, navigationType)
     LaunchedEffect(navigateCalled) {
@@ -92,11 +93,15 @@ fun loginDialog(dataContext: MyScreenVM,
     }
 }
 @Composable
-fun passwordChangeDialog(dataContext: MyScreenVM) {
+fun passwordChangeDialog(dataContext: MyScreenVM,
+                         windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
+                         displayFeatures: List<DisplayFeature> = emptyList(),
+                         navigationType: NavigationType = NavigationType.BOTTOM) {
     val passwordChange by dataContext.passwordChange.collectAsState()
     if (passwordChange) {
-
-
+        passwordChangeDialog(windowPanelType, displayFeatures, navigationType) {
+            dataContext.passwordChange.value = false
+        }
     }
 }
 @Composable
