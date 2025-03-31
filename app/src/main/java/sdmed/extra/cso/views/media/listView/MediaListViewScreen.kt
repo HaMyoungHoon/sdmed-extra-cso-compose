@@ -95,8 +95,6 @@ private fun mediaListViewScreenItemContainer(dataContext: MediaListViewActivityV
         val item = items.getOrNull(page) ?: items.getOrNull(0) ?: return@HorizontalPager
         if (item.isImage) {
             mediaListViewScreenImageView(item)
-        } else if(item.isExcel) {
-            mediaListViewScreenExcel(item)
         } else {
             mediaListViewScreenWebView(item, webViewTouch = {
                 when (it.action) {
@@ -162,16 +160,11 @@ private fun mediaListViewScreenImageView(item: MediaViewModel) {
 }
 
 @Composable
-private fun mediaListViewScreenExcel(item: MediaViewModel) {
-
-}
-
-@Composable
 private fun mediaListViewScreenWebView(item: MediaViewModel, webViewTouch: ((event: MotionEvent) -> Boolean)? = null) {
     val loadUrl = "${FConstants.WEB_VIEW_PREFIX}${FAmhohwa.urlEncoder(item.blobUrl.value)}"
     var canGoBack by remember { mutableStateOf(false) }
     var webview: WebView? = null
-    Box(Modifier.fillMaxSize().padding(20.dp)) {
+    Box(Modifier.fillMaxSize()) {
         AndroidView({ context ->
             WebView(context).apply {
                 webViewClient = object: WebViewClient() {
@@ -186,7 +179,7 @@ private fun mediaListViewScreenWebView(item: MediaViewModel, webViewTouch: ((eve
                     setOnTouchListener { v, event -> x.invoke(event) }
                 }
             }
-        }, Modifier.fillMaxSize(), update = { webview = it})
+        }, Modifier.fillMaxSize().padding(bottom = 20.dp), update = { webview = it})
     }
     BackHandler(enabled = canGoBack) {
         if (webview?.canGoBack() == true) {

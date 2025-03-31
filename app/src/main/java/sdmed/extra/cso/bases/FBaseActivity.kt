@@ -57,7 +57,6 @@ abstract class FBaseActivity<T: FBaseViewModel>(val needRoles: UserRoles = UserR
 
     override fun onDestroy() {
         super.onDestroy()
-        loading(false)
     }
 
     protected fun initCommand() {

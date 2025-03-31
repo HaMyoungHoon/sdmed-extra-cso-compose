@@ -76,7 +76,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".views.component.PermissionActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".views.media.picker.MediaPickerActivity" />
+        <activity android:name=".views.media.picker.MediaPickerActivity" android:configChanges="fontScale|orientation|screenSize" />
         <activity android:name=".views.media.singleView.MediaViewActivity" android:configChanges="fontScale|orientation|screenSize" />
         <activity android:name=".views.media.listView.MediaListViewActivity" android:configChanges="fontScale|orientation|screenSize" />
     </application>

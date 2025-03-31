@@ -1,14 +1,17 @@
 package sdmed.extra.cso.views.main.my
 
 import android.content.Context
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import org.kodein.di.instance
 import sdmed.extra.cso.bases.FBaseViewModel
 import sdmed.extra.cso.interfaces.repository.IMyInfoRepository
 import sdmed.extra.cso.models.RestResultT
 import sdmed.extra.cso.models.common.MediaPickerSourceModel
 import sdmed.extra.cso.models.common.UserFileSASKeyQueueModel
+import sdmed.extra.cso.models.eventbus.EventList
 import sdmed.extra.cso.models.retrofit.hospitals.HospitalModel
 import sdmed.extra.cso.models.retrofit.pharmas.PharmaModel
 import sdmed.extra.cso.models.retrofit.users.UserDataModel
@@ -18,16 +21,30 @@ import sdmed.extra.cso.models.retrofit.users.UserTrainingModel
 import sdmed.extra.cso.models.services.FBackgroundUserFileUploadService
 import sdmed.extra.cso.utils.FContentsType
 import sdmed.extra.cso.utils.FDI
+import sdmed.extra.cso.utils.FEventBus
 import java.util.Date
 
 class MyScreenVM(applicationContext: Context? = null): FBaseViewModel(applicationContext) {
     private val backgroundService: FBackgroundUserFileUploadService by FDI.di(applicationContext).instance(FBackgroundUserFileUploadService::class)
     private val myInfoRepository: IMyInfoRepository by FDI.di(applicationContext).instance(IMyInfoRepository::class)
+    private val eventChannel = FEventBus.createEventChannel<EventList.UserFileUploadEvent>()
 
     val thisData = MutableStateFlow(UserDataModel())
     val hosList = MutableStateFlow(mutableListOf<HospitalModel>())
     val selectedHos = MutableStateFlow<HospitalModel>(HospitalModel())
     val pharmaList = MutableStateFlow(mutableListOf<PharmaModel>())
+
+    val userFileSelect = MutableStateFlow(-1)
+    init {
+        viewModelScope.launch {
+            for (event in eventChannel) {
+                loading(false)
+                if (event.thisPK.isNotEmpty()) {
+                    getData()
+                }
+            }
+        }
+    }
 
     suspend fun getData(): RestResultT<UserDataModel> {
         val ret = myInfoRepository.getData()

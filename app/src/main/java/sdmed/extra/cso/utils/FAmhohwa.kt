@@ -57,7 +57,7 @@ object FAmhohwa {
     fun logout(context: Context?, expired: Boolean = false) {
         context ?: return
         removeLoginData(context)
-        FExtensions.moveToLandingActivity(context, expired)
+//        FExtensions.moveToLandingActivity(context, expired)
     }
     fun removeLoginData(context: Context) {
         FRetrofitVariable.token.value = ""
@@ -134,11 +134,11 @@ object FAmhohwa {
         if (FRetrofitVariable.refreshing.get()) {
             return
         }
-        FRetrofitVariable.refreshing.set(true)
         if (FRetrofitVariable.token.value.isNullOrBlank()) {
             ret?.invoke(RestResultT<String>().setFail())
             return
         }
+        FRetrofitVariable.refreshing.set(true)
         val context = dataContext.context
         FCoroutineUtil.coroutineScope({
             val buff = dataContext.tokenRefresh()

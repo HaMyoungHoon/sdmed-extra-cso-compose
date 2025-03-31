@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import sdmed.extra.cso.models.menu.MenuItem
 import sdmed.extra.cso.models.menu.MenuList
 import sdmed.extra.cso.utils.FAmhohwa
+import sdmed.extra.cso.utils.FLog
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
 import sdmed.extra.cso.views.component.shape.shapeRoundedBox

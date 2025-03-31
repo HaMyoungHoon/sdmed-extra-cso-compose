@@ -64,8 +64,6 @@ fun mediaViewScreen(dataContext: MediaViewActivityVM) {
         mediaViewTopContainer(dataContext)
         if (item.isImage) {
             mediaViewImageView(dataContext)
-        }  else if(item.isExcel) {
-            mediaViewScreenExcel(item)
         } else {
             mediaViewWebView(dataContext)
         }
@@ -96,33 +94,18 @@ private fun mediaViewImageView(dataContext: MediaViewActivityVM) {
     val item by dataContext.item.collectAsState()
     var scale by remember { mutableStateOf(1F) }
     var offset by remember { mutableStateOf(Offset.Zero) }
-    Box(Modifier.fillMaxSize().background(color.gray),
+    Box(Modifier.fillMaxSize().background(color.gray)
+        .pointerInput(Unit) {
+            detectTransformGestures { _, pan, zoom, _ ->
+                scale = (scale * zoom).coerceIn(1F, 5F)
+                offset = if (scale != 1F) offset + pan else Offset.Zero
+            } },
         contentAlignment = Alignment.Center) {
         FCoil.load(item.blobUrl.value,
             item.mimeType.value,
             item.originalFilename.value,
             Modifier.fillMaxWidth().graphicsLayer(scale, scale, 1F, offset.x, offset.y),
             ContentScale.FillWidth)
-        Box(Modifier.zIndex(100F).align(Alignment.TopEnd).width(200.dp).height(200.dp).pointerInput(Unit) {
-            detectTransformGestures { _, pan, zoom, _ ->
-                scale = (scale * zoom).coerceIn(1F, 5F)
-                if (scale != 1F) {
-                    offset += pan
-                } else {
-                    offset = Offset.Zero
-                }
-            }
-        }) {
-            customText(CustomTextData().apply {
-                text = "zoom"
-                textColor = color.absoluteWhite
-                textAlign = TextAlign.Center
-                modifier = Modifier.align(Alignment.Center)
-            })
-            Icon(vectorCircle(FVectorData(color.transparent, color.scrim)),
-                stringResource(R.string.media_view_title_desc),
-                Modifier.align(Alignment.TopEnd).fillMaxSize())
-        }
         customText(CustomTextData().apply {
             text = item.originalFilename.value
             textColor = color.disableForeGray
@@ -132,11 +115,6 @@ private fun mediaViewImageView(dataContext: MediaViewActivityVM) {
             overflow = TextOverflow.Ellipsis
         })
     }
-}
-
-@Composable
-private fun mediaViewScreenExcel(item: MediaViewModel) {
-
 }
 
 @Composable

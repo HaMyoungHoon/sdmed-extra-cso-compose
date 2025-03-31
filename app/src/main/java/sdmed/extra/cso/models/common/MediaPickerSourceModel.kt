@@ -3,6 +3,8 @@ package sdmed.extra.cso.models.common
 import android.net.Uri
 import android.os.Parcelable
 import android.view.View
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import sdmed.extra.cso.bases.FDataModelClass
 import sdmed.extra.cso.utils.FExtensions
@@ -16,16 +18,21 @@ data class MediaPickerSourceModel(
     var mediaFileType: MediaFileType = MediaFileType.UNKNOWN,
     var mediaDateTime: String = "",
     var mediaMimeType: String = "",
-    var duration: Long = -1L,
-    var clickState: Boolean = false,
-    var num: Int? = null,
-    var solid: Int? = null,
-    var stroke: Int? = null,
-    var lastClick: Boolean = false,
-    var durationString: String = "",
 ): FDataModelClass<MediaPickerSourceModel.ClickEvent>(), Parcelable {
+    @IgnoredOnParcel
+    val duration = MutableStateFlow(-1L)
+    @IgnoredOnParcel
+    var clickState = MutableStateFlow(false)
+    @IgnoredOnParcel
+    var num: MutableStateFlow<Int?> = MutableStateFlow(null)
+    @IgnoredOnParcel
+    var solid: MutableStateFlow<ULong?> = MutableStateFlow(null)
+    @IgnoredOnParcel
+    var lastClick = MutableStateFlow(false)
+    @IgnoredOnParcel
+    var durationString: String = ""
     fun generateData(): MediaPickerSourceModel {
-        durationString = FExtensions.getDurationToTime(duration)
+        durationString = FExtensions.getDurationToTime(duration.value)
         return this
     }
     fun onVideoClick(view: View) {
