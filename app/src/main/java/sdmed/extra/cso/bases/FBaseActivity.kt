@@ -1,6 +1,5 @@
 package sdmed.extra.cso.bases
 
-import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
@@ -15,8 +14,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.window.core.layout.WindowWidthSizeClass
 import androidx.window.layout.DisplayFeature
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +27,7 @@ import sdmed.extra.cso.models.retrofit.users.UserRole
 import sdmed.extra.cso.models.retrofit.users.UserRole.Companion.getFlag
 import sdmed.extra.cso.models.retrofit.users.UserRoles
 import sdmed.extra.cso.models.retrofit.users.UserStatus
-import sdmed.extra.cso.views.component.loadingDialog
+import sdmed.extra.cso.views.dialog.loadingDialog
 import sdmed.extra.cso.views.navigation.getFoldingDevicePosture
 import sdmed.extra.cso.views.navigation.getWindowPaneType
 import sdmed.extra.cso.views.navigation.isCompact

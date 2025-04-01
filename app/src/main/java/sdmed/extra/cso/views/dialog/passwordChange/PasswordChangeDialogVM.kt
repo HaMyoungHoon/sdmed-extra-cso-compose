@@ -1,4 +1,4 @@
-package sdmed.extra.cso.views.component.passwordChange
+package sdmed.extra.cso.views.dialog.passwordChange
 
 import android.content.Context
 import kotlinx.coroutines.flow.MutableStateFlow

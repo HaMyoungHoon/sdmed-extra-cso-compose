@@ -1,4 +1,4 @@
-package sdmed.extra.cso.views.component
+package sdmed.extra.cso.views.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
 import sdmed.extra.cso.models.common.LoadingMessageModel
-import sdmed.extra.cso.utils.FLog
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
 import sdmed.extra.cso.views.theme.FThemeUtil

@@ -28,14 +28,13 @@ import sdmed.extra.cso.models.retrofit.hospitals.HospitalModel
 import sdmed.extra.cso.models.retrofit.users.UserFileType
 import sdmed.extra.cso.utils.FAmhohwa
 import sdmed.extra.cso.utils.FCoroutineUtil
-import sdmed.extra.cso.utils.FLog
 import sdmed.extra.cso.utils.FStorage
 import sdmed.extra.cso.utils.FStorage.getParcelableList
 import sdmed.extra.cso.utils.FStorage.putParcelable
 import sdmed.extra.cso.utils.FStorage.putParcelableList
-import sdmed.extra.cso.views.component.loginDialog.loginDialog
-import sdmed.extra.cso.views.component.multiLogin.multiLoginDialog
-import sdmed.extra.cso.views.component.passwordChange.passwordChangeDialog
+import sdmed.extra.cso.views.dialog.loginDialog.loginDialog
+import sdmed.extra.cso.views.dialog.multiLogin.multiLoginDialog
+import sdmed.extra.cso.views.dialog.passwordChange.passwordChangeDialog
 import sdmed.extra.cso.views.media.listView.MediaListViewActivity
 import sdmed.extra.cso.views.media.picker.MediaPickerActivity
 import sdmed.extra.cso.views.media.singleView.MediaViewActivity

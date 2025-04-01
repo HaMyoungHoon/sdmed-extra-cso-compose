@@ -1,4 +1,4 @@
-package sdmed.extra.cso.views.component.loginDialog
+package sdmed.extra.cso.views.dialog.loginDialog
 
 import android.content.Context
 import androidx.lifecycle.viewModelScope

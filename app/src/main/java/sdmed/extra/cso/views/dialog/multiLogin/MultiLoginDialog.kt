@@ -1,4 +1,4 @@
-package sdmed.extra.cso.views.component.multiLogin
+package sdmed.extra.cso.views.dialog.multiLogin
 
 import sdmed.extra.cso.R
 import androidx.compose.foundation.background

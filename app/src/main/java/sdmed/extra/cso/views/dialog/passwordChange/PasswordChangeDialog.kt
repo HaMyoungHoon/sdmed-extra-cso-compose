@@ -1,4 +1,4 @@
-package sdmed.extra.cso.views.component.passwordChange
+package sdmed.extra.cso.views.dialog.passwordChange
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
