@@ -150,7 +150,7 @@ private fun topContainer(dataContext: QnAScreenDetailVM, isWide: Boolean = true)
         Row(rowModifier) {
             Icon(vectorArrowLeft(FVectorData(color.background, color.foreground)),
                 stringResource(R.string.close_desc),
-                Modifier.align(Alignment.CenterVertically).clickable { dataContext.relayCommand.execute(EDIScreenDetailVM.ClickEvent.CLOSE)},
+                Modifier.align(Alignment.CenterVertically).clickable { dataContext.relayCommand.execute(QnAScreenDetailVM.ClickEvent.CLOSE)},
                 Color.Unspecified)
             customText(CustomTextData().apply {
                 text = headerModel.title
