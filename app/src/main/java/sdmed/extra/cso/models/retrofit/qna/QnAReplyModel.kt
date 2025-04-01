@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import sdmed.extra.cso.bases.FDataModelClass
+import sdmed.extra.cso.fDate.FDateTime
 import sdmed.extra.cso.models.common.EllipseItemModel
 import java.util.Date
 
@@ -27,6 +28,7 @@ data class QnAReplyModel(
     val currentPosition = MutableStateFlow<Int>(1)
     val positionString: StateFlow<String> = currentPosition.map { "${it}/${fileList.size}" }
         .stateIn(CoroutineScope(Dispatchers.Main + SupervisorJob()), SharingStarted.Lazily, "${currentPosition.value}/${fileList.size}")
+    val regDateString get() = FDateTime().setThis(regDate.time).toString("yyyy-MM-dd")
     enum class ClickEvent(var index: Int) {
         OPEN(0),
     }

@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -78,7 +79,8 @@ private fun mediaViewTopContainer(dataContext: MediaViewActivityVM) {
             this.tintColor = color.background
             this.fillColor = color.primary
         }), stringResource(R.string.back_btn_close_desc),
-            Modifier.clickable { dataContext.relayCommand.execute(MediaViewActivityVM.ClickEvent.CLOSE) })
+            Modifier.clickable { dataContext.relayCommand.execute(MediaViewActivityVM.ClickEvent.CLOSE) },
+            Color.Unspecified)
         customText(CustomTextData().apply {
             text = stringResource(R.string.media_view_title_desc)
             textColor = color.paragraph

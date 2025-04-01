@@ -49,7 +49,10 @@ fun permanentDrawerNavigationBar(navDestination: NavDestination?,
                         textColor = color.cardParagraph
                         textSize = FThemeUtil.textUnit(16F)
                     })
-                    IconButton(drawerClick) { Icon(vectorMenuOpen(FVectorData(color.cardBackground, color.cardForeground)), stringResource(R.string.menu_desc)) }
+                    IconButton(drawerClick) { Icon(vectorMenuOpen(FVectorData(color.cardBackground, color.cardForeground)),
+                        stringResource(R.string.menu_desc),
+                        Modifier,
+                        Color.Unspecified) }
                 }
             }
             Column(Modifier.layoutId(MenuLayoutType.CONTENT),

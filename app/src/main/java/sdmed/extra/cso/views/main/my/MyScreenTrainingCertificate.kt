@@ -44,7 +44,6 @@ import sdmed.extra.cso.models.menu.NavigationType
 import sdmed.extra.cso.models.menu.WindowPanelType
 import sdmed.extra.cso.models.retrofit.users.UserTrainingModel
 import sdmed.extra.cso.utils.FCoil
-import sdmed.extra.cso.utils.FLog
 import sdmed.extra.cso.utils.FStorage.getParcelableList
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
@@ -52,7 +51,6 @@ import sdmed.extra.cso.views.component.shape.ShapeRoundedBoxData
 import sdmed.extra.cso.views.component.shape.shapeRoundedBox
 import sdmed.extra.cso.views.media.picker.MediaPickerActivity
 import sdmed.extra.cso.views.theme.FThemeUtil
-import java.lang.Exception
 
 @Composable
 fun myScreenTrainingCertificate(item: List<UserTrainingModel>,

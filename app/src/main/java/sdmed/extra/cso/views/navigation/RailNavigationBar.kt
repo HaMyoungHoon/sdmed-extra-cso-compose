@@ -39,7 +39,10 @@ fun railNavigationBar(navDestination: NavDestination?,
                 Arrangement.spacedBy(4.dp),
                 Alignment.CenterHorizontally) {
                 NavigationRailItem(false, drawerClick, {
-                    Icon(vectorMenuOpen(FVectorData(color.cardBackground, color.cardForeground)), stringResource(R.string.menu_my_desc))
+                    Icon(vectorMenuOpen(FVectorData(color.cardBackground, color.cardForeground)),
+                        stringResource(R.string.menu_my_desc),
+                        Modifier,
+                        Color.Unspecified)
                 })
             }
             Column(Modifier.layoutId(MenuLayoutType.CONTENT),

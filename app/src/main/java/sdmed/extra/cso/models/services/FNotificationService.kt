@@ -120,6 +120,9 @@ class FNotificationService(applicationContext: Context): FBaseService(applicatio
         if (!checkPermission(context)) {
             return
         }
+        if (content.isEmpty()) {
+            return
+        }
         _notificationManager.notify(notificationId++, notificationCompatBuild(context, title, content, null, notifyType, true, false).build())
     }
     private fun indexToActivity(notifyIndex: NotifyIndex): Class<*> {

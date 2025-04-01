@@ -11,6 +11,7 @@ data class QnAReplyFileModel(
     var regDate: String = ""
 ): FDataModelClass<QnAReplyFileModel.ClickEvent>() {
     enum class ClickEvent(var index: Int) {
-        THIS(0)
+        LONG(0),
+        SHORT(1)
     }
 }

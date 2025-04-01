@@ -23,7 +23,6 @@ class EDIScreenVM(applicationContext: Context? = null): FBaseViewModel(applicati
     private val ediListRepository: IEDIListRepository by FDI.di(applicationContext).instance(IEDIListRepository::class)
     private val eventChannel = FEventBus.createEventChannel<EventList.EDIUploadEvent>()
 
-    val isRefreshing = MutableStateFlow(false)
     val items = MutableStateFlow(mutableListOf<EDIUploadModel>())
     val startDate = MutableStateFlow(FExtensions.getToday().addMonth(-1).toString("yyyy-MM-dd"))
     val endDate = MutableStateFlow(FExtensions.getTodayString())
@@ -41,12 +40,10 @@ class EDIScreenVM(applicationContext: Context? = null): FBaseViewModel(applicati
     }
 
     suspend fun getList(): RestResultT<List<EDIUploadModel>> {
-        isRefreshing.value = true
         val ret = ediListRepository.getList(startDate.value, endDate.value)
         if (ret.result == true) {
             items.value = ret.data?.toMutableList() ?: mutableListOf()
         }
-        isRefreshing.value = false
         return ret
     }
 

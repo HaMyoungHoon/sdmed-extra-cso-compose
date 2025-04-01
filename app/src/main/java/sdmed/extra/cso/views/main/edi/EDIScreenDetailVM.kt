@@ -37,6 +37,7 @@ class EDIScreenDetailVM(applicationContext: Context? = null): FBaseViewModel(app
             for (event in eventChannel) {
                 loading(false)
                 getData()
+                closeAble.value = true
             }
         }
     }
@@ -105,6 +106,7 @@ class EDIScreenDetailVM(applicationContext: Context? = null): FBaseViewModel(app
     }
 
     fun startBackgroundService(data: EDIUploadPharmaModel) {
+        closeAble.value = false
         backgroundService.sasKeyEnqueue(EDISASKeyQueueModel().apply {
             pharmaPK = data.thisPK
             ediUploadModel = EDIUploadModel().apply {

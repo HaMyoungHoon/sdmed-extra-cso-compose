@@ -20,8 +20,10 @@ import sdmed.extra.cso.models.common.QnAAzureQueueModel
 import sdmed.extra.cso.models.common.QnAResultQueueModel
 import sdmed.extra.cso.models.common.QueueLockModel
 import sdmed.extra.cso.models.common.QnASASKeyQueueModel
+import sdmed.extra.cso.models.eventbus.EventList
 import sdmed.extra.cso.models.eventbus.QnAUploadEvent
 import sdmed.extra.cso.utils.FCoroutineUtil
+import sdmed.extra.cso.utils.FEventBus
 import sdmed.extra.cso.utils.FExtensions
 import sdmed.extra.cso.utils.FImageUtils
 import java.util.UUID
@@ -152,8 +154,9 @@ class FBackgroundQnAUpload(applicationContext: Context): FBaseService(applicatio
         }
         progressNotificationCall(data.uuid, true)
     }
-    private fun notificationCall(title: String, message: String? = null, qnaPK: String = "") {
+    private suspend fun notificationCall(title: String, message: String? = null, qnaPK: String = "") {
         notificationService.sendNotify(context, NotifyIndex.QNA_UPLOAD, title, message, FNotificationService.NotifyType.WITH_VIBRATE, true, qnaPK)
+        FEventBus.emit(EventList.QnAUploadEvent(qnaPK))
     }
     private fun progressNotificationCall(uuid: String, isCancel: Boolean = false) {
         if (isCancel) {

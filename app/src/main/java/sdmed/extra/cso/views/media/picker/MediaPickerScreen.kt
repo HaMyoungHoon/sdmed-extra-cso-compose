@@ -57,7 +57,6 @@ import com.google.accompanist.adaptive.TwoPane
 import sdmed.extra.cso.R
 import sdmed.extra.cso.models.common.MediaPickerSourceModel
 import sdmed.extra.cso.utils.FCoil
-import sdmed.extra.cso.utils.FLog
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
 import sdmed.extra.cso.views.component.vector.FVectorData
@@ -136,7 +135,8 @@ private fun topContainer(dataContext: MediaPickerActivityVM) {
             Arrangement.SpaceBetween,
             Alignment.CenterVertically) {
             Icon(vectorCross(FVectorData(color.background, color.primary)), stringResource(R.string.close_desc),
-                Modifier.clickable { dataContext.relayCommand.execute(MediaPickerActivityVM.ClickEvent.CLOSE) })
+                Modifier.clickable { dataContext.relayCommand.execute(MediaPickerActivityVM.ClickEvent.CLOSE) },
+                Color.Unspecified)
             if (boxes.isNotEmpty()) {
                 ExposedDropdownMenuBox(expanded, { expanded = !expanded },
                     Modifier) {
@@ -146,7 +146,10 @@ private fun topContainer(dataContext: MediaPickerActivityVM) {
                         modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable).background(color.background),
                         readOnly = true,
                         singleLine = true,
-                        trailingIcon = { Icon(vectorArrowDown(FVectorData(color.background, color.primary)), stringResource(R.string.select_desc)) },
+                        trailingIcon = { Icon(vectorArrowDown(FVectorData(color.background, color.primary)),
+                            stringResource(R.string.select_desc),
+                            Modifier,
+                            Color.Unspecified) },
                         colors = exposedDropColor()
                     )
                     ExposedDropdownMenu(expanded, { expanded = false}) {
@@ -225,7 +228,8 @@ private fun mediaListContainer(dataContext: MediaPickerActivityVM) {
                             textAlign = TextAlign.Center
                             modifier = Modifier.zIndex(100F)
                         })
-                        Icon(vectorCircle(FVectorData(color.transparent, Color(solid!!))), stringResource(R.string.select_desc), Modifier, Color.Unspecified)
+                        Icon(vectorCircle(FVectorData(color.transparent, Color(solid!!))),
+                            stringResource(R.string.select_desc), Modifier, Color.Unspecified)
                     }
                 }
             }

@@ -13,7 +13,9 @@ import sdmed.extra.cso.models.common.EDISASKeyQueueModel
 import sdmed.extra.cso.models.common.NotifyIndex
 import sdmed.extra.cso.models.common.QueueLockModel
 import sdmed.extra.cso.models.eventbus.EDIUploadEvent
+import sdmed.extra.cso.models.eventbus.EventList
 import sdmed.extra.cso.utils.FCoroutineUtil
+import sdmed.extra.cso.utils.FEventBus
 import sdmed.extra.cso.utils.FExtensions
 import sdmed.extra.cso.utils.FImageUtils
 import java.util.UUID
@@ -142,8 +144,9 @@ class FBackgroundEDIRequestNewUploadService(applicationContext: Context): FBaseS
         })
     }
 
-    private fun notificationCall(title: String, message: String? = null, ediPK: String = "") {
+    private suspend fun notificationCall(title: String, message: String? = null, ediPK: String = "") {
         notificationService.sendNotify(context, NotifyIndex.EDI_FILE_UPLOAD, title, message, FNotificationService.NotifyType.WITH_VIBRATE, true, ediPK)
+        FEventBus.emit(EventList.EDIUploadEvent(ediPK))
     }
     private fun progressNotificationCall(uuid: String, isCancel: Boolean = false) {
         if (isCancel) {

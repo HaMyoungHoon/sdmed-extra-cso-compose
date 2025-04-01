@@ -130,15 +130,15 @@ private fun ediScreenDetailPhone(dataContext: EDIScreenDetailVM) {
             responseListContainer(dataContext, false)
         }
     }
-    Box(Modifier.background(color.background).fillMaxWidth()) {
-    }
 }
 @Composable
 private fun ediScreenDetailTablet(dataContext: EDIScreenDetailVM) {
     val color = FThemeUtil.safeColorC()
     shapeRoundedBox(ShapeRoundedBoxData().apply {
         backgroundColor = color.background
-        modifier = Modifier.padding(5.dp)
+        borderColor = color.primary
+        borderSize = 1.dp
+        modifier = Modifier.padding(5.dp).fillMaxWidth()
     }) {
         Column(Modifier.align(Alignment.Center)) {
             topContainer(dataContext)
@@ -157,7 +157,8 @@ private fun topContainer(dataContext: EDIScreenDetailVM, isWide: Boolean = true)
         val rowModifier = if (isWide) Modifier.align(Alignment.Center) else Modifier.fillMaxWidth()
         Row(rowModifier) {
             Icon(vectorArrowLeft(FVectorData(color.background, color.foreground)),
-                stringResource(R.string.close_desc), Modifier.clickable { dataContext.relayCommand.execute(EDIScreenDetailVM.ClickEvent.CLOSE)})
+                stringResource(R.string.close_desc), Modifier.clickable { dataContext.relayCommand.execute(EDIScreenDetailVM.ClickEvent.CLOSE) },
+                Color.Unspecified)
             customText(CustomTextData().apply {
                 text = item.orgViewName
                 textColor = color.paragraph
@@ -195,10 +196,10 @@ private fun pharmaItemContainer(dataContext: EDIScreenDetailVM, item: EDIUploadP
     item.relayCommand = dataContext.relayCommand
     shapeRoundedBox(ShapeRoundedBoxData().apply {
         backgroundColor = color.cardBackground
-        modifier = Modifier.padding(10.dp).clickable { item.onClick(EDIUploadPharmaModel.ClickEvent.OPEN) }
+        modifier = Modifier.padding(10.dp)
     }) {
         Column(Modifier.padding(5.dp).align(Alignment.Center)) {
-            Row(Modifier) {
+            Row(Modifier.fillMaxWidth().clickable { item.onClick(EDIUploadPharmaModel.ClickEvent.OPEN) }) {
                 if (item.isCarriedOver) {
                     customText(CustomTextData().apply {
                         text = stringResource(R.string.carried_over_desc)
@@ -239,7 +240,7 @@ private fun pharmaFileContainer(dataContext: EDIScreenDetailVM, items: MutableLi
     val color = FThemeUtil.safeColorC()
     val pagerState = rememberPagerState(pageCount = { items.size })
     var scrollEnabled by remember { mutableStateOf(true) }
-    HorizontalPager(pagerState, Modifier.fillMaxSize(), userScrollEnabled = scrollEnabled) { page ->
+    HorizontalPager(pagerState, Modifier.padding(top = 10.dp).fillMaxSize(), userScrollEnabled = scrollEnabled) { page ->
         val item = items.getOrNull(page) ?: items.getOrNull(0) ?: return@HorizontalPager
         item.relayCommand = dataContext.relayCommand
         Column(Modifier) {
@@ -261,6 +262,10 @@ private fun pharmaFileContainer(dataContext: EDIScreenDetailVM, items: MutableLi
 }
 @Composable
 private fun pharmaFileUploadContainer(dataContext: EDIScreenDetailVM, item: EDIUploadPharmaModel) {
+    val ediUploadItem by dataContext.item.collectAsState()
+    if (!ediUploadItem.ediState.isEditable()) {
+        return
+    }
     val color = FThemeUtil.safeColorC()
     val uploadItems by item.uploadItems.collectAsState()
     val isSavable by item.isSavable.collectAsState()
@@ -487,6 +492,7 @@ private fun addPharmaFile(dataContext: EDIScreenDetailVM, dataBuff: EDIUploadPha
     if (!dataBuff.isAddable) {
         return
     }
+    checkExternalStorage(dataContext)
     checkReadStorage(dataContext) {
         dataContext.addPharmaFilePK.value = dataBuff.thisPK
     }
@@ -504,10 +510,10 @@ private fun savePharmaFile(dataContext: EDIScreenDetailVM, dataBuff: EDIUploadPh
 }
 private fun pharmaFileLongSelect(dataContext: EDIScreenDetailVM, dataBuff: EDIUploadPharmaFileModel) {
     val context = dataContext.context
-    context.startActivity((Intent(context, MediaListViewActivity::class.java).apply {
+    context.startActivity(Intent(context, MediaListViewActivity::class.java).apply {
         putParcelableList(FConstants.MEDIA_LIST, dataContext.getMediaViewPharmaFiles(dataBuff))
         flags = Intent.FLAG_ACTIVITY_NEW_TASK
-    }))
+    })
 }
 private fun pharmaFileShortSelect(dataContext: EDIScreenDetailVM, dataBuff: EDIUploadPharmaFileModel) {
     val context = dataContext.context
@@ -515,6 +521,9 @@ private fun pharmaFileShortSelect(dataContext: EDIScreenDetailVM, dataBuff: EDIU
         putParcelable(FConstants.MEDIA_ITEM, MediaViewParcelModel().parse(dataBuff))
         flags = Intent.FLAG_ACTIVITY_NEW_TASK
     })
+}
+private fun checkExternalStorage(dataContext: EDIScreenDetailVM) {
+    dataContext.permissionService.externalStorage()
 }
 private fun checkReadStorage(dataContext: EDIScreenDetailVM, callback: (Boolean) -> Unit) {
     dataContext.permissionService.requestReadExternalPermissions(callback)

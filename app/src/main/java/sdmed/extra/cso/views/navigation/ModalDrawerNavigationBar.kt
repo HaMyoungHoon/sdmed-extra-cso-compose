@@ -47,7 +47,10 @@ fun modalDrawerNavigationBar(navDestination: NavDestination?,
                         textColor = color.cardParagraph
                     })
                     IconButton(drawerClick) {
-                        Icon(vectorMenuOpen(FVectorData(color.cardBackground, color.cardForeground)), stringResource(R.string.menu_my_desc))
+                        Icon(vectorMenuOpen(FVectorData(color.cardBackground, color.cardForeground)),
+                            stringResource(R.string.menu_my_desc),
+                            Modifier,
+                            Color.Unspecified)
                     }
                 }
             }

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -90,7 +91,9 @@ private fun priceScreenDual(dataContext: PriceScreenVM, displayFeatures: List<Di
             topContainer(dataContext)
             searchLoading(dataContext)
             Column(Modifier) {
-                itemListContainer(dataContext)
+                Box(Modifier.weight(1F)) {
+                    itemListContainer(dataContext)
+                }
                 pageListContainer(dataContext)
             }
         }
@@ -104,7 +107,9 @@ private fun priceScreenTablet(dataContext: PriceScreenVM) {
             topContainer(dataContext)
             searchLoading(dataContext)
             Column(Modifier) {
-                itemListContainer(dataContext)
+                Box(Modifier.weight(1F)) {
+                    itemListContainer(dataContext)
+                }
                 pageListContainer(dataContext)
             }
         }
@@ -271,7 +276,7 @@ private fun pageListContainer(dataContext: PriceScreenVM, isWide: Boolean = true
     val pages by paginationModel.pages.collectAsState()
     val first by paginationModel.first.collectAsState()
     val last by paginationModel.last.collectAsState()
-    val itemCountOnScreen = if (isWide) 10 else 5
+    val itemCountOnScreen = if (isWide) 2 else 5
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val itemWidth = screenWidth / itemCountOnScreen * 2
     val listState = rememberLazyListState()
@@ -281,7 +286,7 @@ private fun pageListContainer(dataContext: PriceScreenVM, isWide: Boolean = true
             Icon(vectorDoubleLeft(FVectorData(color.transparent, if (first) color.disableForeGray else color.primary)),
                 stringResource(R.string.left_desc),
                 Modifier.clickable { paginationModel.onClick(PaginationModel.ClickEvent.FIRST) }, Color.Unspecified)
-            LazyRow(Modifier.width(itemWidth), listState) {
+            LazyRow(Modifier.widthIn(0.dp, itemWidth), listState) {
                 items(pages, { it.pageNumber }) { item ->
                     pageItemContainer(dataContext, item)
                 }

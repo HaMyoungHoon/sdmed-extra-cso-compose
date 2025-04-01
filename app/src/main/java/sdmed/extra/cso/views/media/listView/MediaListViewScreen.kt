@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -48,7 +49,6 @@ import sdmed.extra.cso.bases.FConstants
 import sdmed.extra.cso.models.common.MediaViewModel
 import sdmed.extra.cso.utils.FAmhohwa
 import sdmed.extra.cso.utils.FCoil
-import sdmed.extra.cso.utils.FLog
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
 import sdmed.extra.cso.views.component.vector.FVectorData
@@ -76,7 +76,8 @@ private fun mediaListViewScreenTopContainer(dataContext: MediaListViewActivityVM
             this.tintColor = color.background
             this.fillColor = color.primary
         }), stringResource(R.string.close_desc),
-            Modifier.clickable { dataContext.relayCommand.execute(MediaListViewActivityVM.ClickEvent.CLOSE) })
+            Modifier.clickable { dataContext.relayCommand.execute(MediaListViewActivityVM.ClickEvent.CLOSE) },
+            Color.Unspecified)
         customText(CustomTextData().apply {
             text = stringResource(R.string.media_list_view_title_desc)
             textColor = color.paragraph
@@ -146,7 +147,8 @@ private fun mediaListViewScreenImageView(item: MediaViewModel) {
             })
             Icon(vectorCircle(FVectorData(color.transparent, color.scrim)),
                 stringResource(R.string.media_view_title_desc),
-                Modifier.align(Alignment.TopEnd).fillMaxSize())
+                Modifier.align(Alignment.TopEnd).fillMaxSize(),
+                Color.Unspecified)
         }
         customText(CustomTextData().apply {
             text = item.originalFilename.value

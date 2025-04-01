@@ -8,6 +8,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -29,6 +30,7 @@ data class CustomTextFieldData(
     var textAlign: TextAlign = TextAlign.Start,
     var keyboardType: KeyboardType = KeyboardType.Text,
     var onDone: (KeyboardActionScope.() -> Unit)? = null,
+    var imeAction: ImeAction = ImeAction.Done,
     var singleLine: Boolean = false,
     var maxLines: Int = 1,
     var minLines: Int = 1,

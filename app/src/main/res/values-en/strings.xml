@@ -13,6 +13,7 @@
     <string name="confirm_desc">confirm</string>
     <string name="apply_desc">apply</string>
     <string name="start_desc">start</string>
+    <string name="open_desc">open</string>
     <string name="back_btn_close_desc">Press \'Back\' again to exit.</string>
     <string name="login_id_edit_desc">user id (3~20)</string>
     <string name="login_pw_edit_desc">password (8~20)</string>
@@ -90,7 +91,7 @@
     <string name="own_hospital_list_desc">own hospital list</string>
     <string name="own_pharma_list_desc">own pharma list</string>
     <string name="qna_desc">QnA</string>
-    <string name="qna_add_desc">add</string>
+    <string name="qna_add_desc">add reply</string>
     <string name="qna_comp_desc">compleate</string>
     <string name="qna_add_content_hint_desc">write down qna</string>
     <string name="qna_upload_fail">qna upload fail</string>
