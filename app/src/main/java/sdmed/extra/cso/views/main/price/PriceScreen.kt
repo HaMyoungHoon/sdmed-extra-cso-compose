@@ -192,7 +192,7 @@ private fun itemListContainer(dataContext: PriceScreenVM, isWide: Boolean = true
             items(medicineModel.chunked(2), { it.first().thisPK }) { items ->
                 Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween) {
                     items.forEach { item ->
-                        Box(Modifier.weight(1F).aspectRatio(1F).padding(8.dp),
+                        Box(Modifier.weight(1F).padding(8.dp),
                             Alignment.Center) {
                             medicineItemContainer(dataContext, item)
                         }
