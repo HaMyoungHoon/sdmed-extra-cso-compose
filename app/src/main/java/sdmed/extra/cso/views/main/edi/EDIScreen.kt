@@ -13,6 +13,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,6 +37,7 @@ import sdmed.extra.cso.models.menu.NavigationType
 import sdmed.extra.cso.models.menu.WindowPanelType
 import sdmed.extra.cso.models.retrofit.edi.EDIUploadModel
 import sdmed.extra.cso.utils.FCoroutineUtil
+import sdmed.extra.cso.utils.FLog
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
 import sdmed.extra.cso.views.component.shape.ShapeRoundedBoxData
@@ -238,12 +241,22 @@ private fun topContainer(dataContext: EDIScreenVM, isWide: Boolean = true) {
         }
     }
 }
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun itemListContainer(dataContext: EDIScreenVM) {
     val items by dataContext.items.collectAsState()
-    LazyColumn(Modifier.fillMaxWidth()) {
-        items(items, { it.thisPK }) { item ->
-            ediItemContainer(dataContext, item)
+    var isRefreshing by remember { mutableStateOf(false) }
+    val refreshState = rememberPullToRefreshState()
+    PullToRefreshBox(isRefreshing, {
+        isRefreshing = true
+        getList(dataContext) {
+            isRefreshing = false
+        }
+    }, Modifier, refreshState) {
+        LazyColumn(Modifier.fillMaxWidth()) {
+            items(items, { it.thisPK }) { item ->
+                ediItemContainer(dataContext, item)
+            }
         }
     }
 }
@@ -322,7 +335,7 @@ private fun endDateOpen(dataContext: EDIScreenVM) {
     dataContext.endDateSelect.value = true
 }
 
-private fun getList(dataContext: EDIScreenVM) {
+private fun getList(dataContext: EDIScreenVM, end: () -> Unit = { }) {
     dataContext.loading()
     FCoroutineUtil.coroutineScope({
         val ret = dataContext.getList()
@@ -330,6 +343,7 @@ private fun getList(dataContext: EDIScreenVM) {
         if (ret.result != true) {
             dataContext.toast(ret.msg)
         }
+        end()
     })
 }
 private fun checkExternalStorage(dataContext: EDIScreenVM) {
