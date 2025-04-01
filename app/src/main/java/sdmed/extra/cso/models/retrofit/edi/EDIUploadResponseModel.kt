@@ -1,5 +1,6 @@
 package sdmed.extra.cso.models.retrofit.edi
 
+import kotlinx.coroutines.flow.MutableStateFlow
 import sdmed.extra.cso.bases.FDataModelClass
 import sdmed.extra.cso.fDate.FDateTime
 
@@ -14,7 +15,7 @@ data class EDIUploadResponseModel(
     var ediState: EDIState = EDIState.None,
     var regDate: String = "",
 ): FDataModelClass<EDIUploadResponseModel.ClickEvent>() {
-    var open: Boolean = false
+    var isOpen = MutableStateFlow(false)
 
     fun getResponseDate() = FDateTime().setThis(regDate).toString("yyyy-MM")
 //    fun getEdiColor() = ediState.parseEDIColor()

@@ -80,7 +80,7 @@ fun mediaPickerScreen(content: @Composable BoxScope.() -> Unit) {
 @Composable
 fun mediaPickerScreenPhone(dataContext: MediaPickerActivityVM) {
     mediaPickerScreen {
-        Column {
+        Column(Modifier) {
             topContainer(dataContext)
             mediaContainer(dataContext)
             mediaListContainer(dataContext)
@@ -90,7 +90,7 @@ fun mediaPickerScreenPhone(dataContext: MediaPickerActivityVM) {
 @Composable
 fun mediaPickerScreenTablet(dataContext: MediaPickerActivityVM) {
     mediaPickerScreen {
-        Column {
+        Column(Modifier) {
             topContainer(dataContext)
             mediaContainer(dataContext)
             mediaListContainer(dataContext)
@@ -102,13 +102,13 @@ fun mediaPickerScreenTwoPane(dataContext: MediaPickerActivityVM, displayFeatures
     val mediaPath by dataContext.mediaPath.collectAsState()
     mediaPickerScreen {
         if (mediaPath == null) {
-            Column {
+            Column(Modifier) {
                 topContainer(dataContext)
                 mediaListContainer(dataContext)
             }
         } else {
             TwoPane({
-                Column {
+                Column(Modifier) {
                     topContainer(dataContext)
                     mediaListContainer(dataContext)
                 }

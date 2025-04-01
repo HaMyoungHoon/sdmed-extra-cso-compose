@@ -260,14 +260,14 @@ private fun taxpayer(dataContext: MyScreenVM) {
     val context = dataContext.context
     val blobUrl = dataContext.thisData.value.taxPayerUrl
     if (blobUrl != null) {
-        context.startActivity((Intent(context, MediaViewActivity::class.java).apply {
+        context.startActivity(Intent(context, MediaViewActivity::class.java).apply {
             putParcelable(FConstants.MEDIA_ITEM, MediaViewParcelModel().apply {
                 this.blobUrl = blobUrl
                 this.mimeType = dataContext.thisData.value.taxPayerMimeType ?: ""
                 this.originalFilename = dataContext.thisData.value.trainingFilename ?: ""
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
             })
-        }))
+        })
         return
     }
     checkReadStorage(dataContext) {
@@ -278,14 +278,14 @@ private fun bankAccount(dataContext: MyScreenVM) {
     val context = dataContext.context
     val blobUrl = dataContext.thisData.value.bankAccountUrl
     if (blobUrl != null) {
-        context.startActivity((Intent(context, MediaViewActivity::class.java).apply {
+        context.startActivity(Intent(context, MediaViewActivity::class.java).apply {
             putParcelable(FConstants.MEDIA_ITEM, MediaViewParcelModel().apply {
                 this.blobUrl = blobUrl
                 this.mimeType = dataContext.thisData.value.bankAccountMimeType ?: ""
                 this.originalFilename = dataContext.thisData.value.bankAccountFilename ?: ""
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
             })
-        }))
+        })
         return
     }
     checkReadStorage(dataContext) {
@@ -296,14 +296,14 @@ private fun csoReport(dataContext: MyScreenVM) {
     val context = dataContext.context
     val blobUrl = dataContext.thisData.value.csoReportUrl
     if (blobUrl != null) {
-        context.startActivity((Intent(context, MediaViewActivity::class.java).apply {
+        context.startActivity(Intent(context, MediaViewActivity::class.java).apply {
             putParcelable(FConstants.MEDIA_ITEM, MediaViewParcelModel().apply {
                 this.blobUrl = blobUrl
                 this.mimeType = dataContext.thisData.value.csoReportMimeType ?: ""
                 this.originalFilename = dataContext.thisData.value.csoReportFilename ?: ""
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
             })
-        }))
+        })
         return
     }
     checkReadStorage(dataContext) {
@@ -314,14 +314,14 @@ private fun marketingContract(dataContext: MyScreenVM) {
     val context = dataContext.context
     val blobUrl = dataContext.thisData.value.marketingContractUrl
     if (blobUrl != null) {
-        context.startActivity((Intent(context, MediaViewActivity::class.java).apply {
+        context.startActivity(Intent(context, MediaViewActivity::class.java).apply {
             putParcelable(FConstants.MEDIA_ITEM, MediaViewParcelModel().apply {
                 this.blobUrl = blobUrl
                 this.mimeType = dataContext.thisData.value.marketingContractMimeType ?: ""
                 this.originalFilename = dataContext.thisData.value.marketingContractFilename ?: ""
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
             })
-        }))
+        })
         return
     }
     checkReadStorage(dataContext) {
