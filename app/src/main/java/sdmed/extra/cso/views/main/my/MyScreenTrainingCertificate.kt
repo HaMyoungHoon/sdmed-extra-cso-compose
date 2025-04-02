@@ -180,8 +180,7 @@ private fun uploadContainer(dataContext: MyScreenTrainingCertificateVM) {
             Row(Modifier.fillMaxWidth(),
                 Arrangement.Center,
                 Alignment.CenterVertically) {
-                FCoil.load(null,
-                    buff.mediaPath,
+                FCoil.load(buff.mediaPath,
                     buff.mediaFileType,
                     buff.mediaName,
                     Modifier.width(100.dp).height(100.dp).padding(10.dp),

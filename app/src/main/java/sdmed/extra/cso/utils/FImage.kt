@@ -1,63 +1,27 @@
 package sdmed.extra.cso.utils
 
-import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import coil.ImageLoader
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.AsyncImage
-import coil.decode.ImageDecoderDecoder
-import coil.disk.DiskCache
-import coil.memory.MemoryCache
-import coil.request.CachePolicy
-import coil.request.ImageRequest
 import sdmed.extra.cso.R
 import sdmed.extra.cso.models.common.MediaFileType
 
-object FCoil {
-    @OptIn(ExperimentalCoilApi::class)
-    fun clearCache(context: Context? = null) {
-        val imageLoader = ImageLoader.Builder(context ?: FDI.context()).build()
-        imageLoader.diskCache?.clear()
-        imageLoader.memoryCache?.clear()
-    }
-    fun imageRequest(context: Context, data: Any?) = ImageRequest.Builder(context)
-        .data(data)
-        .size(300)
-        .diskCachePolicy(CachePolicy.WRITE_ONLY)
-        .memoryCachePolicy(CachePolicy.READ_ONLY)
-        .build()
-    fun imageLoader(context: Context) = ImageLoader.Builder(context)
-        .crossfade(true)
-        .bitmapConfig(Bitmap.Config.RGB_565)
-        .allowRgb565(true)
-        .diskCache {
-            DiskCache.Builder()
-                .directory(context.cacheDir)
-                .maxSizePercent(0.05)
-                .build()
-        }
-        .memoryCache {
-            MemoryCache.Builder(context)
-                .maxSizePercent(0.25)
-                .build()
-        }
-        .memoryCachePolicy(CachePolicy.ENABLED)
-        .diskCachePolicy(CachePolicy.ENABLED)
-        .respectCacheHeaders(false)
-        .components {
-            add(ImageDecoderDecoder.Factory())
-        }
-        .build()
+object FImage {
     @Composable
     fun load(blobUrl: String? = null, blobMimeType: String? = null, blobFilename: String? = null, contentScale: ContentScale = ContentScale.Crop) {
-        val context = FDI.context()
         val mimeType = FContentsType.getExtMimeType(blobMimeType)
         if (blobUrl.isNullOrEmpty() || !FImageUtils.isImage(mimeType)) {
             Image(painterResource(FImageUtils.getDefaultImage(blobMimeType)),
@@ -65,16 +29,14 @@ object FCoil {
                 Modifier.fillMaxSize(),
                 contentScale = contentScale)
         } else {
-            AsyncImage(imageRequest(context, blobUrl),
+            AsyncImage(blobUrl,
                 blobFilename,
-                imageLoader(context),
                 Modifier.fillMaxSize(),
                 contentScale = contentScale)
         }
     }
     @Composable
     fun load(blobUrl: String? = null, blobMimeType: String? = null, blobFilename: String? = null, modifier: Modifier, contentScale: ContentScale = ContentScale.Crop) {
-        val context = FDI.context()
         val mimeType = FContentsType.getExtMimeType(blobMimeType)
         if (blobUrl.isNullOrEmpty() || !FImageUtils.isImage(mimeType)) {
             Image(painterResource(FImageUtils.getDefaultImage(blobMimeType)),
@@ -82,9 +44,8 @@ object FCoil {
                 modifier,
                 contentScale = contentScale)
         } else {
-            AsyncImage(imageRequest(context, blobUrl),
+            AsyncImage(blobUrl,
                 blobFilename,
-                imageLoader(context),
                 modifier,
                 contentScale = contentScale)
         }
@@ -95,12 +56,22 @@ object FCoil {
         var imageId = R.drawable.image_no_image_1920
         when (mediaFileType) {
             MediaFileType.IMAGE -> {
-                AsyncImage(imageRequest(context, mediaUri),
-                    mediaFilename,
-                    imageLoader(context),
-                    modifier,
-                    contentScale = contentScale)
-                return
+                mediaUri?.let {
+                    var bitmap by remember { mutableStateOf<Bitmap?>(null) }
+                    FCoroutineUtil.coroutineScopeIO({
+                        val inputStream = context.contentResolver.openInputStream(mediaUri)
+                        bitmap = BitmapFactory.decodeStream(inputStream)
+                        inputStream?.close()
+                    })
+                    bitmap?.let {
+                        Image(it.asImageBitmap(),
+                            mediaFilename,
+                            modifier,
+                            contentScale = contentScale,
+                            filterQuality = FilterQuality.None)
+                    }
+                    return
+                }
             }
             MediaFileType.VIDEO -> { }
             MediaFileType.UNKNOWN -> {  }

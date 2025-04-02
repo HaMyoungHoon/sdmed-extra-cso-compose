@@ -52,4 +52,14 @@ object FCoroutineUtil {
             }
         }
     }
+    fun <T> coroutineScopeIO(scope: suspend CoroutineScope.() -> T, result: ((T) -> Unit)? = null, method: (() -> Unit)? = null) {
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                scope().also {
+                    result?.invoke(it)
+                    method?.invoke()
+                }
+            }
+        }
+    }
 }

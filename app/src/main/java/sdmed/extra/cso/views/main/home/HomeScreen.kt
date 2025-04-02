@@ -4,7 +4,6 @@ import sdmed.extra.cso.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.pager.HorizontalPager
@@ -65,7 +64,7 @@ private fun homeScreenPhone(dataContext: HomeScreenVM, windowPanelType: WindowPa
 private fun topContainer(dataContext: HomeScreenVM) {
     val color = FThemeUtil.safeColorC()
     val tabIndex by dataContext.tabIndex.collectAsState()
-    SecondaryTabRow(tabIndex, Modifier.fillMaxWidth(), color.primaryContainer, color.primary, {
+    SecondaryTabRow(tabIndex, Modifier.fillMaxWidth(), color.onPrimary, color.primary, {
         TabRowDefaults.SecondaryIndicator(Modifier.tabIndicatorOffset(tabIndex, matchContentSize = true))
     }) {
         Tab(tabIndex == 0, { dataContext.tabIndex.value = 0 }) {
@@ -125,7 +124,7 @@ fun contentContainer(dataContext: HomeScreenVM,
     }
 
     LaunchedEffect(tabIndex) {
-        pagerState.animateScrollToPage(tabIndex)
+        pagerState.requestScrollToPage(tabIndex)
     }
     LaunchedEffect(pagerState.currentPage) {
         dataContext.tabIndex.value = pagerState.currentPage

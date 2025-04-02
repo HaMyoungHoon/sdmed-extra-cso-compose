@@ -2,6 +2,7 @@ package sdmed.extra.cso.bases
 
 import android.content.Context
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.lifecycle.ViewModel
@@ -37,6 +38,7 @@ abstract class FBaseViewModel(applicationContext: Context? = null): ViewModel() 
         return commonRepository.tokenRefresh()
     }
 
+    fun toast(@StringRes id: Int, duration: Int = Toast.LENGTH_SHORT) = uiStateService.toast(context.getString(id), duration)
     fun toast(msg: String?, duration: Int = Toast.LENGTH_SHORT) = uiStateService.toast(msg, duration)
     @Composable
     fun toastComposable(msg: String?, duration: Int = Toast.LENGTH_SHORT) = uiStateService.toast(msg, duration)

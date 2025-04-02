@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.core.net.toUri
 import androidx.window.layout.DisplayFeature
 import com.google.accompanist.adaptive.calculateDisplayFeatures
+import kotlinx.coroutines.withTimeoutOrNull
 import sdmed.extra.cso.R
 import sdmed.extra.cso.bases.FBaseActivity
 import sdmed.extra.cso.bases.FConstants
@@ -21,7 +22,9 @@ import sdmed.extra.cso.models.common.MediaPickerSourceModel
 import sdmed.extra.cso.models.common.SelectListModel
 import sdmed.extra.cso.utils.FCoil
 import sdmed.extra.cso.utils.FContentsType
+import sdmed.extra.cso.utils.FCoroutineUtil
 import sdmed.extra.cso.utils.FImageUtils
+import sdmed.extra.cso.utils.FLog
 import sdmed.extra.cso.utils.FStorage.getParcelableList
 import sdmed.extra.cso.utils.FStorage.putParcelableList
 import sdmed.extra.cso.views.theme.FThemeUtil
@@ -59,18 +62,22 @@ class MediaPickerActivity: FBaseActivity<MediaPickerActivityVM>() {
     }
 
     private fun init() {
-        val mediaList = getImageList()
+        FCoil.clearCache()
+        FCoroutineUtil.coroutineScopeIO({
+            withTimeoutOrNull(3000) {
+                val mediaList = getImageList()
 //        getVideoList(mediaList)
-        getFileList(mediaList)
-//        dataContext.imageLoader = FCoil.imageLoader(this)
-        dataContext.setItems(mediaList)
-        dataContext.selectItem(0)
-        dataContext.mediaTargetPK = intent.getStringExtra(FConstants.MEDIA_TARGET_PK) ?: ""
-        val buffList = intent.getParcelableList<MediaPickerSourceModel>(FConstants.MEDIA_LIST)
-        dataContext.ableSelectCountStringSuffix = getString(R.string.media_able_click_suffix_desc)
-        dataContext.setPreviousMedia(buffList)
-        dataContext.setMediaMaxCount(intent.getIntExtra(FConstants.MEDIA_MAX_COUNT, -1))
+                getFileList(mediaList)
+                dataContext.setItems(mediaList)
+                dataContext.selectItem(0)
+                dataContext.mediaTargetPK = intent.getStringExtra(FConstants.MEDIA_TARGET_PK) ?: ""
+                val buffList = intent.getParcelableList<MediaPickerSourceModel>(FConstants.MEDIA_LIST)
+                dataContext.ableSelectCountStringSuffix = getString(R.string.media_able_click_suffix_desc)
+                dataContext.setPreviousMedia(buffList)
+                dataContext.setMediaMaxCount(intent.getIntExtra(FConstants.MEDIA_MAX_COUNT, -1))
 //        binding?.playerView?.player = ExoPlayer.Builder(this).build()
+            }
+        })
     }
 
     override fun setLayoutCommand(data: Any?) {
@@ -83,7 +90,6 @@ class MediaPickerActivity: FBaseActivity<MediaPickerActivityVM>() {
         when (eventName) {
             MediaPickerActivityVM.ClickEvent.CLOSE -> {
                 setResult(RESULT_CANCELED)
-                dataContext.imageLoader?.memoryCache?.clear()
                 finish()
             }
             MediaPickerActivityVM.ClickEvent.CONFIRM -> {
@@ -94,7 +100,6 @@ class MediaPickerActivity: FBaseActivity<MediaPickerActivityVM>() {
                     putExtra(FConstants.MEDIA_TARGET_PK, dataContext.mediaTargetPK)
                     putParcelableList(FConstants.MEDIA_LIST, dataContext.getClickItems())
                 })
-                dataContext.imageLoader?.memoryCache?.clear()
                 finish()
             }
         }
@@ -194,6 +199,11 @@ class MediaPickerActivity: FBaseActivity<MediaPickerActivityVM>() {
         val sortOrder = "${MediaStore.Files.FileColumns.DATE_ADDED} DESC"
         val selection = "${MediaStore.Files.FileColumns.MIME_TYPE} IN (?, ?, ?, ?)"
         val selectionArgs = arrayOf(FContentsType.type_pdf, FContentsType.type_xlsx, FContentsType.type_xls, FContentsType.type_zip)
+        try {
+            this.contentResolver.call(MediaStore.Files.getContentUri("external"), "releasePersistableUriPermission", null, null)
+        } catch (e: Exception) {
+            FLog.debug("mhha", "${e.message}")
+        }
 
         val query = this.contentResolver.query(
             MediaStore.Files.getContentUri("external"),
@@ -248,6 +258,11 @@ class MediaPickerActivity: FBaseActivity<MediaPickerActivityVM>() {
         val mediaList = mutableListOf<Pair<String, MutableList<MediaPickerSourceModel>>>()
         val projection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.DISPLAY_NAME, MediaStore.Images.Media.BUCKET_DISPLAY_NAME, MediaStore.Images.Media.DATE_ADDED, MediaStore.Images.Media.MIME_TYPE)
         val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} DESC"
+        try {
+            this.contentResolver.call(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "releasePersistableUriPermission", null, null)
+        } catch (e: Exception) {
+            FLog.debug("mhha", "${e.message}")
+        }
 
         val query = this.contentResolver.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -299,6 +314,11 @@ class MediaPickerActivity: FBaseActivity<MediaPickerActivityVM>() {
         val mediaList = buff ?: mutableListOf()
         val projection = arrayOf(MediaStore.Video.Media._ID, MediaStore.Video.Media.DISPLAY_NAME, MediaStore.Video.Media.BUCKET_DISPLAY_NAME, MediaStore.Video.Media.DATE_ADDED, MediaStore.Video.Media.DURATION)
         val sortOrder = "${MediaStore.Video.Media.DATE_ADDED} DESC"
+        try {
+            this.contentResolver.call(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, "releasePersistableUriPermission", null, null)
+        } catch (e: Exception) {
+            FLog.debug("mhha", "${e.message}")
+        }
 
         val query = this.contentResolver.query(
             MediaStore.Video.Media.EXTERNAL_CONTENT_URI,

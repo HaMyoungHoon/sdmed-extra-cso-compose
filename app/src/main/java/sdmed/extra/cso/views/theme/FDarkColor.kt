@@ -103,6 +103,14 @@ object FDarkColor: IBaseColor {
     override val qnaBackStateRecep = Color(0xFFC5C6A9)
     override val qnaBackStateReply = Color(0xFFB293B4)
 
+    override val sunday = Color(0xFFFF1616)
+    override val monday = Color(0xFFEEFFEE)
+    override val tuesday = Color(0xFFEEFFEE)
+    override val wednesday = Color(0xFFEEFFEE)
+    override val thursday = Color(0xFFEEFFEE)
+    override val friday = Color(0xFFEEFFEE)
+    override val saturday = Color(0xFF2C7EF4)
+
     override fun materialTheme(): ColorScheme {
         return darkColorScheme(
             primary,

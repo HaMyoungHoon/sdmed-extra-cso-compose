@@ -238,8 +238,7 @@ private fun uploadItemContainer(dataContext: QnAScreenAddVM, item: MediaPickerSo
                     stringResource(R.string.remove_desc),
                     Modifier, Color.Unspecified)
             }
-            FCoil.load(null,
-                item.mediaPath,
+            FCoil.load(item.mediaPath,
                 item.mediaFileType,
                 item.mediaName,
                 Modifier.width(100.dp).height(100.dp).padding(10.dp),

@@ -28,7 +28,6 @@ class MediaPickerActivityVM(applicationContext: Context? = null): FBaseViewModel
     val mediaPath = MutableStateFlow<Uri?>(null)
     val videoPath = MutableStateFlow<Uri?>(null)
     val mediaName = MutableStateFlow<String>("")
-    var imageLoader: ImageLoader? = null
 
     fun setPreviousMedia(mediaPickerModel: ArrayList<MediaPickerSourceModel>?) {
         mediaPickerModel?.forEach { x ->

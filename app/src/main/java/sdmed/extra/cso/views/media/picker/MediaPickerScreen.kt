@@ -40,14 +40,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -57,6 +54,7 @@ import com.google.accompanist.adaptive.TwoPane
 import sdmed.extra.cso.R
 import sdmed.extra.cso.models.common.MediaPickerSourceModel
 import sdmed.extra.cso.utils.FCoil
+import sdmed.extra.cso.utils.FDI
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
 import sdmed.extra.cso.views.component.vector.FVectorData
@@ -189,8 +187,7 @@ private fun mediaContainer(dataContext: MediaPickerActivityVM, isFull: Boolean =
     if (mediaPath != null) {
         val modifier = if (isFull) Modifier.fillMaxSize() else Modifier.fillMaxWidth().height(300.dp)
         Box(modifier) {
-            FCoil.load(dataContext.imageLoader,
-                mediaPath,
+            FCoil.load(mediaPath,
                 mediaFileType,
                 mediaName,
                 Modifier.fillMaxSize(),
@@ -211,8 +208,7 @@ private fun mediaListContainer(dataContext: MediaPickerActivityVM) {
                 if (lastClick) {
                     Box(Modifier.fillMaxSize().zIndex(99F).background(color.scrim))
                 }
-                FCoil.load(dataContext.imageLoader,
-                    item.mediaPath,
+                FCoil.load(item.mediaPath,
                     item.mediaFileType,
                     item.mediaName,
                     Modifier.fillMaxSize(),

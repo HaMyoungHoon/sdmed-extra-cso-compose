@@ -101,5 +101,13 @@ interface IBaseColor {
     val qnaBackStateRecep: Color
     val qnaBackStateReply: Color
 
+    val sunday: Color
+    val monday: Color
+    val tuesday: Color
+    val wednesday: Color
+    val thursday: Color
+    val friday: Color
+    val saturday: Color
+
     fun materialTheme(): ColorScheme
 }
