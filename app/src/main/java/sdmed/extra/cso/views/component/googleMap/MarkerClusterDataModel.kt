@@ -1,9 +1,7 @@
-package sdmed.extra.cso.utils.googleMap
+package sdmed.extra.cso.views.component.googleMap
 
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.clustering.ClusterItem
-import kotlin.takeIf
-import kotlin.text.isNotEmpty
 
 data class MarkerClusterDataModel(
     var thisPK: String = "",
@@ -15,6 +13,7 @@ data class MarkerClusterDataModel(
     var longitude: Double = 0.0,
     var zIndex: Float = 10F,
     var resDrawableId: Int = 0,
+    var markerType: MarkerClusterType = MarkerClusterType.NONE,
 ): ClusterItem {
     override fun getPosition() = LatLng(latitude, longitude)
     override fun getTitle() = orgName

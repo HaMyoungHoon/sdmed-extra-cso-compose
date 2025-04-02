@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import kotlinx.coroutines.flow.MutableStateFlow
 import sdmed.extra.cso.R
 import sdmed.extra.cso.bases.FDataModelClass
-import sdmed.extra.cso.utils.googleMap.MarkerClusterDataModel
+import sdmed.extra.cso.views.component.googleMap.MarkerClusterDataModel
+import sdmed.extra.cso.views.component.googleMap.MarkerClusterType
 
 data class PharmacyTempModel(
     var thisPK: String = "",
@@ -20,6 +21,7 @@ data class PharmacyTempModel(
     var openDate: String = "",
     var longitude: Double = 0.0,
     var latitude: Double = 0.0,
+    var markerType: MarkerClusterType = MarkerClusterType.PHARMACY,
 ): FDataModelClass<PharmacyTempModel.ClickEvent>() {
     @Transient
     @JsonIgnore
@@ -34,6 +36,7 @@ data class PharmacyTempModel(
         ret.latitude = this.latitude
         ret.longitude = this.longitude
         ret.resDrawableId = R.drawable.pharmacy_green
+        ret.markerType = this.markerType
         return ret
     }
     fun parse(data: MarkerClusterDataModel): PharmacyTempModel {
@@ -47,6 +50,7 @@ data class PharmacyTempModel(
     }
 
     enum class ClickEvent(var index: Int) {
-        THIS(0)
+        THIS(0),
+        PHONE_NUMBER(1)
     }
 }

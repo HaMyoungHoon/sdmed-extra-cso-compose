@@ -31,24 +31,20 @@ fun thisApp(
     windowPanelType: WindowPanelType,
     displayFeatures: List<DisplayFeature>,
     startDest: String = Route.LANDING.Main.data.path) {
-    val context = LocalContext.current
     val navHostController = rememberNavController()
     val navigationActions = remember(navHostController) {
         NavigationAction(navHostController)
     }
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
     val dest = navBackStackEntry?.destination
-    val navVisible = FComposableDI.uiStateService(context).isNavigationVisible.collectAsState()
     val color = FThemeUtil.safeColorC()
 
     Surface(Modifier.background(color.background)) {
-        if (navVisible.value) {
-            navigationWrapper(dest, navigationActions::navigateTo) {
-                appNavHost(navHostController, windowPanelType, displayFeatures,
-                    navSuiteType.toNavType(),
-                    navigationActions::navigateTo,
-                    startDest)
-            }
+        navigationWrapper(dest, navigationActions::navigateTo) {
+            appNavHost(navHostController, windowPanelType, displayFeatures,
+                navSuiteType.toNavType(),
+                navigationActions::navigateTo,
+                startDest)
         }
     }
 }

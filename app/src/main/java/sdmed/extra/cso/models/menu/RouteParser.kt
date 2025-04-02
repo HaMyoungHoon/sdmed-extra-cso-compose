@@ -10,7 +10,7 @@ object RouteParser {
             RouteName.MY -> Route.MY.Main
             RouteName.LANDING -> Route.LANDING.Main
             RouteName.LOGIN -> Route.LOGIN.Main
-            else -> Route.EDI.Main
+            else -> Route.LANDING.Main
         }
     }
 }

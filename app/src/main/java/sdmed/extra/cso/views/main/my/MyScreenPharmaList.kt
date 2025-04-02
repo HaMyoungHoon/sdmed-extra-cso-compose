@@ -78,6 +78,7 @@ private fun itemContainer(data: PharmaModel) {
                     textColor = color.cardForeground
                     textSize = FThemeUtil.textUnit(18F)
                     modifier = Modifier.align(Alignment.Start)
+                    maxLines = 2
                     overflow = TextOverflow.Ellipsis
                 })
             }

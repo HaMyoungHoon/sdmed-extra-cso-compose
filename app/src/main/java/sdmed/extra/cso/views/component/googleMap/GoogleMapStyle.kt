@@ -1,7 +1,6 @@
-package sdmed.extra.cso.utils.googleMap
+package sdmed.extra.cso.views.component.googleMap
 
 import sdmed.extra.cso.R
-import kotlin.collections.find
 
 enum class GoogleMapStyle(val index: Int, val resId: Int) {
     STANDARD(0, R.raw.map_style_standard),

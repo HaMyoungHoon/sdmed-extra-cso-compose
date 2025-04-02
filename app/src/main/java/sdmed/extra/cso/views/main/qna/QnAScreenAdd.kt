@@ -273,7 +273,9 @@ private fun addQnAFileSelect(dataContext: QnAScreenAddVM, context: Context, acti
         return
     }
     checkReadStorage(dataContext) {
-        activityResult.launch(Intent(context, MediaPickerActivity::class.java))
+        if (it) {
+            activityResult.launch(Intent(context, MediaPickerActivity::class.java))
+        }
     }
     dataContext.imageSelect.value = false
 }

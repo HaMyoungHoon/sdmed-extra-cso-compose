@@ -57,6 +57,10 @@ object FConstants {
     const val CLAIMS_NAME = "name"
     const val CLAIMS_EXP = "exp"
 
+    const val DEF_LATITUDE = 37.6618
+    const val DEF_LONGITUDE = 126.76905
+    const val DEF_ZOOM = 15F
+
     const val REGEX_NUMBER_REPLACE = "[^0-9]"
     // 숫자, 문자(영대소한글)
     const val REGEX_CHECK_PASSWORD_0 = "^(?=.*[A-Za-z가-힣ㄱ-ㅎㅏ-ㅣ!@#\$%^&*()])(?=.*\\d)[A-Za-z가-힣ㄱ-ㅎㅏ-ㅣ\\d@\$!@#\$%^&*()]{8,20}\$"

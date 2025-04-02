@@ -6,7 +6,7 @@ import sdmed.extra.cso.models.common.LoadingMessageModel
 import sdmed.extra.cso.models.common.ToastMessageModel
 
 class FUIStateService {
-    val isNavigationVisible = MutableStateFlow(true)
+    val isNavigationVisible = MutableStateFlow(false)
     val isLoading = MutableStateFlow<LoadingMessageModel>(LoadingMessageModel.Hidden)
     val toast = MutableStateFlow<ToastMessageModel>(ToastMessageModel.Hidden)
 

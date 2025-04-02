@@ -85,6 +85,7 @@ private fun itemContainer(data: HospitalModel, select: Boolean = false, relayCom
                     textColor = color.cardForeground
                     textSize = FThemeUtil.textUnit(18F)
                     modifier = Modifier.align(Alignment.Start)
+                    maxLines = 2
                     overflow = TextOverflow.Ellipsis
                 })
             }

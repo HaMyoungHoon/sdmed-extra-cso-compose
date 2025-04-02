@@ -31,6 +31,7 @@ class EDIScreenDetailVM(applicationContext: Context? = null): FBaseViewModel(app
     val item = MutableStateFlow(EDIUploadModel())
     val closeAble = MutableStateFlow(true)
     val addPharmaFilePK = MutableStateFlow<String?>(null)
+    val hospitalTempDetail = MutableStateFlow(false)
 
     init {
         viewModelScope.launch {

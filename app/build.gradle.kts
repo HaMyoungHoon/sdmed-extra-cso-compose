@@ -119,7 +119,8 @@ dependencies {
     implementation(libs.google.accompanist.permissions)
     implementation(libs.google.location)
     implementation(libs.google.maps)
-    implementation(libs.google.map.util)
+    implementation(libs.google.maps.compose)
+    implementation(libs.google.maps.compose.util)
     implementation(libs.google.play)
 
     implementation(libs.kodein.core)

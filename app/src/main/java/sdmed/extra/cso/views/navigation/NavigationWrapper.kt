@@ -10,8 +10,11 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
@@ -23,6 +26,7 @@ import kotlinx.coroutines.launch
 import sdmed.extra.cso.models.menu.MenuItem
 import sdmed.extra.cso.models.menu.NavigationContentType
 import sdmed.extra.cso.models.menu.RouteParser
+import sdmed.extra.cso.utils.FComposableDI
 import sdmed.extra.cso.views.theme.FThemeUtil
 
 @Composable
@@ -54,8 +58,10 @@ fun navigationWrapper(navDestination: NavDestination?,
             drawerState.close()
         }
     }
-
-    val navigation = RouteParser.routeToClass(navDestination?.route).data.navigation
+    val context = LocalContext.current
+    val uiStateService = FComposableDI.uiStateService(context)
+    val navVisible by uiStateService.isNavigationVisible.collectAsState()
+    uiStateService.isNavigationVisible.value = RouteParser.routeToClass(navDestination?.route).data.navigation
     ModalNavigationDrawer({
         modalDrawerNavigationBar(navDestination, navContentPosition, navigate, {
             coroutineScope.launch {
@@ -64,7 +70,7 @@ fun navigationWrapper(navDestination: NavDestination?,
         })},
         Modifier.background(color.background), drawerState, gesturesEnabled) {
         NavigationSuiteScaffoldLayout({
-            if (navigation) {
+            if (navVisible) {
                 when (navLayoutType) {
                     NavigationSuiteType.NavigationBar -> bottomNavigationBar(navDestination, navigate)
                     NavigationSuiteType.NavigationRail -> railNavigationBar(navDestination, navContentPosition, navigate, {

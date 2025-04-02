@@ -86,9 +86,13 @@ fun myScreenTrainingCertificate(item: List<UserTrainingModel>,
     }
 }
 private fun imageSelect(dataContext: MyScreenTrainingCertificateVM, context: Context, activityResult: ManagedActivityResultLauncher<Intent, ActivityResult>) {
-    activityResult.launch(Intent(context, MediaPickerActivity::class.java).apply {
-        putExtra(FConstants.MEDIA_MAX_COUNT, 1)
-    })
+    checkReadStorage(dataContext) {
+        if (it) {
+            activityResult.launch(Intent(context, MediaPickerActivity::class.java).apply {
+                putExtra(FConstants.MEDIA_MAX_COUNT, 1)
+            })
+        }
+    }
     dataContext.imageSelect.value = false
 }
 @OptIn(ExperimentalMaterial3Api::class)
@@ -257,4 +261,8 @@ private fun setThisCommand(data: Any?, dataContext: MyScreenTrainingCertificateV
         MyScreenTrainingCertificateVM.ClickEvent.ADD -> { dataContext.imageSelect.value = true }
         MyScreenTrainingCertificateVM.ClickEvent.SAVE ->  dataContext.startBackground()
     }
+}
+
+private fun checkReadStorage(dataContext: MyScreenTrainingCertificateVM, callback: (Boolean) -> Unit) {
+    dataContext.permissionService.requestReadExternalPermissions(callback)
 }

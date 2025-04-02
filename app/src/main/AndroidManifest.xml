@@ -79,6 +79,8 @@
         <activity android:name=".views.media.picker.MediaPickerActivity" android:configChanges="fontScale|orientation|screenSize" />
         <activity android:name=".views.media.singleView.MediaViewActivity" android:configChanges="fontScale|orientation|screenSize" />
         <activity android:name=".views.media.listView.MediaListViewActivity" android:configChanges="fontScale|orientation|screenSize" />
+        <activity android:name=".views.hospitalMap.hospitalTempDetail.HospitalTempDetailActivity" android:configChanges="fontScale|orientation|screenSize" />
+        <activity android:name=".views.hospitalMap.hospitalTempFind.HospitalTempFindActivity" android:configChanges="fontScale|orientation|screenSize" />
     </application>
 
 </manifest>

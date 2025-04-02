@@ -69,6 +69,7 @@ import sdmed.extra.cso.views.component.vector.FVectorData
 import sdmed.extra.cso.views.component.vector.vectorArrowLeft
 import sdmed.extra.cso.views.component.vector.vectorCircle
 import sdmed.extra.cso.views.component.vector.vectorCross
+import sdmed.extra.cso.views.hospitalMap.hospitalTempDetail.HospitalTempDetailActivity
 import sdmed.extra.cso.views.media.listView.MediaListViewActivity
 import sdmed.extra.cso.views.media.picker.MediaPickerActivity
 import sdmed.extra.cso.views.media.singleView.MediaViewActivity
@@ -91,6 +92,7 @@ fun ediScreenDetail(selectedItem: EDIUploadModel,
     val thisPK by dataContext.thisPK.collectAsState()
     dataContext.thisPK.value = selectedItem.thisPK
     addPharmaFilePK(dataContext)
+    hospitalTempDetail(dataContext)
     BackHandler() {
         if (closeAble) {
             onDismissRequest()
@@ -161,9 +163,13 @@ private fun topContainer(dataContext: EDIScreenDetailVM, isWide: Boolean = true)
                 Color.Unspecified)
             customText(CustomTextData().apply {
                 text = item.orgViewName
-                textColor = color.paragraph
+                textColor = if (item.tempHospitalPK.isEmpty()) color.paragraph else color.septenary
                 textAlign = TextAlign.Center
-                modifier = Modifier.weight(1F).clickable { dataContext.relayCommand.execute(EDIScreenDetailVM.ClickEvent.HOSPITAL_DETAIL)}
+                modifier = if (item.tempHospitalPK.isNotEmpty()) {
+                    Modifier.weight(1F).clickable { dataContext.relayCommand.execute(EDIScreenDetailVM.ClickEvent.HOSPITAL_DETAIL) }
+                } else {
+                    Modifier.weight(1F)
+                }
             })
             shapeRoundedBox(ShapeRoundedBoxData().apply {
                 backgroundColor = item.getEdiBackColor()
@@ -413,10 +419,43 @@ private fun addPharmaFileSelect(dataContext: EDIScreenDetailVM, context: Context
         return
     }
 
-    activityResult.launch(Intent(context, MediaPickerActivity::class.java).apply {
-        putExtra(FConstants.MEDIA_TARGET_PK, addPharmaFilePK)
-    })
+    checkReadStorage(dataContext) {
+        if (it) {
+            activityResult.launch(Intent(context, MediaPickerActivity::class.java).apply {
+                putExtra(FConstants.MEDIA_TARGET_PK, addPharmaFilePK)
+            })
+        }
+    }
     dataContext.addPharmaFilePK.value = null
+}
+
+@Composable
+private fun hospitalTempDetail(dataContext: EDIScreenDetailVM) {
+    val context = LocalContext.current
+    val hospitalTempDetail by dataContext.hospitalTempDetail.collectAsState()
+    val activityResult = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { }
+    LaunchedEffect(hospitalTempDetail) {
+        if (hospitalTempDetail) {
+            hospitalTempDetail(dataContext, context, activityResult)
+        }
+    }
+}
+private fun hospitalTempDetail(dataContext: EDIScreenDetailVM, context: Context, activityResult: ManagedActivityResultLauncher<Intent, ActivityResult>) {
+    val hospitalTempDetail = dataContext.hospitalTempDetail.value
+    if (!hospitalTempDetail) {
+        return
+    }
+    val tempHospitalPK = dataContext.item.value.tempHospitalPK
+    if (tempHospitalPK.isEmpty()) {
+        dataContext.hospitalTempDetail.value = false
+        return
+    }
+
+    activityResult.launch(Intent(context, HospitalTempDetailActivity::class.java).apply {
+        putExtra(FConstants.HOSPITAL_PK, tempHospitalPK)
+    })
+
+    dataContext.hospitalTempDetail.value = false
 }
 
 private fun setLayoutCommand(data: Any?, dataContext: EDIScreenDetailVM, onDismissRequest: () -> Unit) {
@@ -485,7 +524,7 @@ private fun dismiss(dataContext: EDIScreenDetailVM, onDismissRequest: () -> Unit
     dataContext.reSet()
 }
 private fun hospitalDetail(dataContext: EDIScreenDetailVM) {
-
+    dataContext.hospitalTempDetail.value = true
 }
 
 private fun addPharmaFile(dataContext: EDIScreenDetailVM, dataBuff: EDIUploadPharmaModel) {

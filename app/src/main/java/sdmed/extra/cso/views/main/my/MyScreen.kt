@@ -146,40 +146,56 @@ private fun taxImageSelect(dataContext: MyScreenVM, context: Context, activityRe
     if (dataContext.userFileSelect.value != UserFileType.Taxpayer.index) {
         return
     }
-    activityResult.launch(Intent(context, MediaPickerActivity::class.java).apply {
-        putExtra(FConstants.MEDIA_TARGET_PK, UserFileType.Taxpayer.index.toString())
-        putExtra(FConstants.MEDIA_MAX_COUNT, 1)
-    })
+    checkReadStorage(dataContext) {
+        if (it) {
+            activityResult.launch(Intent(context, MediaPickerActivity::class.java).apply {
+                putExtra(FConstants.MEDIA_TARGET_PK, UserFileType.Taxpayer.index.toString())
+                putExtra(FConstants.MEDIA_MAX_COUNT, 1)
+            })
+        }
+    }
     dataContext.userFileSelect.value = -1
 }
 private fun bankAccountSelect(dataContext: MyScreenVM, context: Context, activityResult: ManagedActivityResultLauncher<Intent, ActivityResult>) {
     if (dataContext.userFileSelect.value != UserFileType.BankAccount.index) {
         return
     }
-    activityResult.launch(Intent(context, MediaPickerActivity::class.java).apply {
-        putExtra(FConstants.MEDIA_TARGET_PK, UserFileType.BankAccount.index.toString())
-        putExtra(FConstants.MEDIA_MAX_COUNT, 1)
-    })
+    checkReadStorage(dataContext) {
+        if (it) {
+            activityResult.launch(Intent(context, MediaPickerActivity::class.java).apply {
+                putExtra(FConstants.MEDIA_TARGET_PK, UserFileType.BankAccount.index.toString())
+                putExtra(FConstants.MEDIA_MAX_COUNT, 1)
+            })
+        }
+    }
     dataContext.userFileSelect.value = -1
 }
 private fun csoReportSelect(dataContext: MyScreenVM, context: Context, activityResult: ManagedActivityResultLauncher<Intent, ActivityResult>) {
     if (dataContext.userFileSelect.value != UserFileType.CsoReport.index) {
         return
     }
-    activityResult.launch(Intent(context, MediaPickerActivity::class.java).apply {
-        putExtra(FConstants.MEDIA_TARGET_PK, UserFileType.CsoReport.index.toString())
-        putExtra(FConstants.MEDIA_MAX_COUNT, 1)
-    })
+    checkReadStorage(dataContext) {
+        if (it) {
+            activityResult.launch(Intent(context, MediaPickerActivity::class.java).apply {
+                putExtra(FConstants.MEDIA_TARGET_PK, UserFileType.CsoReport.index.toString())
+                putExtra(FConstants.MEDIA_MAX_COUNT, 1)
+            })
+        }
+    }
     dataContext.userFileSelect.value = -1
 }
 private fun marketingContractSelect(dataContext: MyScreenVM, context: Context, activityResult: ManagedActivityResultLauncher<Intent, ActivityResult>) {
     if (dataContext.userFileSelect.value != UserFileType.MarketingContract.index) {
         return
     }
-    activityResult.launch(Intent(context, MediaPickerActivity::class.java).apply {
-        putExtra(FConstants.MEDIA_TARGET_PK, UserFileType.MarketingContract.index.toString())
-        putExtra(FConstants.MEDIA_MAX_COUNT, 1)
-    })
+    checkReadStorage(dataContext) {
+        if (it) {
+            activityResult.launch(Intent(context, MediaPickerActivity::class.java).apply {
+                putExtra(FConstants.MEDIA_TARGET_PK, UserFileType.MarketingContract.index.toString())
+                putExtra(FConstants.MEDIA_MAX_COUNT, 1)
+            })
+        }
+    }
     dataContext.userFileSelect.value = -1
 }
 private fun getMyScreenData(dataContext: MyScreenVM) {
@@ -329,9 +345,6 @@ private fun marketingContract(dataContext: MyScreenVM) {
     }
 }
 
-private fun checkCamera(dataContext: MyScreenVM, callback: (Boolean) -> Unit) {
-    dataContext.permissionService.requestCameraPermissions(callback)
-}
 private fun checkExternalStorage(dataContext: MyScreenVM) {
     dataContext.permissionService.externalStorage()
 }

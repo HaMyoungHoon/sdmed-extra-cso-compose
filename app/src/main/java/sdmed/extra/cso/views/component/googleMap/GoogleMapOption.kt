@@ -1,4 +1,4 @@
-package sdmed.extra.cso.utils.googleMap
+package sdmed.extra.cso.views.component.googleMap
 
 import java.util.EnumSet
 import kotlin.collections.toTypedArray

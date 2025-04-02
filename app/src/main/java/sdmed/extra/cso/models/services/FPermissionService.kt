@@ -43,6 +43,14 @@ class FPermissionService(applicationContext: Context): FBaseService(applicationC
             requestPermissions(FConstants.READ_EXTERNAL_PERMISSION_34, callback)
         }
     }
+    fun requestLocation(callback: (Boolean) -> Unit) {
+        if (hasLocationGranted(context)) {
+            callback(true)
+            return
+        }
+
+        requestPermissions(FConstants.LOCATION_PERMISSION, callback)
+    }
     fun requestPermissions(permit: String, callback: (Boolean) -> Unit) {
         val intent = Intent(context, PermissionActivity::class.java).apply {
             putExtra(FConstants.PERMISSION, permit)
@@ -71,6 +79,9 @@ class FPermissionService(applicationContext: Context): FBaseService(applicationC
         } else {
             hasPermissionsGranted(context, FConstants.READ_EXTERNAL_PERMISSION_34)
         }
+    }
+    fun hasLocationGranted(context: Context): Boolean {
+        return hasPermissionsGranted(context, FConstants.LOCATION_PERMISSION)
     }
     fun hasPermissionsGranted(context: Context, permission: String) = ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED
     fun hasPermissionsGranted(context: Context, permissions: Array<String>) = permissions.all {

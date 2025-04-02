@@ -6,7 +6,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import sdmed.extra.cso.bases.FDataModelClass
-import sdmed.extra.cso.utils.googleMap.MarkerClusterDataModel
+import sdmed.extra.cso.views.component.googleMap.MarkerClusterDataModel
+import sdmed.extra.cso.views.component.googleMap.MarkerClusterType
 
 @Parcelize
 data class HospitalTempModel(
@@ -24,6 +25,7 @@ data class HospitalTempModel(
     var openDate: String = "",
     var longitude: Double = 0.0,
     var latitude: Double = 0.0,
+    var markerType: MarkerClusterType = MarkerClusterType.HOSPITAL,
     var fileList: MutableList<HospitalTempModel> = mutableListOf()
 ): FDataModelClass<HospitalTempModel.ClickEvent>(), Parcelable {
     @IgnoredOnParcel
@@ -41,6 +43,7 @@ data class HospitalTempModel(
         ret.latitude = this.latitude
         ret.longitude = this.longitude
         ret.resDrawableId = R.drawable.hospital_red
+        ret.markerType = this.markerType
         return ret
     }
     fun parse(data: MarkerClusterDataModel): HospitalTempModel {
@@ -55,6 +58,8 @@ data class HospitalTempModel(
     }
 
     enum class ClickEvent(var index: Int) {
-        THIS(0)
+        THIS(0),
+        WEB_SITE(1),
+        PHONE_NUMBER(2),
     }
 }
