@@ -68,6 +68,8 @@ import sdmed.extra.cso.views.component.customText.customTextField
 import sdmed.extra.cso.views.component.shape.ShapeRoundedBoxData
 import sdmed.extra.cso.views.component.shape.shapeRoundedBox
 import sdmed.extra.cso.views.component.vector.FVectorData
+import sdmed.extra.cso.views.component.vector.vectorArrowDown
+import sdmed.extra.cso.views.component.vector.vectorArrowUp
 import sdmed.extra.cso.views.component.vector.vectorCircle
 import sdmed.extra.cso.views.component.vector.vectorCross
 import sdmed.extra.cso.views.media.picker.MediaPickerActivity
@@ -108,7 +110,7 @@ private fun homeEDIRequestScreenTwoPane(dataContext: HomeEDIRequestScreenVM, dis
         Box(Modifier.fillMaxSize().background(color.background)) {
             Column {
                 ediDateContainer(dataContext)
-                ediHospitalContainer(dataContext)
+                ediHospitalContainer(dataContext, true)
             }
         }
     } else {
@@ -116,13 +118,13 @@ private fun homeEDIRequestScreenTwoPane(dataContext: HomeEDIRequestScreenVM, dis
             Box(Modifier.fillMaxSize().background(color.background)) {
                 Column {
                     ediDateContainer(dataContext)
-                    ediHospitalContainer(dataContext)
+                    ediHospitalContainer(dataContext, true)
                 }
             }
         }, {
             Box(Modifier.fillMaxSize().background(color.background)) {
                 Column {
-                    ediPharmaContainer(dataContext)
+                    ediPharmaContainer(dataContext, true)
                 }
             }
         },
@@ -160,28 +162,42 @@ private fun ediDateContainer(dataContext: HomeEDIRequestScreenVM) {
     val color = FThemeUtil.safeColorC()
     val applyDateModel by dataContext.applyDateModel.collectAsState()
     val selectApplyDate by dataContext.selectApplyDate.collectAsState()
+    val isSavable by dataContext.isSavable.collectAsState()
     Box(Modifier.fillMaxWidth().padding(5.dp)) {
-        Column(Modifier.fillMaxWidth().align(Alignment.Center)) {
-            customText(CustomTextData().apply {
-                text = stringResource(R.string.edi_date_select_desc)
-                textColor = color.foreground
-                textAlign = TextAlign.Center
-                modifier = Modifier.fillMaxWidth()
-            })
-            LazyRow(Modifier.align(Alignment.CenterHorizontally)) {
-                items(applyDateModel, { it.thisPK }) { item ->
-                    item.relayCommand = dataContext.relayCommand
-                    shapeRoundedBox(ShapeRoundedBoxData().apply {
-                        backgroundColor = if (selectApplyDate?.thisPK == item.thisPK) color.onPrimary else color.disableBackGray
-                        modifier = Modifier.padding(5.dp).clickable { item.onClick(EDIApplyDateModel.ClickEvent.THIS) }
-                    }) {
-                        customText(CustomTextData().apply {
-                            text = item.yearMonth
-                            textColor = if (selectApplyDate?.thisPK == item.thisPK) color.primary else color.disableForeGray
-                            modifier = Modifier.padding(start = 10.dp, end = 10.dp)
-                        })
+        Row(Modifier.fillMaxWidth()) {
+            Column(Modifier.weight(1F).align(Alignment.CenterVertically)) {
+                customText(CustomTextData().apply {
+                    text = stringResource(R.string.edi_date_select_desc)
+                    textColor = color.foreground
+                    textAlign = TextAlign.Center
+                    modifier = Modifier.fillMaxWidth()
+                })
+                LazyRow(Modifier.align(Alignment.CenterHorizontally)) {
+                    items(applyDateModel, { it.thisPK }) { item ->
+                        item.relayCommand = dataContext.relayCommand
+                        shapeRoundedBox(ShapeRoundedBoxData().apply {
+                            backgroundColor = if (selectApplyDate?.thisPK == item.thisPK) color.onPrimary else color.disableBackGray
+                            modifier = Modifier.padding(5.dp).clickable { item.onClick(EDIApplyDateModel.ClickEvent.THIS) }
+                        }) {
+                            customText(CustomTextData().apply {
+                                text = item.yearMonth
+                                textColor = if (selectApplyDate?.thisPK == item.thisPK) color.primary else color.disableForeGray
+                                modifier = Modifier.padding(top = 5.dp, bottom = 5.dp, start = 10.dp, end = 10.dp)
+                            })
+                        }
                     }
                 }
+            }
+            shapeRoundedBox(ShapeRoundedBoxData().apply {
+                backgroundColor = if (isSavable) color.buttonBackground else color.disableBackGray
+                modifier = Modifier.padding(5.dp).align(Alignment.CenterVertically)
+                    .clickable { dataContext.relayCommand.execute(HomeEDIRequestScreenVM.ClickEvent.SAVE) }
+            }) {
+                customText(CustomTextData().apply {
+                    text = stringResource(R.string.save_desc)
+                    textColor = if (isSavable) color.buttonForeground else color.disableForeGray
+                    modifier = Modifier.padding(top = 5.dp, bottom = 5.dp, start = 10.dp, end = 10.dp)
+                })
             }
         }
     }
@@ -189,6 +205,7 @@ private fun ediDateContainer(dataContext: HomeEDIRequestScreenVM) {
 @Composable
 private fun ediHospitalContainer(dataContext: HomeEDIRequestScreenVM, isTwoPane: Boolean = false) {
     val color = FThemeUtil.safeColorC()
+    val hospitalOpen by dataContext.hospitalOpen.collectAsState()
     val hospitalModel by dataContext.hospitalModel.collectAsState()
     val selectHospital by dataContext.selectHospital.collectAsState()
     shapeRoundedBox(ShapeRoundedBoxData().apply {
@@ -198,27 +215,42 @@ private fun ediHospitalContainer(dataContext: HomeEDIRequestScreenVM, isTwoPane:
         modifier = Modifier.fillMaxWidth().padding(5.dp)
     }) {
         Column(Modifier.align(Alignment.Center)) {
-            customText(CustomTextData().apply {
-                text = stringResource(R.string.edi_hospital_select_desc)
-                textColor = color.foreground
-                textAlign = TextAlign.Center
-                modifier = Modifier.fillMaxWidth()
-            })
-            val lazyModifier = if (isTwoPane) Modifier.fillMaxSize() else Modifier.fillMaxWidth().heightIn(0.dp, 300.dp)
-            LazyColumn(lazyModifier) {
-                items(hospitalModel, { it.thisPK }) { item ->
-                    item.relayCommand = dataContext.relayCommand
-                    shapeRoundedBox(ShapeRoundedBoxData().apply {
-                        backgroundColor = if (selectHospital?.thisPK == item.thisPK) color.onPrimary else color.disableBackGray
-                        modifier = Modifier.fillMaxWidth().padding(5.dp).clickable { item.onClick(EDIHosBuffModel.ClickEvent.THIS)}
-                    }) {
-                        customText(CustomTextData().apply {
-                            text = item.orgName
-                            textColor = if(selectHospital?.thisPK == item.thisPK) color.primary else color.disableForeGray
-                            maxLines = 2
-                            overflow = TextOverflow.Ellipsis
-                            modifier = Modifier.fillMaxSize().padding(10.dp)
-                        })
+            Row(Modifier.clickable { dataContext.relayCommand.execute(HomeEDIRequestScreenVM.ClickEvent.HOSPITAL_OPEN) }) {
+                customText(CustomTextData().apply {
+                    text = stringResource(R.string.edi_hospital_select_desc)
+                    textColor = color.foreground
+                    textAlign = TextAlign.Center
+                    modifier = Modifier.padding(10.dp).weight(1F).align(Alignment.CenterVertically)
+                })
+                if (hospitalOpen) {
+                    Icon(vectorArrowDown(FVectorData(color.background, color.foreground)),
+                        stringResource(R.string.open_desc),
+                        Modifier.padding(end = 5.dp).align(Alignment.CenterVertically),
+                        Color.Unspecified)
+                } else {
+                    Icon(vectorArrowUp(FVectorData(color.background, color.foreground)),
+                        stringResource(R.string.close_desc),
+                        Modifier.padding(end = 5.dp).align(Alignment.CenterVertically),
+                        Color.Unspecified)
+                }
+            }
+            if (hospitalOpen) {
+                val lazyModifier = if (isTwoPane) Modifier.fillMaxSize() else Modifier.fillMaxWidth().heightIn(0.dp, 300.dp)
+                LazyColumn(lazyModifier) {
+                    items(hospitalModel, { it.thisPK }) { item ->
+                        item.relayCommand = dataContext.relayCommand
+                        shapeRoundedBox(ShapeRoundedBoxData().apply {
+                            backgroundColor = if (selectHospital?.thisPK == item.thisPK) color.onPrimary else color.disableBackGray
+                            modifier = Modifier.fillMaxWidth().padding(5.dp).clickable { item.onClick(EDIHosBuffModel.ClickEvent.THIS)}
+                        }) {
+                            customText(CustomTextData().apply {
+                                text = item.orgName
+                                textColor = if(selectHospital?.thisPK == item.thisPK) color.primary else color.disableForeGray
+                                maxLines = 2
+                                overflow = TextOverflow.Ellipsis
+                                modifier = Modifier.fillMaxSize().padding(10.dp)
+                            })
+                        }
                     }
                 }
             }
@@ -230,91 +262,86 @@ private fun ediPharmaContainer(dataContext: HomeEDIRequestScreenVM, isTwoPane: B
     val color = FThemeUtil.safeColorC()
     val pharmaViewModel by dataContext.pharmaViewModel.collectAsState()
     val searchString by dataContext.searchString.collectAsState()
-    val isSavable by dataContext.isSavable.collectAsState()
-    Column {
-        shapeRoundedBox(ShapeRoundedBoxData().apply {
-            backgroundColor = color.background
-            borderColor = color.primary
-            borderSize = 1.dp
-            modifier = Modifier.fillMaxWidth().padding(5.dp)
-        }) {
-            Column(Modifier.align(Alignment.Center)) {
-                shapeRoundedBox(ShapeRoundedBoxData().apply {
-                    backgroundColor = color.background
-                    borderColor = color.primary
-                    borderSize = 1.dp
-                    modifier = Modifier.fillMaxWidth().padding(5.dp)
-                }) {
-                    customTextField(CustomTextFieldData().apply {
-                        text = searchString
-                        modifier = Modifier.padding(10.dp)
-                        onValueChange = {
-                            dataContext.searchString.value = it
-                        }
-                        decorationBox = { searchDecorationBox(it, searchString, color) }
-                    })
-                }
-                val lazyModifier = if (isTwoPane) Modifier.fillMaxSize() else Modifier.fillMaxWidth().heightIn(0.dp, 300.dp)
-                LazyColumn(lazyModifier) {
-                    items(pharmaViewModel, { it.thisPK }) { item ->
-                        item.relayCommand = dataContext.relayCommand
-                        val uploadItemCount by item.uploadItemCount.collectAsState()
-                        val isOpen by item.isOpen.collectAsState()
-                        shapeRoundedBox(ShapeRoundedBoxData().apply {
-                            backgroundColor = color.cardBackground
-                            modifier = Modifier.fillMaxWidth().padding(5.dp).clickable { item.onClick(EDIPharmaBuffModel.ClickEvent.OPEN)}
-                        }) {
-                            Column(Modifier.padding(5.dp)) {
-                                Row(Modifier, Arrangement.SpaceBetween) {
+    shapeRoundedBox(ShapeRoundedBoxData().apply {
+        backgroundColor = color.background
+        borderColor = color.primary
+        borderSize = 1.dp
+        modifier = Modifier.fillMaxWidth().padding(5.dp)
+    }) {
+        Column(Modifier.align(Alignment.Center)) {
+            shapeRoundedBox(ShapeRoundedBoxData().apply {
+                backgroundColor = color.background
+                borderColor = color.primary
+                borderSize = 1.dp
+                modifier = Modifier.fillMaxWidth().padding(5.dp)
+            }) {
+                customTextField(CustomTextFieldData().apply {
+                    text = searchString
+                    modifier = Modifier.padding(10.dp)
+                    onValueChange = {
+                        dataContext.searchString.value = it
+                    }
+                    decorationBox = { searchDecorationBox(it, searchString, color) }
+                })
+            }
+            val lazyModifier = if (isTwoPane) Modifier.fillMaxSize() else Modifier.fillMaxWidth().heightIn(0.dp, 300.dp)
+            LazyColumn(lazyModifier) {
+                items(pharmaViewModel, { it.thisPK }) { item ->
+                    item.relayCommand = dataContext.relayCommand
+                    val uploadItemCount by item.uploadItemCount.collectAsState()
+                    val isOpen by item.isOpen.collectAsState()
+                    shapeRoundedBox(ShapeRoundedBoxData().apply {
+                        backgroundColor = color.cardBackground
+                        modifier = Modifier.fillMaxWidth().padding(5.dp).clickable { item.onClick(EDIPharmaBuffModel.ClickEvent.OPEN)}
+                    }) {
+                        Column(Modifier.padding(5.dp)) {
+                            Row(Modifier, Arrangement.SpaceBetween) {
+                                customText(CustomTextData().apply {
+                                    text = item.orgName
+                                    textColor = color.cardForeground
+                                    overflow = TextOverflow.Ellipsis
+                                    modifier = Modifier.weight(1F).align(Alignment.CenterVertically)
+                                })
+                                Row(Modifier.align(Alignment.CenterVertically)) {
                                     customText(CustomTextData().apply {
-                                        text = item.orgName
-                                        textColor = color.cardForeground
-                                        overflow = TextOverflow.Ellipsis
-                                        modifier = Modifier.weight(1F).align(Alignment.CenterVertically)
+                                        text = uploadItemCount
+                                        textColor = color.foreground
+                                        modifier = Modifier.align(Alignment.CenterVertically)
                                     })
-                                    Row(Modifier.align(Alignment.CenterVertically)) {
+                                    shapeRoundedBox(ShapeRoundedBoxData().apply {
+                                        backgroundColor = color.buttonBackground
+                                        modifier = Modifier.padding(5.dp).clickable { item.onClick(EDIPharmaBuffModel.ClickEvent.ADD)}
+                                    }) {
                                         customText(CustomTextData().apply {
-                                            text = uploadItemCount
-                                            textColor = color.foreground
-                                            modifier = Modifier.align(Alignment.CenterVertically)
+                                            text = stringResource(R.string.add_file_desc)
+                                            textColor = color.buttonForeground
+                                            modifier = Modifier.padding(top = 5.dp, bottom = 5.dp, start = 10.dp, end = 10.dp)
                                         })
-                                        shapeRoundedBox(ShapeRoundedBoxData().apply {
-                                            backgroundColor = color.buttonBackground
-                                            modifier = Modifier.padding(5.dp).clickable { item.onClick(EDIPharmaBuffModel.ClickEvent.ADD)}
-                                        }) {
-                                            customText(CustomTextData().apply {
-                                                text = stringResource(R.string.add_file_desc)
-                                                textColor = color.buttonForeground
-                                                modifier = Modifier.padding(start = 10.dp, end = 10.dp)
-                                            })
-                                        }
                                     }
                                 }
-                                if (isOpen) {
-                                    val uploadItems by item.uploadItems.collectAsState()
-                                    LazyRow(Modifier.padding(5.dp)) {
-                                        items(uploadItems, { it.thisPK }) { uploadItem ->
-                                            uploadItem.relayCommand = dataContext.relayCommand
-                                            Box(Modifier) {
-                                                shapeRoundedBox(ShapeRoundedBoxData().apply {
-                                                    backgroundColor = color.transparent
-                                                }) {
-                                                    Box(Modifier.align(Alignment.TopEnd).zIndex(100F).clickable { uploadItem.onClick(MediaPickerSourceModel.ClickEvent.SELECT) },
-                                                        contentAlignment = Alignment.Center) {
-                                                        Icon(vectorCircle(FVectorData(color.background, color.primary)),
-                                                            stringResource(R.string.remove_desc),
-                                                            Modifier, Color.Unspecified)
-                                                        Icon(vectorCross(FVectorData(color.background, color.primary)),
-                                                            stringResource(R.string.remove_desc),
-                                                            Modifier, Color.Unspecified)
-                                                    }
-                                                    fImageLoad(uploadItem.mediaUrl,
-                                                        uploadItem.mediaFileType,
-                                                        uploadItem.mediaName,
-                                                        Modifier.width(100.dp).height(100.dp).padding(10.dp),
-                                                        ContentScale.Crop)
-                                                }
+                            }
+                            if (isOpen) {
+                                val uploadItems by item.uploadItems.collectAsState()
+                                LazyRow(Modifier.padding(5.dp)) {
+                                    items(uploadItems, { it.thisPK }) { uploadItem ->
+                                        uploadItem.relayCommand = dataContext.relayCommand
+                                        shapeRoundedBox(ShapeRoundedBoxData().apply {
+                                            backgroundColor = color.transparent
+                                        }) {
+                                            Box(Modifier.align(Alignment.TopEnd).zIndex(100F).clickable { uploadItem.onClick(MediaPickerSourceModel.ClickEvent.SELECT) },
+                                                contentAlignment = Alignment.Center) {
+                                                Icon(vectorCircle(FVectorData(color.background, color.primary)),
+                                                    stringResource(R.string.remove_desc),
+                                                    Modifier, Color.Unspecified)
+                                                Icon(vectorCross(FVectorData(color.background, color.primary)),
+                                                    stringResource(R.string.remove_desc),
+                                                    Modifier, Color.Unspecified)
                                             }
+                                            fImageLoad(uploadItem.mediaUrl,
+                                                uploadItem.mediaFileType,
+                                                uploadItem.mediaName,
+                                                Modifier.width(100.dp).height(100.dp).padding(10.dp),
+                                                ContentScale.Crop)
                                         }
                                     }
                                 }
@@ -322,19 +349,6 @@ private fun ediPharmaContainer(dataContext: HomeEDIRequestScreenVM, isTwoPane: B
                         }
                     }
                 }
-            }
-        }
-        if (isSavable) {
-            shapeRoundedBox(ShapeRoundedBoxData().apply {
-                backgroundColor = color.buttonBackground
-                modifier = Modifier.padding(5.dp).align(Alignment.CenterHorizontally)
-                    .clickable { dataContext.relayCommand.execute(HomeEDIRequestScreenVM.ClickEvent.SAVE) }
-            }) {
-                customText(CustomTextData().apply {
-                    text = stringResource(R.string.save_desc)
-                    textColor = color.buttonForeground
-                    modifier = Modifier.padding(10.dp)
-                })
             }
         }
     }
@@ -407,6 +421,7 @@ private fun setThisCommand(data: Any?, dataContext: HomeEDIRequestScreenVM) {
     val eventName = data as? HomeEDIRequestScreenVM.ClickEvent ?: return
     when (eventName) {
         HomeEDIRequestScreenVM.ClickEvent.SAVE -> save(dataContext)
+        HomeEDIRequestScreenVM.ClickEvent.HOSPITAL_OPEN -> dataContext.hospitalOpen.value = !dataContext.hospitalOpen.value
     }
 }
 private fun setApplyDateCommand(data: Any?, dataContext: HomeEDIRequestScreenVM) {

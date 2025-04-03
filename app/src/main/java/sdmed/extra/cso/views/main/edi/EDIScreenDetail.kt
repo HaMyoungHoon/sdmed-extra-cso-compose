@@ -178,7 +178,7 @@ private fun topContainer(dataContext: EDIScreenDetailVM, isWide: Boolean = true)
                 customText(CustomTextData().apply {
                     text = item.ediState.desc
                     textColor = item.getEdiColor()
-                    modifier = Modifier.padding(start = 10.dp, end = 10.dp)
+                    modifier = Modifier.padding(top = 5.dp, bottom = 5.dp, start = 10.dp, end = 10.dp)
                 })
             }
         }
@@ -279,7 +279,7 @@ private fun pharmaFileUploadContainer(dataContext: EDIScreenDetailVM, item: EDIU
     Box(Modifier) {
         Column(Modifier.fillMaxWidth()) {
             if (uploadItems.isNotEmpty()) {
-                LazyRow(Modifier.padding(start = 10.dp, end = 10.dp)) {
+                LazyRow(Modifier.padding(top = 5.dp, bottom = 5.dp, start = 10.dp, end = 10.dp)) {
                     items(uploadItems, { it.thisPK }) { item ->
                         pharmaFileUploadItemContainer(dataContext, item)
                     }
@@ -375,7 +375,7 @@ private fun responseItemContainer(dataContext: EDIScreenDetailVM, item: EDIUploa
                     customText(CustomTextData().apply {
                         text = item.ediState.desc
                         textColor = item.ediState.parseEDIColor()
-                        modifier = Modifier.padding(start = 10.dp, end = 10.dp)
+                        modifier = Modifier.padding(top = 5.dp, bottom = 5.dp, start = 10.dp, end = 10.dp)
                     })
                 }
             }

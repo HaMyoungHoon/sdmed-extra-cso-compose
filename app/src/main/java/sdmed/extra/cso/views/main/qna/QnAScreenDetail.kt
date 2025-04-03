@@ -164,7 +164,7 @@ private fun topContainer(dataContext: QnAScreenDetailVM, isWide: Boolean = true)
                 customText(CustomTextData().apply {
                     text = headerModel.qnaState.desc
                     textColor = headerModel.qnaState.parseQnAColor()
-                    modifier = Modifier.padding(start = 10.dp, end = 10.dp)
+                    modifier = Modifier.padding(top = 5.dp, bottom = 5.dp, start = 10.dp, end = 10.dp)
                 })
             }
         }

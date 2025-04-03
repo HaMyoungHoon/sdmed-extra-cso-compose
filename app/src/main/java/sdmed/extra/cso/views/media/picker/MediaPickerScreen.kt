@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -59,6 +61,8 @@ import sdmed.extra.cso.utils.fCoilLoad
 import sdmed.extra.cso.utils.fImageLoad
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
+import sdmed.extra.cso.views.component.shape.ShapeRoundedBoxData
+import sdmed.extra.cso.views.component.shape.shapeRoundedBox
 import sdmed.extra.cso.views.component.vector.FVectorData
 import sdmed.extra.cso.views.component.vector.vectorArrowDown
 import sdmed.extra.cso.views.component.vector.vectorCheck
@@ -138,19 +142,20 @@ private fun topContainer(dataContext: MediaPickerActivityVM) {
             if (boxes.isNotEmpty()) {
                 ExposedDropdownMenuBox(expanded, { expanded = !expanded },
                     Modifier) {
-                    TextField(value = boxes[boxPosition],
-                        textStyle = exposedTextStyle(),
-                        onValueChange =  {},
-                        modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable).background(color.background),
-                        readOnly = true,
-                        singleLine = true,
-                        trailingIcon = { Icon(vectorArrowDown(FVectorData(color.background, color.primary)),
-                            stringResource(R.string.select_desc),
-                            Modifier,
-                            Color.Unspecified) },
-                        colors = exposedDropColor()
-                    )
-                    ExposedDropdownMenu(expanded, { expanded = false}) {
+                    shapeRoundedBox(ShapeRoundedBoxData().apply {
+                        backgroundColor = color.primaryContainer
+                        modifier = Modifier.padding(5.dp).menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                    }) {
+                        Row(Modifier.padding(10.dp)) {
+                            customText(CustomTextData().apply {
+                                text = boxes[boxPosition]
+                                textColor = color.primary
+                            })
+                            Icon(vectorArrowDown(FVectorData(color.background, color.primary)),
+                                stringResource(R.string.select_desc), Modifier.width(IntrinsicSize.Min), Color.Unspecified)
+                        }
+                    }
+                    ExposedDropdownMenu(expanded, { expanded = false }) {
                         boxes.forEachIndexed { index, box ->
                             DropdownMenuItem({
                                 customText(CustomTextData().apply {
@@ -233,59 +238,6 @@ private fun mediaListContainer(dataContext: MediaPickerActivityVM) {
             }
         }
     }
-}
-
-@Composable
-private fun exposedTextStyle(): TextStyle = TextStyle(
-    fontWeight = FontWeight.Normal,
-    fontSize = 20.sp,
-    lineHeight = 0.sp,
-    letterSpacing = 0.sp
-)
-@Composable
-private fun exposedDropColor(): TextFieldColors {
-    val color = FThemeUtil.safeColorC()
-    return TextFieldDefaults.colors(
-        focusedTextColor = color.primary,
-        unfocusedTextColor = color.primary,
-        disabledTextColor = color.disableForeGray,
-        errorTextColor = color.error,
-        focusedContainerColor = color.primaryContainer,
-        unfocusedContainerColor = color.primaryContainer,
-        disabledContainerColor = color.paragraph,
-        errorContainerColor = color.errorContainer,
-        cursorColor = color.paragraph,
-        errorCursorColor = color.error,
-        selectionColors = null,
-        focusedIndicatorColor = color.transparent,
-        unfocusedIndicatorColor = color.transparent,
-        disabledIndicatorColor = color.disableForeGray,
-        errorIndicatorColor = color.errorContainer,
-        focusedLeadingIconColor = color.primary,
-        unfocusedLeadingIconColor = color.primary,
-        disabledLeadingIconColor = color.disableForeGray,
-        errorLeadingIconColor = color.error,
-        focusedTrailingIconColor = color.primary,
-        unfocusedTrailingIconColor = color.primary,
-        disabledTrailingIconColor = color.disableForeGray,
-        errorTrailingIconColor = color.error,
-        focusedLabelColor = color.primary,
-        unfocusedLabelColor = color.primary,
-        disabledLabelColor = color.disableForeGray,
-        errorLabelColor = color.error,
-        focusedPlaceholderColor = color.primary,
-        unfocusedPlaceholderColor = color.primary,
-        disabledPlaceholderColor = color.disableForeGray,
-        errorPlaceholderColor = color.error,
-        focusedPrefixColor = color.primary,
-        unfocusedPrefixColor = color.primary,
-        disabledPrefixColor = color.disableForeGray,
-        errorPrefixColor = color.error,
-        focusedSuffixColor = color.primary,
-        unfocusedSuffixColor = color.primary,
-        disabledSuffixColor = color.disableForeGray,
-        errorSuffixColor = color.error,
-    )
 }
 
 

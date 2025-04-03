@@ -11,14 +11,18 @@ import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
+import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import sdmed.extra.cso.bases.FMainApplication
 import sdmed.extra.cso.interfaces.theme.IBaseColor
@@ -93,7 +97,6 @@ object FThemeUtil {
 
     fun textUnit(size: Float, unitType: TextUnitType = TextUnitType.Sp) = TextUnit(size, unitType)
 
-
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun datePickerColors(): DatePickerColors {
@@ -124,6 +127,58 @@ object FThemeUtil {
             dayInSelectionRangeContainerColor = color.primaryContainer,
             dividerColor = color.secondary,
             dateTextFieldColors = null
+        )
+    }
+    @Composable
+    fun exposedTextStyle(): TextStyle = TextStyle(
+        fontWeight = FontWeight.Normal,
+        fontSize = 20.sp,
+        lineHeight = 0.sp,
+        letterSpacing = 0.sp
+    )
+    @Composable
+    fun exposedDropColor(): TextFieldColors {
+        val color = FThemeUtil.safeColorC()
+        return TextFieldDefaults.colors(
+            focusedTextColor = color.primary,
+            unfocusedTextColor = color.primary,
+            disabledTextColor = color.disableForeGray,
+            errorTextColor = color.error,
+            focusedContainerColor = color.primaryContainer,
+            unfocusedContainerColor = color.primaryContainer,
+            disabledContainerColor = color.paragraph,
+            errorContainerColor = color.errorContainer,
+            cursorColor = color.paragraph,
+            errorCursorColor = color.error,
+            selectionColors = null,
+            focusedIndicatorColor = color.transparent,
+            unfocusedIndicatorColor = color.transparent,
+            disabledIndicatorColor = color.disableForeGray,
+            errorIndicatorColor = color.errorContainer,
+            focusedLeadingIconColor = color.primary,
+            unfocusedLeadingIconColor = color.primary,
+            disabledLeadingIconColor = color.disableForeGray,
+            errorLeadingIconColor = color.error,
+            focusedTrailingIconColor = color.primary,
+            unfocusedTrailingIconColor = color.primary,
+            disabledTrailingIconColor = color.disableForeGray,
+            errorTrailingIconColor = color.error,
+            focusedLabelColor = color.primary,
+            unfocusedLabelColor = color.primary,
+            disabledLabelColor = color.disableForeGray,
+            errorLabelColor = color.error,
+            focusedPlaceholderColor = color.primary,
+            unfocusedPlaceholderColor = color.primary,
+            disabledPlaceholderColor = color.disableForeGray,
+            errorPlaceholderColor = color.error,
+            focusedPrefixColor = color.primary,
+            unfocusedPrefixColor = color.primary,
+            disabledPrefixColor = color.disableForeGray,
+            errorPrefixColor = color.error,
+            focusedSuffixColor = color.primary,
+            unfocusedSuffixColor = color.primary,
+            disabledSuffixColor = color.disableForeGray,
+            errorSuffixColor = color.error,
         )
     }
 }

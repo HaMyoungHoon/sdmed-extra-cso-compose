@@ -31,8 +31,9 @@ class HomeEDIRequestScreenVM(applicationContext: Context? = null): FBaseViewMode
     private val eventChannel = FEventBus.createEventChannel<EventList.EDIUploadEvent>()
     val applyDateModel = MutableStateFlow(mutableListOf<EDIApplyDateModel>())
     val selectApplyDate = MutableStateFlow<EDIApplyDateModel?>(null)
+    val hospitalOpen = MutableStateFlow(true)
     val hospitalModel = MutableStateFlow(mutableListOf<EDIHosBuffModel>())
-    var selectHospital= MutableStateFlow<EDIHosBuffModel?>(null)
+    val selectHospital = MutableStateFlow<EDIHosBuffModel?>(null)
     val searchString = MutableStateFlow<String>("")
     val pharmaModel = MutableStateFlow(mutableListOf<EDIPharmaBuffModel>())
     val pharmaViewModel = MutableStateFlow(mutableListOf<EDIPharmaBuffModel>())
@@ -223,5 +224,6 @@ class HomeEDIRequestScreenVM(applicationContext: Context? = null): FBaseViewMode
 
     enum class ClickEvent(var index: Int) {
         SAVE(0),
+        HOSPITAL_OPEN(1)
     }
 }

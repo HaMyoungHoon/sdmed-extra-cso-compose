@@ -190,7 +190,7 @@ private fun fileUploadContainer(dataContext: QnAScreenAddVM) {
     Box(Modifier) {
         Column(Modifier.fillMaxWidth()) {
             if (uploadBuff.isNotEmpty()) {
-                LazyRow(Modifier.padding(start = 10.dp, end = 10.dp)) {
+                LazyRow(Modifier.padding(top = 5.dp, bottom = 5.dp, start = 10.dp, end = 10.dp)) {
                     items(uploadBuff, { it.thisPK }) { item ->
                         uploadItemContainer(dataContext, item)
                     }
