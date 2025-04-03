@@ -103,9 +103,9 @@ class FBackgroundQnAUpload(applicationContext: Context): FBaseService(applicatio
     }
     private fun checkAzureQ(data: QnAAzureQueueModel) {
         FCoroutineUtil.coroutineScope({
-            data.media.mediaPath?.let { uri ->
+            data.media.mediaUrl?.let { url ->
                 try {
-                    val cachedFile = FImageUtils.uriToFile(context, uri, data.media.mediaName)
+                    val cachedFile = FImageUtils.urlToFile(context, url, data.media.mediaName)
                     val ret = azureBlobRepository.upload(data.qnaFileModel.blobUrlKey(), cachedFile, data.qnaFileModel.mimeType)
                     FImageUtils.fileDelete(context, cachedFile)
                     if (ret.isSuccessful) {

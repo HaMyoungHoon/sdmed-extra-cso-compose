@@ -137,6 +137,9 @@ object FExtensions {
             magicNumber.startsWith("42 4D") -> "file.bmp"
             magicNumber.startsWith("52 49 46 46") && getMagicNumber(file, 12).contains("57 45 42 50") -> "file.webp"
             magicNumber.startsWith("66 74 79 70 68 65 69 63") -> "file.heic"
+            magicNumber.startsWith("00 00 00 18 66 74 79 70 33 67 70 35") -> "file.mp4"
+            magicNumber.startsWith("52 49 46 46 FF FF FF FF 41 56 49 20 4C 49 53 54") -> "file.avi"
+            magicNumber.startsWith("00 00 00 18 66 74 79 70 71 74 20 20 6D 6F 6F 76") -> "file.mov"
             else -> file.name ?: "file.unknown"
         }
         return FContentsType.findContentType(ext)

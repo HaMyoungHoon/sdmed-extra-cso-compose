@@ -76,14 +76,14 @@ class EDIScreenDetailVM(applicationContext: Context? = null): FBaseViewModel(app
         }
         return ret
     }
-    fun addImage(pharmaBuffPK: String, uriString: String?, name: String, fileType: MediaFileType, mimeType: String) {
-        uriString ?: return
+    fun addImage(pharmaBuffPK: String, url: String?, name: String, fileType: MediaFileType, mimeType: String) {
+        url ?: return
         val buff = item.value.pharmaList.toMutableList()
         try {
             val findBuff = buff.find { x -> x.thisPK == pharmaBuffPK } ?: return
             val imageBuff = findBuff.uploadItems.value.toMutableList()
             imageBuff.add(MediaPickerSourceModel().apply {
-                mediaPath = uriString.toUri()
+                mediaUrl = url
                 mediaName = name
                 mediaFileType = fileType
                 mediaMimeType = mimeType

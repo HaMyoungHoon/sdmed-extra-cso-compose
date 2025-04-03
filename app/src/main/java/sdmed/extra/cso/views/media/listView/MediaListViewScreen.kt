@@ -48,7 +48,7 @@ import sdmed.extra.cso.R
 import sdmed.extra.cso.bases.FConstants
 import sdmed.extra.cso.models.common.MediaViewModel
 import sdmed.extra.cso.utils.FAmhohwa
-import sdmed.extra.cso.utils.FCoil
+import sdmed.extra.cso.utils.fCoilLoad
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
 import sdmed.extra.cso.views.component.vector.FVectorData
@@ -124,7 +124,7 @@ private fun mediaListViewScreenImageView(item: MediaViewModel) {
     var scale by remember { mutableStateOf(1F) }
     var offset by remember { mutableStateOf(Offset.Zero) }
     Box(Modifier.fillMaxSize().background(color.gray), contentAlignment = Alignment.Center) {
-        FCoil.load(item.blobUrl.value,
+        fCoilLoad(item.blobUrl.value,
             item.mimeType.value,
             item.originalFilename.value,
             Modifier.fillMaxWidth().graphicsLayer(scale, scale, 1F, offset.x, offset.y),

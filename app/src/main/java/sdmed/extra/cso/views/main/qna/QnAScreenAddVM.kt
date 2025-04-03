@@ -52,12 +52,12 @@ class QnAScreenAddVM(applicationContext: Context? = null): FBaseViewModel(applic
     fun removeImage(data: MediaPickerSourceModel?) {
         uploadItems.value = uploadItems.value.filter { it != data }.toMutableList()
     }
-    fun addImage(uriString: String?, name: String, fileType: MediaFileType, mimeType: String) {
-        uriString ?: return
+    fun addImage(url: String?, name: String, fileType: MediaFileType, mimeType: String) {
+        url ?: return
         try {
             val imageBuff = uploadItems.value.toMutableList()
             imageBuff.add(MediaPickerSourceModel().apply {
-                mediaPath = uriString.toUri()
+                mediaUrl = url
                 mediaName = name
                 mediaFileType = fileType
                 mediaMimeType = mimeType

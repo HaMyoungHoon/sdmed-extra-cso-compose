@@ -56,11 +56,12 @@ import sdmed.extra.cso.models.retrofit.edi.EDIUploadModel
 import sdmed.extra.cso.models.retrofit.edi.EDIUploadPharmaFileModel
 import sdmed.extra.cso.models.retrofit.edi.EDIUploadPharmaModel
 import sdmed.extra.cso.models.retrofit.edi.EDIUploadResponseModel
-import sdmed.extra.cso.utils.FCoil
+import sdmed.extra.cso.utils.fCoilLoad
 import sdmed.extra.cso.utils.FCoroutineUtil
 import sdmed.extra.cso.utils.FStorage.getParcelableList
 import sdmed.extra.cso.utils.FStorage.putParcelable
 import sdmed.extra.cso.utils.FStorage.putParcelableList
+import sdmed.extra.cso.utils.fImageLoad
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
 import sdmed.extra.cso.views.component.shape.ShapeRoundedBoxData
@@ -251,7 +252,7 @@ private fun pharmaFileContainer(dataContext: EDIScreenDetailVM, items: MutableLi
         item.relayCommand = dataContext.relayCommand
         Column(Modifier) {
             val imageModifier = if (isWide) Modifier.fillMaxWidth() else Modifier.height(300.dp).fillMaxWidth()
-            FCoil.load(item.blobUrl,
+            fCoilLoad(item.blobUrl,
                 item.mimeType,
                 item.originalFilename,
                 imageModifier.combinedClickable(onClick = { item.onClick(EDIUploadPharmaFileModel.ClickEvent.SHORT) },
@@ -327,7 +328,7 @@ private fun pharmaFileUploadItemContainer(dataContext: EDIScreenDetailVM, item: 
                     stringResource(R.string.remove_desc),
                     Modifier, Color.Unspecified)
             }
-            FCoil.load(item.mediaPath,
+            fImageLoad(item.mediaUrl,
                 item.mediaFileType,
                 item.mediaName,
                 Modifier.width(100.dp).height(100.dp).padding(10.dp),

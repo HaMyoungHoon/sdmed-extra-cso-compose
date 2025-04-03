@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -58,9 +57,10 @@ import sdmed.extra.cso.models.menu.WindowPanelType
 import sdmed.extra.cso.models.retrofit.edi.EDIApplyDateModel
 import sdmed.extra.cso.models.retrofit.edi.EDIHosBuffModel
 import sdmed.extra.cso.models.retrofit.edi.EDIPharmaBuffModel
-import sdmed.extra.cso.utils.FCoil
+import sdmed.extra.cso.utils.fCoilLoad
 import sdmed.extra.cso.utils.FCoroutineUtil
 import sdmed.extra.cso.utils.FStorage.getParcelableList
+import sdmed.extra.cso.utils.fImageLoad
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.CustomTextFieldData
 import sdmed.extra.cso.views.component.customText.customText
@@ -308,7 +308,7 @@ private fun ediPharmaContainer(dataContext: HomeEDIRequestScreenVM, isTwoPane: B
                                                             stringResource(R.string.remove_desc),
                                                             Modifier, Color.Unspecified)
                                                     }
-                                                    FCoil.load(uploadItem.mediaPath,
+                                                    fImageLoad(uploadItem.mediaUrl,
                                                         uploadItem.mediaFileType,
                                                         uploadItem.mediaName,
                                                         Modifier.width(100.dp).height(100.dp).padding(10.dp),

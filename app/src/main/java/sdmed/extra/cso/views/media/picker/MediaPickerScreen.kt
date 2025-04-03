@@ -16,12 +16,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -53,8 +55,8 @@ import com.google.accompanist.adaptive.HorizontalTwoPaneStrategy
 import com.google.accompanist.adaptive.TwoPane
 import sdmed.extra.cso.R
 import sdmed.extra.cso.models.common.MediaPickerSourceModel
-import sdmed.extra.cso.utils.FCoil
-import sdmed.extra.cso.utils.FDI
+import sdmed.extra.cso.utils.fCoilLoad
+import sdmed.extra.cso.utils.fImageLoad
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
 import sdmed.extra.cso.views.component.vector.FVectorData
@@ -96,23 +98,21 @@ fun mediaPickerScreenTablet(dataContext: MediaPickerActivityVM) {
 }
 @Composable
 fun mediaPickerScreenTwoPane(dataContext: MediaPickerActivityVM, displayFeatures: List<DisplayFeature>) {
-    val mediaPath by dataContext.mediaPath.collectAsState()
+    val mediaUrl by dataContext.mediaUrl.collectAsState()
     mediaPickerScreen {
-        if (mediaPath == null) {
+        mediaUrl?.let {
             Column(Modifier) {
                 topContainer(dataContext)
                 mediaListContainer(dataContext)
             }
-        } else {
-            TwoPane({
-                Column(Modifier) {
-                    topContainer(dataContext)
-                    mediaListContainer(dataContext)
-                }
-            }, {
+        } ?: TwoPane({
+            Column(Modifier) {
+                topContainer(dataContext)
+                mediaListContainer(dataContext)
+            }},
+            {
                 mediaContainer(dataContext, true)
             }, HorizontalTwoPaneStrategy(0.5F, 5.dp), displayFeatures)
-        }
     }
 }
 
@@ -181,17 +181,18 @@ private fun topContainer(dataContext: MediaPickerActivityVM) {
 }
 @Composable
 private fun mediaContainer(dataContext: MediaPickerActivityVM, isFull: Boolean = false) {
-    val mediaPath by dataContext.mediaPath.collectAsState()
+    val mediaUrl by dataContext.mediaUrl.collectAsState()
     val mediaFileType by dataContext.mediaFileType.collectAsState()
     val mediaName by dataContext.mediaName.collectAsState()
-    if (mediaPath != null) {
+    mediaUrl?.let {
         val modifier = if (isFull) Modifier.fillMaxSize() else Modifier.fillMaxWidth().height(300.dp)
         Box(modifier) {
-            FCoil.load(mediaPath,
+            fImageLoad(it,
                 mediaFileType,
                 mediaName,
                 Modifier.fillMaxSize(),
-                ContentScale.FillWidth)
+                ContentScale.FillWidth,
+                512)
         }
     }
 }
@@ -199,7 +200,8 @@ private fun mediaContainer(dataContext: MediaPickerActivityVM, isFull: Boolean =
 private fun mediaListContainer(dataContext: MediaPickerActivityVM) {
     val color = FThemeUtil.safeColorC()
     val items by dataContext.items.collectAsState()
-    LazyVerticalGrid(GridCells.Fixed(3), Modifier.fillMaxSize()) {
+    val gridState = rememberLazyGridState()
+    LazyVerticalGrid(GridCells.Fixed(3), Modifier.fillMaxSize(), gridState) {
         itemsIndexed(items, { index, item -> item.thisPK }) { index, item ->
             item.relayCommand = dataContext.relayCommand
             Box(Modifier.fillMaxWidth().aspectRatio(1F)
@@ -208,11 +210,11 @@ private fun mediaListContainer(dataContext: MediaPickerActivityVM) {
                 if (lastClick) {
                     Box(Modifier.fillMaxSize().zIndex(99F).background(color.scrim))
                 }
-                FCoil.load(item.mediaPath,
+                fImageLoad(item.mediaUrl,
                     item.mediaFileType,
                     item.mediaName,
                     Modifier.fillMaxSize(),
-                    ContentScale.FillWidth)
+                    ContentScale.Crop)
                 val num by item.num.collectAsState()
                 val solid by item.solid.collectAsState()
                 if (num != null && solid != null) {

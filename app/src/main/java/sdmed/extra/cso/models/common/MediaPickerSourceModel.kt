@@ -13,7 +13,7 @@ import java.util.UUID
 @Parcelize
 data class MediaPickerSourceModel(
     var thisPK: String = UUID.randomUUID().toString(),
-    var mediaPath: Uri? = null,
+    var mediaUrl: String? = null,
     var mediaName: String = "",
     var mediaFileType: MediaFileType = MediaFileType.UNKNOWN,
     var mediaDateTime: String = "",

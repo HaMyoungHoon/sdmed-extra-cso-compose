@@ -43,8 +43,9 @@ import sdmed.extra.cso.models.common.MediaPickerSourceModel
 import sdmed.extra.cso.models.menu.NavigationType
 import sdmed.extra.cso.models.menu.WindowPanelType
 import sdmed.extra.cso.models.retrofit.users.UserTrainingModel
-import sdmed.extra.cso.utils.FCoil
+import sdmed.extra.cso.utils.fCoilLoad
 import sdmed.extra.cso.utils.FStorage.getParcelableList
+import sdmed.extra.cso.utils.fImageLoad
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
 import sdmed.extra.cso.views.component.shape.ShapeRoundedBoxData
@@ -180,7 +181,7 @@ private fun uploadContainer(dataContext: MyScreenTrainingCertificateVM) {
             Row(Modifier.fillMaxWidth(),
                 Arrangement.Center,
                 Alignment.CenterVertically) {
-                FCoil.load(buff.mediaPath,
+                fImageLoad(buff.mediaUrl,
                     buff.mediaFileType,
                     buff.mediaName,
                     Modifier.width(100.dp).height(100.dp).padding(10.dp),
@@ -229,7 +230,7 @@ private fun itemListContainer(dataContext: MyScreenTrainingCertificateVM) {
     LazyColumn(Modifier.fillMaxWidth()) {
         items(trainingList, { it.thisPK}) { x ->
             Row(Modifier.fillMaxWidth()) {
-                FCoil.load(x.blobUrl,
+                fCoilLoad(x.blobUrl,
                     x.mimeType,
                     x.originalFilename,
                     Modifier.height(100.dp).width(100.dp))

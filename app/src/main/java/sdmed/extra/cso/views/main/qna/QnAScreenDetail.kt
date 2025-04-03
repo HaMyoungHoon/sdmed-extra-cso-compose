@@ -44,7 +44,7 @@ import sdmed.extra.cso.models.retrofit.qna.QnAFileModel
 import sdmed.extra.cso.models.retrofit.qna.QnAHeaderModel
 import sdmed.extra.cso.models.retrofit.qna.QnAReplyFileModel
 import sdmed.extra.cso.models.retrofit.qna.QnAReplyModel
-import sdmed.extra.cso.utils.FCoil
+import sdmed.extra.cso.utils.fCoilLoad
 import sdmed.extra.cso.utils.FCoroutineUtil
 import sdmed.extra.cso.utils.FStorage.putParcelable
 import sdmed.extra.cso.utils.FStorage.putParcelableList
@@ -56,7 +56,6 @@ import sdmed.extra.cso.views.component.vector.FVectorData
 import sdmed.extra.cso.views.component.vector.vectorArrowDown
 import sdmed.extra.cso.views.component.vector.vectorArrowLeft
 import sdmed.extra.cso.views.component.vector.vectorArrowUp
-import sdmed.extra.cso.views.main.edi.EDIScreenDetailVM
 import sdmed.extra.cso.views.media.listView.MediaListViewActivity
 import sdmed.extra.cso.views.media.singleView.MediaViewActivity
 import sdmed.extra.cso.views.theme.FThemeUtil
@@ -231,7 +230,7 @@ private fun contentFileListContainer(dataContext: QnAScreenDetailVM, isWide: Boo
             item.relayCommand = dataContext.relayCommand
             Column(Modifier) {
                 val imageModifier = if (isWide) Modifier.fillMaxWidth() else Modifier.height(150.dp).fillMaxWidth()
-                FCoil.load(item.blobUrl,
+                fCoilLoad(item.blobUrl,
                     item.mimeType,
                     item.originalFilename,
                     imageModifier.combinedClickable(onClick = { item.onClick(QnAFileModel.ClickEvent.SHORT) },
@@ -318,7 +317,7 @@ private fun replyFileListContainer(dataContext: QnAScreenDetailVM, reply: QnARep
             item.relayCommand = dataContext.relayCommand
             Column(Modifier) {
                 val imageModifier = if (isWide) Modifier.fillMaxWidth() else Modifier.height(150.dp).fillMaxWidth()
-                FCoil.load(item.blobUrl,
+                fCoilLoad(item.blobUrl,
                     item.mimeType,
                     item.originalFilename,
                     imageModifier.combinedClickable(onClick = { item.onClick(QnAReplyFileModel.ClickEvent.SHORT) },

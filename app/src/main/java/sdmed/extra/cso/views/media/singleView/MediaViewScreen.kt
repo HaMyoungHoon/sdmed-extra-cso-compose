@@ -14,13 +14,11 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -39,19 +37,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.compose.ui.zIndex
 import sdmed.extra.cso.bases.FConstants
-import sdmed.extra.cso.models.common.MediaViewModel
 import sdmed.extra.cso.utils.FAmhohwa
-import sdmed.extra.cso.utils.FCoil
+import sdmed.extra.cso.utils.fCoilLoad
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
 import sdmed.extra.cso.views.component.vector.FVectorData
 import sdmed.extra.cso.views.component.vector.vectorArrowLeft
-import sdmed.extra.cso.views.component.vector.vectorCircle
 import sdmed.extra.cso.views.theme.FThemeUtil
 
 @Composable
@@ -103,7 +97,7 @@ private fun mediaViewImageView(dataContext: MediaViewActivityVM) {
                 offset = if (scale != 1F) offset + pan else Offset.Zero
             } },
         contentAlignment = Alignment.Center) {
-        FCoil.load(item.blobUrl.value,
+        fCoilLoad(item.blobUrl.value,
             item.mimeType.value,
             item.originalFilename.value,
             Modifier.fillMaxWidth().graphicsLayer(scale, scale, 1F, offset.x, offset.y),

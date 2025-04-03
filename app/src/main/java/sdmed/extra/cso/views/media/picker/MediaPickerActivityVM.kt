@@ -24,9 +24,9 @@ class MediaPickerActivityVM(applicationContext: Context? = null): FBaseViewModel
     val confirmEnable = MutableStateFlow(false)
     val items = MutableStateFlow(mutableListOf<MediaPickerSourceModel>())
     val clickItemBuff = mutableListOf<MediaPickerSourceModel>()
+    val mediaUrl = MutableStateFlow<String?>(null)
     val mediaFileType = MutableStateFlow(MediaFileType.UNKNOWN)
-    val mediaPath = MutableStateFlow<Uri?>(null)
-    val videoPath = MutableStateFlow<Uri?>(null)
+    val videoUrl = MutableStateFlow<String?>(null)
     val mediaName = MutableStateFlow<String>("")
 
     fun setPreviousMedia(mediaPickerModel: ArrayList<MediaPickerSourceModel>?) {
@@ -46,7 +46,7 @@ class MediaPickerActivityVM(applicationContext: Context? = null): FBaseViewModel
     fun setLastClickedItem(data: MediaPickerSourceModel) {
         val itemsBuff = items.value.toMutableList()
         clickItemBuff.forEachIndexed { index, x ->
-            itemsBuff.find { y -> x.mediaPath == y.mediaPath }?.let { z ->
+            itemsBuff.find { y -> x.mediaUrl == y.mediaUrl }?.let { z ->
                 z.lastClick.value = false
             }
         }
@@ -63,9 +63,9 @@ class MediaPickerActivityVM(applicationContext: Context? = null): FBaseViewModel
     }
     fun removeClickedItem(data: MediaPickerSourceModel) {
         val itemsBuff = items.value.toMutableList()
-        clickItemBuff.removeIf { it.mediaPath == data.mediaPath }
+        clickItemBuff.removeIf { it.mediaUrl == data.mediaUrl }
         clickItemBuff.forEachIndexed { index, x ->
-            itemsBuff.find { y -> x.mediaPath == y.mediaPath }?.let { z ->
+            itemsBuff.find { y -> x.mediaUrl == y.mediaUrl }?.let { z ->
                 z.num.value = index + 1
                 z.clickState.value = true
                 z.solid.value = FThemeUtil.safeColor().primary.value
@@ -88,7 +88,7 @@ class MediaPickerActivityVM(applicationContext: Context? = null): FBaseViewModel
         val itemBuff = mutableListOf<MediaPickerSourceModel>()
         itemBuff.addAll(_selectBox[data].second)
         clickItemBuff.forEachIndexed { index, x ->
-            itemBuff.find { y -> x.mediaPath == y.mediaPath }?.let { z ->
+            itemBuff.find { y -> x.mediaUrl == y.mediaUrl }?.let { z ->
                 z.num.value = index + 1
                 z.clickState.value = true
                 z.solid.value = FThemeUtil.safeColor().primary.value
@@ -109,7 +109,7 @@ class MediaPickerActivityVM(applicationContext: Context? = null): FBaseViewModel
         boxes.value = boxesBuff
     }
     fun removeItems(data: MediaPickerSourceModel) {
-        items.value.find { x -> x.mediaPath == data.mediaPath }?.let {  y ->
+        items.value.find { x -> x.mediaUrl == data.mediaUrl }?.let {  y ->
             _selectBox.find { z -> z.second == items }?.second?.removeIf { z -> z == y }
             items.value = items.value.filter { z -> z != y }.toMutableList()
         }
@@ -158,7 +158,7 @@ class MediaPickerActivityVM(applicationContext: Context? = null): FBaseViewModel
         data.parentFile?.listFiles()?.forEach { x ->
             val fileType = isMediaFile(x)
             if (fileType != MediaFileType.UNKNOWN) {
-                itemBuff.add(MediaPickerSourceModel(UUID.randomUUID().toString(), x.toUri(), mediaFileType = fileType))
+                itemBuff.add(MediaPickerSourceModel(UUID.randomUUID().toString(), x.absolutePath, mediaFileType = fileType))
             }
         }
     }

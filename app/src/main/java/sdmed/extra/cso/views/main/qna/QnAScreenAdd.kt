@@ -44,8 +44,9 @@ import sdmed.extra.cso.interfaces.theme.IBaseColor
 import sdmed.extra.cso.models.common.MediaPickerSourceModel
 import sdmed.extra.cso.models.menu.NavigationType
 import sdmed.extra.cso.models.menu.WindowPanelType
-import sdmed.extra.cso.utils.FCoil
+import sdmed.extra.cso.utils.fCoilLoad
 import sdmed.extra.cso.utils.FStorage.getParcelableList
+import sdmed.extra.cso.utils.fImageLoad
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.CustomTextFieldData
 import sdmed.extra.cso.views.component.customText.customText
@@ -238,7 +239,7 @@ private fun uploadItemContainer(dataContext: QnAScreenAddVM, item: MediaPickerSo
                     stringResource(R.string.remove_desc),
                     Modifier, Color.Unspecified)
             }
-            FCoil.load(item.mediaPath,
+            fImageLoad(item.mediaUrl,
                 item.mediaFileType,
                 item.mediaName,
                 Modifier.width(100.dp).height(100.dp).padding(10.dp),

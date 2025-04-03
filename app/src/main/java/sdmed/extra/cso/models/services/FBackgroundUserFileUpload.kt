@@ -145,9 +145,9 @@ class FBackgroundUserFileUpload(applicationContext: Context): FBaseService(appli
     }
     private fun checkAzureQ(data: UserFileAzureQueueModel) {
         FCoroutineUtil.coroutineScope({
-            data.media.mediaPath?.let { uri ->
+            data.media.mediaUrl?.let { url ->
                 try {
-                    val cachedFile = FImageUtils.uriToFile(context, uri, data.media.mediaName)
+                    val cachedFile = FImageUtils.urlToFile(context, url, data.media.mediaName)
                     val ret = azureBlobRepository.upload(data.userFileModel.blobUrlKey(), cachedFile, data.userFileModel.mimeType)
                     FImageUtils.fileDelete(context, cachedFile)
                     if (ret.isSuccessful) {
@@ -204,9 +204,9 @@ class FBackgroundUserFileUpload(applicationContext: Context): FBaseService(appli
     }
     private fun checkAzureQ(data: UserTrainingFileAzureQueueModel) {
         FCoroutineUtil.coroutineScope({
-            data.media.mediaPath?.let { uri ->
+            data.media.mediaUrl?.let { url ->
                 try {
-                    val cachedFile = FImageUtils.uriToFile(context, uri, data.media.mediaName)
+                    val cachedFile = FImageUtils.urlToFile(context, url, data.media.mediaName)
                     val ret = azureBlobRepository.upload(data.userFileModel.blobUrlKey(), cachedFile, data.userFileModel.mimeType)
                     FImageUtils.fileDelete(context, cachedFile)
                     if (ret.isSuccessful) {

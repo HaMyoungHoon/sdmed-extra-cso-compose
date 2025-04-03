@@ -19,7 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import sdmed.extra.cso.utils.FCoil
+import sdmed.extra.cso.utils.fCoilLoad
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
 import sdmed.extra.cso.views.component.shape.ShapeRoundedBoxData
@@ -36,7 +36,7 @@ fun myScreenFileList(dataContext: MyScreenVM) {
             Column(Modifier.widthIn(100.dp, 120.dp)) {
                 Box(Modifier.width(100.dp).height(100.dp).align(Alignment.CenterHorizontally)
                     .clickable { dataContext.relayCommand.execute(MyScreenVM.ClickEvent.IMAGE_TRAINING)}) {
-                    FCoil.load(thisData.trainingUrl, thisData.trainingMimeType, thisData.trainingFilename)
+                    fCoilLoad(thisData.trainingUrl, thisData.trainingMimeType, thisData.trainingFilename)
                 }
                 customText(CustomTextData().apply {
                     text = thisData.trainingDate
@@ -62,7 +62,7 @@ fun myScreenFileList(dataContext: MyScreenVM) {
             Column(Modifier.widthIn(100.dp, 120.dp)) {
                 Box(Modifier.width(100.dp).height(100.dp).align(Alignment.CenterHorizontally)
                     .clickable { dataContext.relayCommand.execute(MyScreenVM.ClickEvent.IMAGE_TAXPAYER)}) {
-                    FCoil.load(thisData.taxPayerUrl, thisData.taxPayerMimeType, thisData.taxPayerFilename)
+                    fCoilLoad(thisData.taxPayerUrl, thisData.taxPayerMimeType, thisData.taxPayerFilename)
                 }
                 customText(CustomTextData().apply {
                     text = thisData.companyName
@@ -82,7 +82,7 @@ fun myScreenFileList(dataContext: MyScreenVM) {
             Column(Modifier.widthIn(100.dp, 120.dp)) {
                 Box(Modifier.width(100.dp).height(100.dp).align(Alignment.CenterHorizontally)
                     .clickable { dataContext.relayCommand.execute(MyScreenVM.ClickEvent.IMAGE_BANK_ACCOUNT)}) {
-                    FCoil.load(thisData.csoReportUrl, thisData.csoReportMimeType, thisData.csoReportFilename)
+                    fCoilLoad(thisData.csoReportUrl, thisData.csoReportMimeType, thisData.csoReportFilename)
                 }
                 customText(CustomTextData().apply {
                     text = thisData.csoReportNumber
@@ -96,7 +96,7 @@ fun myScreenFileList(dataContext: MyScreenVM) {
             Column(Modifier.widthIn(100.dp, 120.dp)) {
                 Box(Modifier.width(100.dp).height(100.dp).align(Alignment.CenterHorizontally)
                     .clickable { dataContext.relayCommand.execute(MyScreenVM.ClickEvent.IMAGE_CSO_REPORT)}) {
-                    FCoil.load(thisData.bankAccountUrl, thisData.bankAccountMimeType, thisData.bankAccountFilename)
+                    fCoilLoad(thisData.bankAccountUrl, thisData.bankAccountMimeType, thisData.bankAccountFilename)
                 }
                 customText(CustomTextData().apply {
                     text = thisData.bankAccount
@@ -111,7 +111,7 @@ fun myScreenFileList(dataContext: MyScreenVM) {
             Column(Modifier.widthIn(100.dp, 120.dp)) {
                 Box(Modifier.width(100.dp).height(100.dp).align(Alignment.CenterHorizontally)
                     .clickable { dataContext.relayCommand.execute(MyScreenVM.ClickEvent.IMAGE_MARKETING_CONTRACT)}) {
-                    FCoil.load(thisData.marketingContractUrl, thisData.marketingContractMimeType, thisData.marketingContractFilename)
+                    fCoilLoad(thisData.marketingContractUrl, thisData.marketingContractMimeType, thisData.marketingContractFilename)
                 }
                 customText(CustomTextData().apply {
                     text = thisData.contractDateString

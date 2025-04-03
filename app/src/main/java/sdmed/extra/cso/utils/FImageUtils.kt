@@ -137,6 +137,12 @@ object FImageUtils {
             }
         }
     }
+    fun fileDelete(context: Context, url: String) {
+        try {
+            File(url).delete()
+        } catch (_: Exception) {
+        }
+    }
     fun ableDeleteFile(context: Context, uri: Uri) = try {
         val projection = arrayOf(MediaStore.Images.Media.DATA)
         context.contentResolver.query(uri, projection, null, null, null)?.use {
@@ -253,6 +259,52 @@ object FImageUtils {
         fileDescriptor.close()
         return copiedFile.toUri()
     }
+    fun urlToFile(context: Context, fileUrl: String, fileName: String): File {
+        val fileRet = File(fileUrl)
+        val fileExt = fileRet.extension
+        if (!isImage(fileExt)) {
+            return fileRet
+        }
+        if (isGif(fileExt)) {
+            return urlToGifFile(context, fileUrl, fileName)
+        }
+        val fileStream = fileRet.inputStream()
+        val inputStream = ByteArrayInputStream(fileStream.readBytes())
+        val documentsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+        var rootDir = File(documentsDir, FConstants.SHARED_FILE_NAME)
+        if (!rootDir.exists()) {
+            if (!rootDir.mkdirs()) {
+                rootDir = ContextWrapper(context).getDir("Documents", Context.MODE_PRIVATE)
+            }
+        }
+
+        var extension = fileExt
+        if (extension.lowercase() != "webp") {
+            extension = "webp"
+        }
+
+        val file = File(rootDir, "${fileName}.$extension")
+        if (!file.exists()) {
+            inputStream.mark(inputStream.available())
+            if (fileExt != "webp") {
+                if (!imageResize(inputStream, file)) {
+                    val outputStream = FileOutputStream(file)
+                    inputStream.copyTo(outputStream)
+                    outputStream.close()
+                }
+            } else {
+                val outputStream = FileOutputStream(file)
+                inputStream.copyTo(outputStream)
+                outputStream.close()
+            }
+        }
+        try {
+            inputStream.close()
+            fileStream.close()
+        } catch (_: Exception) {
+        }
+        return file
+    }
     fun uriToFile(context: Context, fileUri: Uri, fileName: String): File {
         if (isLocalFile(context, fileUri)) return fileUri.toFile()
 
@@ -298,8 +350,44 @@ object FImageUtils {
                 outputStream.close()
             }
         }
-        inputStream.close()
-        fileDescriptor.close()
+        try {
+            inputStream.close()
+            fileDescriptor.close()
+            fileStream.close()
+        } catch (_: Exception) {
+        }
+        return file
+    }
+    fun urlToGifFile(context: Context, fileUrl: String, fileName: String): File {
+        val fileRet = File(fileUrl)
+        val fileExt = fileRet.extension
+        if (!isImage(fileExt)) {
+            return fileRet
+        }
+        val fileStream = fileRet.inputStream()
+        val inputStream = ByteArrayInputStream(fileStream.readBytes())
+        val documentsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+        var rootDir = File(documentsDir, FConstants.SHARED_FILE_NAME)
+        if (!rootDir.exists()) {
+            if (!rootDir.mkdirs()) {
+                rootDir = ContextWrapper(context).getDir("Documents", Context.MODE_PRIVATE)
+            }
+        }
+
+        val extension = fileExt
+
+        val file = File(rootDir, "${fileName}.$extension")
+        if (!file.exists()) {
+            inputStream.mark(inputStream.available())
+            val outputStream = FileOutputStream(file)
+            inputStream.copyTo(outputStream)
+            outputStream.close()
+        }
+        try {
+            inputStream.close()
+            fileStream.close()
+        } catch (_: Exception) {
+        }
         return file
     }
     fun uriToGifFile(context: Context, fileUri: Uri, fileName: String): File {
@@ -333,8 +421,12 @@ object FImageUtils {
             inputStream.copyTo(outputStream)
             outputStream.close()
         }
-        inputStream.close()
-        fileDescriptor.close()
+        try {
+            inputStream.close()
+            fileDescriptor.close()
+            fileStream.close()
+        } catch (_: Exception) {
+        }
         return file
     }
     fun createImageFile(context: Context): File {
