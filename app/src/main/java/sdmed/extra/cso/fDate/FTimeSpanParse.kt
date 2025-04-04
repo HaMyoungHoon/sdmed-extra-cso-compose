@@ -550,7 +550,7 @@ internal object FTimeSpanParse {
                 }
             }
             result.parsedTimeSpan._ticks = ticks
-            return false
+            return true
         }
 
         result.setFailure(ParseFailureKind.Format, "format data is bad")
@@ -603,7 +603,7 @@ internal object FTimeSpanParse {
                 }
             }
             result.parsedTimeSpan._ticks = ticks
-            return false
+            return true
         }
 
         result.setFailure(ParseFailureKind.Format, "format data is bad")
@@ -719,7 +719,7 @@ internal object FTimeSpanParse {
                 }
             }
             result.parsedTimeSpan._ticks = ticks
-            return false
+            return true
         }
         return if (overflow) {
             result.setFailure(ParseFailureKind.OverFlow, "data is overflow")
@@ -839,7 +839,7 @@ internal object FTimeSpanParse {
                 }
             }
             result.parsedTimeSpan._ticks = ticks
-            return false
+            return true
         }
         return if (overflow) {
             result.setFailure(ParseFailureKind.OverFlow, "data is overflow")
@@ -896,7 +896,7 @@ internal object FTimeSpanParse {
                 }
             }
             result.parsedTimeSpan._ticks = ticks
-            return false
+            return true
         }
 
         result.setFailure(ParseFailureKind.Format, "format data is bad")
