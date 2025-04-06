@@ -366,8 +366,8 @@ private fun searchDecorationBox(innerTextField: @Composable () -> Unit, text: St
                 textColor = color.disableForeGray
                 modifier = Modifier.fillMaxWidth()
             })
-            innerTextField()
         }
+        innerTextField()
     }
 }
 

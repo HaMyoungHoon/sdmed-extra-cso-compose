@@ -289,8 +289,8 @@ private fun titleDecorationBox(innerTextField: @Composable () -> Unit, text: Str
                 textColor = color.disableForeGray
                 modifier = Modifier.fillMaxWidth()
             })
-            innerTextField()
         }
+        innerTextField()
     }
 }
 @Composable
@@ -302,8 +302,8 @@ private fun contentDecorationBox(innerTextField: @Composable () -> Unit, text: S
                 textColor = color.disableForeGray
                 modifier = Modifier.fillMaxWidth()
             })
-            innerTextField()
         }
+        innerTextField()
     }
 }
 

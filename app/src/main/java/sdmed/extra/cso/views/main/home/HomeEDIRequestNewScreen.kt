@@ -430,8 +430,8 @@ private fun hospitalFindDecorationBox(innerTextField: @Composable () -> Unit, te
                 textColor = color.disableForeGray
                 modifier = Modifier.fillMaxWidth()
             })
-            innerTextField()
         }
+        innerTextField()
     }
 }
 @Composable
@@ -443,8 +443,8 @@ private fun searchDecorationBox(innerTextField: @Composable () -> Unit, text: St
                 textColor = color.disableForeGray
                 modifier = Modifier.fillMaxWidth()
             })
-            innerTextField()
         }
+        innerTextField()
     }
 }
 

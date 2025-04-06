@@ -164,8 +164,8 @@ private fun pwDecorationBox(innerTextField: @Composable () -> Unit, text: String
                 textColor = color.disableForeGray
                 modifier = Modifier.fillMaxWidth()
             })
-            innerTextField()
         }
+        innerTextField()
     }
 }
 

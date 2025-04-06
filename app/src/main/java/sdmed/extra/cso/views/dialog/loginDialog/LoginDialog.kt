@@ -71,6 +71,7 @@ private fun loginBody(dataContext: LoginDialogVM) {
                 customTextField(CustomTextFieldData().apply {
                     text = id.value
                     textSize = FThemeUtil.textUnit(18F)
+                    textColor = color.foreground
                     modifier = Modifier.padding(10.dp)
                     onValueChange = {
                         if (it.length <= 20) {
@@ -89,6 +90,7 @@ private fun loginBody(dataContext: LoginDialogVM) {
                 customTextField(CustomTextFieldData().apply {
                     text = pw.value
                     textSize = FThemeUtil.textUnit(18F)
+                    textColor = color.foreground
                     modifier = Modifier.padding(10.dp)
                     onValueChange = {
                         if (it.length <= 20) {
@@ -127,8 +129,8 @@ private fun idDecorationBox(innerTextField: @Composable () -> Unit, text: String
                 textColor = color.disableForeGray
                 modifier = Modifier.fillMaxWidth()
             })
-            innerTextField()
         }
+        innerTextField()
     }
 }
 @Composable
@@ -141,8 +143,8 @@ private fun pwDecorationBox(innerTextField: @Composable () -> Unit, text: String
                 textColor = color.disableForeGray
                 modifier = Modifier.fillMaxWidth()
             })
-            innerTextField()
         }
+        innerTextField()
     }
 }
 
