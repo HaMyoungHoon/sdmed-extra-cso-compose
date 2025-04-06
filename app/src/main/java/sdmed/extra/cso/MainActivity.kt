@@ -28,7 +28,9 @@ import sdmed.extra.cso.bases.FConstants
 import sdmed.extra.cso.bases.FMainApplication
 import sdmed.extra.cso.models.common.NotifyIndex
 import sdmed.extra.cso.models.menu.Route
+import sdmed.extra.cso.models.retrofit.FRetrofitVariable
 import sdmed.extra.cso.utils.FCoroutineUtil
+import sdmed.extra.cso.utils.FStorage
 import sdmed.extra.cso.utils.FVersionControl
 import sdmed.extra.cso.views.dialog.message.MessageDialogData
 import sdmed.extra.cso.views.dialog.message.MessageDialogVM
@@ -85,6 +87,13 @@ class MainActivity: FBaseActivity<MainActivityVM>() {
             }
         }
         setBackPressed()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (FRetrofitVariable.token.value.isNullOrEmpty()) {
+            FRetrofitVariable.token.value = FStorage.getAuthToken(this)
+        }
     }
 
     private fun openPage(): String {
