@@ -282,28 +282,26 @@ private fun addQnAFileSelect(dataContext: QnAScreenAddVM, context: Context, acti
 
 @Composable
 private fun titleDecorationBox(innerTextField: @Composable () -> Unit, text: String?, color: IBaseColor) {
-    if (text.isNullOrEmpty()) {
-        customText(CustomTextData().apply {
-            this.text = stringResource(R.string.qna_add_title_hint_desc)
-            textColor = color.disableForeGray
-            modifier = Modifier.fillMaxWidth()
-        })
-    } else {
-        Column(Modifier.fillMaxWidth()) {
+    Box(Modifier.fillMaxWidth()) {
+        if (text.isNullOrEmpty()) {
+            customText(CustomTextData().apply {
+                this.text = stringResource(R.string.qna_add_title_hint_desc)
+                textColor = color.disableForeGray
+                modifier = Modifier.fillMaxWidth()
+            })
             innerTextField()
         }
     }
 }
 @Composable
 private fun contentDecorationBox(innerTextField: @Composable () -> Unit, text: String?, color: IBaseColor) {
-    if (text.isNullOrEmpty()) {
-        customText(CustomTextData().apply {
-            this.text = stringResource(R.string.qna_add_content_hint_desc)
-            textColor = color.disableForeGray
-            modifier = Modifier.fillMaxWidth()
-        })
-    } else {
-        Column(Modifier.fillMaxWidth()) {
+    Box(Modifier.fillMaxWidth()) {
+        if (text.isNullOrEmpty()) {
+            customText(CustomTextData().apply {
+                this.text = stringResource(R.string.qna_add_content_hint_desc)
+                textColor = color.disableForeGray
+                modifier = Modifier.fillMaxWidth()
+            })
             innerTextField()
         }
     }

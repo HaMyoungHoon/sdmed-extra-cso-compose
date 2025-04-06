@@ -153,30 +153,28 @@ private fun loginTail(dataContext: LoginScreenVM) {
 
 @Composable
 private fun idDecorationBox(innerTextField: @Composable () -> Unit, text: String, color: IBaseColor) {
-    if (text.isEmpty()) {
-        customText(CustomTextData().apply {
-            this.text = stringResource(R.string.login_id_edit_desc)
-            textSize = FThemeUtil.textUnit(18F)
-            textColor = color.disableForeGray
-            modifier = Modifier.fillMaxWidth()
-        })
-    } else {
-        Column(Modifier.fillMaxWidth()) {
+    Box(Modifier.fillMaxWidth()) {
+        if (text.isEmpty()) {
+            customText(CustomTextData().apply {
+                this.text = stringResource(R.string.login_id_edit_desc)
+                textSize = FThemeUtil.textUnit(18F)
+                textColor = color.disableForeGray
+                modifier = Modifier.fillMaxWidth()
+            })
             innerTextField()
         }
     }
 }
 @Composable
 private fun pwDecorationBox(innerTextField: @Composable () -> Unit, text: String, color: IBaseColor) {
-    if (text.isEmpty()) {
-        customText(CustomTextData().apply {
-            this.text = stringResource(R.string.pw_hint_desc)
-            textSize = FThemeUtil.textUnit(18F)
-            textColor = color.disableForeGray
-            modifier = Modifier.fillMaxWidth()
-        })
-    } else {
-        Column(Modifier.fillMaxWidth()) {
+    Box(Modifier.fillMaxWidth()) {
+        if (text.isEmpty()) {
+            customText(CustomTextData().apply {
+                this.text = stringResource(R.string.pw_hint_desc)
+                textSize = FThemeUtil.textUnit(18F)
+                textColor = color.disableForeGray
+                modifier = Modifier.fillMaxWidth()
+            })
             innerTextField()
         }
     }

@@ -372,14 +372,13 @@ private fun searchLoading(dataContext: HospitalTempFindActivityVM) {
 }
 @Composable
 private fun searchDecorationBox(innerTextField: @Composable () -> Unit, text: String?, color: IBaseColor) {
-    if (text.isNullOrEmpty()) {
-        customText(CustomTextData().apply {
-            this.text = stringResource(R.string.search_desc)
-            textColor = color.disableForeGray
-            modifier = Modifier.fillMaxWidth()
-        })
-    } else {
-        Column(Modifier.fillMaxWidth()) {
+    Box(Modifier.fillMaxWidth()) {
+        if (text.isNullOrEmpty()) {
+            customText(CustomTextData().apply {
+                this.text = stringResource(R.string.search_desc)
+                textColor = color.disableForeGray
+                modifier = Modifier.fillMaxWidth()
+            })
             innerTextField()
         }
     }

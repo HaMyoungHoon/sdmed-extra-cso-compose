@@ -2,6 +2,7 @@ package sdmed.extra.cso.views.dialog.passwordChange
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -155,15 +156,14 @@ private fun passwordChangeDialogPhone(dataContext: PasswordChangeDialogVM, onDis
 
 @Composable
 private fun pwDecorationBox(innerTextField: @Composable () -> Unit, text: String, color: IBaseColor, @StringRes id: Int) {
-    if (text.isEmpty()) {
-        customText(CustomTextData().apply {
-            this.text = stringResource(id)
-            textSize = FThemeUtil.textUnit(18F)
-            textColor = color.disableForeGray
-            modifier = Modifier.fillMaxWidth()
-        })
-    } else {
-        Column(Modifier.fillMaxWidth()) {
+    Box(Modifier.fillMaxWidth()) {
+        if (text.isEmpty()) {
+            customText(CustomTextData().apply {
+                this.text = stringResource(id)
+                textSize = FThemeUtil.textUnit(18F)
+                textColor = color.disableForeGray
+                modifier = Modifier.fillMaxWidth()
+            })
             innerTextField()
         }
     }

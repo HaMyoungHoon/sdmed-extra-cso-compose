@@ -1,6 +1,7 @@
 package sdmed.extra.cso.views.dialog.loginDialog
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -118,30 +119,28 @@ private fun loginBody(dataContext: LoginDialogVM) {
 
 @Composable
 private fun idDecorationBox(innerTextField: @Composable () -> Unit, text: String, color: IBaseColor) {
-    if (text.isEmpty()) {
-        customText(CustomTextData().apply {
-            this.text = stringResource(R.string.login_id_edit_desc)
-            textSize = FThemeUtil.textUnit(18F)
-            textColor = color.disableForeGray
-            modifier = Modifier.fillMaxWidth()
-        })
-    } else {
-        Column(Modifier.fillMaxWidth()) {
+    Box(Modifier.fillMaxWidth()) {
+        if (text.isEmpty()) {
+            customText(CustomTextData().apply {
+                this.text = stringResource(R.string.login_id_edit_desc)
+                textSize = FThemeUtil.textUnit(18F)
+                textColor = color.disableForeGray
+                modifier = Modifier.fillMaxWidth()
+            })
             innerTextField()
         }
     }
 }
 @Composable
 private fun pwDecorationBox(innerTextField: @Composable () -> Unit, text: String, color: IBaseColor) {
-    if (text.isEmpty()) {
-        customText(CustomTextData().apply {
-            this.text = stringResource(R.string.pw_hint_desc)
-            textSize = FThemeUtil.textUnit(18F)
-            textColor = color.disableForeGray
-            modifier = Modifier.fillMaxWidth()
-        })
-    } else {
-        Column(Modifier.fillMaxWidth()) {
+    Box(Modifier.fillMaxWidth()) {
+        if (text.isEmpty()) {
+            customText(CustomTextData().apply {
+                this.text = stringResource(R.string.pw_hint_desc)
+                textSize = FThemeUtil.textUnit(18F)
+                textColor = color.disableForeGray
+                modifier = Modifier.fillMaxWidth()
+            })
             innerTextField()
         }
     }
