@@ -13,6 +13,8 @@ import sdmed.extra.cso.models.retrofit.FRetrofitVariable
 import sdmed.extra.cso.utils.FAmhohwa
 import sdmed.extra.cso.utils.FCoroutineUtil
 import sdmed.extra.cso.utils.FStorage
+import sdmed.extra.cso.views.dialog.multiLogin.multiLoginDialog
+import sdmed.extra.cso.views.main.my.MyScreenVM
 
 @Composable
 fun loginScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
@@ -23,6 +25,20 @@ fun loginScreen(windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
         { dataContext -> loginScreenDetail(dataContext, navigate) },
         windowPanelType, navigationType)
     dataContext.gatheringMultiSign()
+    multiLogin(dataContext, windowPanelType, displayFeatures, navigationType)
+}
+
+@Composable
+fun multiLogin(dataContext: LoginScreenVM,
+               windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
+               displayFeatures: List<DisplayFeature> = emptyList(),
+               navigationType: NavigationType = NavigationType.BOTTOM) {
+    val multiSignInSelect by dataContext.multiSignInSelect.collectAsState()
+    if (multiSignInSelect) {
+        multiLoginDialog(windowPanelType, displayFeatures, navigationType, false, { }) {
+            dataContext.multiSignInSelect.value = false
+        }
+    }
 }
 private fun setLayoutCommand(data: Any?, dataContext: LoginScreenVM) {
     val eventName = data as? LoginScreenVM.ClickEvent ?: return
@@ -52,5 +68,5 @@ private fun login(dataContext: LoginScreenVM) {
     })
 }
 private fun multiLogin(dataContext: LoginScreenVM) {
-
+    dataContext.multiSignInSelect.value = true
 }
