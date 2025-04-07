@@ -18,10 +18,8 @@ data class EDIPharmaBuffModel(
     var code: String = "",
     var orgName: String = "",
     var innerName: String = "",
-): FDataModelClass<EDIPharmaBuffModel.ClickEvent>() {
-    @Transient
-    @JsonIgnore
     var medicineList: MutableList<EDIMedicineBuffModel> = mutableListOf()
+): FDataModelClass<EDIPharmaBuffModel.ClickEvent>() {
     @Transient
     @JsonIgnore
     var uploadItems: MutableStateFlow<MutableList<MediaPickerSourceModel>> = MutableStateFlow(mutableListOf())
