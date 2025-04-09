@@ -11,9 +11,9 @@ import sdmed.extra.cso.models.RestResultT
 import sdmed.extra.cso.models.common.MediaPickerSourceModel
 import sdmed.extra.cso.models.common.UserFileSASKeyQueueModel
 import sdmed.extra.cso.models.eventbus.EventList
-import sdmed.extra.cso.models.retrofit.hospitals.HospitalModel
-import sdmed.extra.cso.models.retrofit.pharmas.PharmaModel
-import sdmed.extra.cso.models.retrofit.users.UserDataModel
+import sdmed.extra.cso.models.retrofit.users.ExtraMyInfoHospital
+import sdmed.extra.cso.models.retrofit.users.ExtraMyInfoPharma
+import sdmed.extra.cso.models.retrofit.users.ExtraMyInfoResponse
 import sdmed.extra.cso.models.retrofit.users.UserFileModel
 import sdmed.extra.cso.models.retrofit.users.UserFileType
 import sdmed.extra.cso.models.retrofit.users.UserTrainingModel
@@ -29,10 +29,10 @@ class MyScreenVM(applicationContext: Context? = null): FBaseViewModel(applicatio
     private val eventChannel = FEventBus.createEventChannel<EventList.UserFileUploadEvent>()
     private val multiLoginChannel = FEventBus.createEventChannel<EventList.MultiLoginEvent>()
 
-    val thisData = MutableStateFlow(UserDataModel())
-    val hosList = MutableStateFlow(mutableListOf<HospitalModel>())
-    val selectedHos = MutableStateFlow<HospitalModel>(HospitalModel())
-    val pharmaList = MutableStateFlow(mutableListOf<PharmaModel>())
+    val thisData = MutableStateFlow(ExtraMyInfoResponse())
+    val hosList = MutableStateFlow(mutableListOf<ExtraMyInfoHospital>())
+    val selectedHos = MutableStateFlow<ExtraMyInfoHospital>(ExtraMyInfoHospital())
+    val pharmaList = MutableStateFlow(mutableListOf<ExtraMyInfoPharma>())
 
     val passwordChange = MutableStateFlow(false)
     val multiLogin = MutableStateFlow(false)
@@ -56,10 +56,10 @@ class MyScreenVM(applicationContext: Context? = null): FBaseViewModel(applicatio
         }
     }
 
-    suspend fun getData(): RestResultT<UserDataModel> {
+    suspend fun getData(): RestResultT<ExtraMyInfoResponse> {
         val ret = myInfoRepository.getData()
         if (ret.result == true) {
-            thisData.value = ret.data ?: UserDataModel()
+            thisData.value = ret.data ?: ExtraMyInfoResponse()
         }
         return ret
     }
@@ -74,7 +74,7 @@ class MyScreenVM(applicationContext: Context? = null): FBaseViewModel(applicatio
     }
 
     override fun fakeInit() {
-        thisData.value = UserDataModel().apply {
+        thisData.value = ExtraMyInfoResponse().apply {
             id = "ididid"
             name = "이름이름"
             companyName = "뿅뿅 주식회사"
@@ -107,22 +107,22 @@ class MyScreenVM(applicationContext: Context? = null): FBaseViewModel(applicatio
                 originalFilename = "마케팅계약서"
             })
         }
-        hosList.value.add(HospitalModel().apply {
+        hosList.value.add(ExtraMyInfoHospital().apply {
             thisPK = "123123"
             orgName = "가짜 병원1"
             address = "가짜시 가짜구 가짜로 1-2"
         })
-        hosList.value.add(HospitalModel().apply {
+        hosList.value.add(ExtraMyInfoHospital().apply {
             thisPK = "456456"
             orgName = "뻥 병원1"
             address = "뻥시 뻥구 뻥로 1-2 asdfkj asdlkfj asdflkj aslkdfjalksd fjsdfl  asdfklj aslkdfjas lkdjf"
         })
-        pharmaList.value.add(PharmaModel().apply {
+        pharmaList.value.add(ExtraMyInfoPharma().apply {
             thisPK = "123123"
             orgName = "가짜 제약사1"
             address = "가짜도 가짜군 가짜면 가짜리"
         })
-        pharmaList.value.add(PharmaModel().apply {
+        pharmaList.value.add(ExtraMyInfoPharma().apply {
             thisPK = "456456"
             orgName = "가짜 제약사2"
             address = "가짜도 가짜시 가짜동"

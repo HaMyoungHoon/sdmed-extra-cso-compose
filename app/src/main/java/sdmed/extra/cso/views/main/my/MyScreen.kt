@@ -24,7 +24,7 @@ import sdmed.extra.cso.models.menu.MenuItem
 import sdmed.extra.cso.models.menu.MenuList
 import sdmed.extra.cso.models.menu.NavigationType
 import sdmed.extra.cso.models.menu.WindowPanelType
-import sdmed.extra.cso.models.retrofit.hospitals.HospitalModel
+import sdmed.extra.cso.models.retrofit.users.ExtraMyInfoHospital
 import sdmed.extra.cso.models.retrofit.users.UserFileType
 import sdmed.extra.cso.utils.FAmhohwa
 import sdmed.extra.cso.utils.FCoroutineUtil
@@ -229,12 +229,12 @@ private fun setThisCommand(data: Any?, dataContext: MyScreenVM, navigate: (MenuI
 }
 private fun setHospitalCommand(data: Any?, dataContext: MyScreenVM) {
     if (data !is ArrayList<*> || data.size <= 1) return
-    val eventName = data[0] as? HospitalModel.ClickEvent ?: return
-    val dataBuff = data[1] as? HospitalModel ?: return
+    val eventName = data[0] as? ExtraMyInfoHospital.ClickEvent ?: return
+    val dataBuff = data[1] as? ExtraMyInfoHospital ?: return
     when (eventName) {
-        HospitalModel.ClickEvent.THIS -> {
+        ExtraMyInfoHospital.ClickEvent.THIS -> {
             if (dataContext.selectedHos.value == dataBuff) {
-                dataContext.selectedHos.value = HospitalModel()
+                dataContext.selectedHos.value = ExtraMyInfoHospital()
             } else {
                 dataContext.selectedHos.value = dataBuff
             }

@@ -35,8 +35,9 @@ import sdmed.extra.cso.fDate.FDateTime
 import sdmed.extra.cso.models.menu.MenuItem
 import sdmed.extra.cso.models.menu.NavigationType
 import sdmed.extra.cso.models.menu.WindowPanelType
-import sdmed.extra.cso.models.retrofit.edi.EDIUploadModel
+import sdmed.extra.cso.models.retrofit.edi.ExtraEDIListResponse
 import sdmed.extra.cso.utils.FCoroutineUtil
+import sdmed.extra.cso.utils.FLog
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
 import sdmed.extra.cso.views.component.shape.ShapeRoundedBoxData
@@ -260,13 +261,13 @@ private fun itemListContainer(dataContext: EDIScreenVM) {
     }
 }
 @Composable
-private fun ediItemContainer(dataContext: EDIScreenVM, item: EDIUploadModel) {
+private fun ediItemContainer(dataContext: EDIScreenVM, item: ExtraEDIListResponse) {
     val color = FThemeUtil.safeColorC()
     val selectedItem by dataContext.selectItem.collectAsState()
     item.relayCommand = dataContext.relayCommand
     shapeRoundedBox(ShapeRoundedBoxData().apply {
         backgroundColor = if(selectedItem?.thisPK == item.thisPK) color.onSenary else color.senaryContainer
-        modifier = Modifier.padding(5.dp).clickable { item.onClick(EDIUploadModel.ClickEvent.OPEN) }
+        modifier = Modifier.padding(5.dp).clickable { item.onClick(ExtraEDIListResponse.ClickEvent.OPEN) }
     }) {
         Row(Modifier.fillMaxWidth().padding(10.dp)) {
             customText(CustomTextData().apply {
@@ -314,10 +315,10 @@ private fun setThisCommand(data: Any?, dataContext: EDIScreenVM) {
 }
 private fun setEDICommand(data: Any?, dataContext: EDIScreenVM) {
     if (data !is ArrayList<*> || data.size <= 1) return
-    val eventName = data[0] as? EDIUploadModel.ClickEvent ?: return
-    val dataBuff = data[1] as? EDIUploadModel ?: return
+    val eventName = data[0] as? ExtraEDIListResponse.ClickEvent ?: return
+    val dataBuff = data[1] as? ExtraEDIListResponse ?: return
     when (eventName) {
-        EDIUploadModel.ClickEvent.OPEN -> {
+        ExtraEDIListResponse.ClickEvent.OPEN -> {
             if (dataContext.selectItem.value != dataBuff) {
                 dataContext.selectItem.value = dataBuff
             } else {
@@ -341,6 +342,7 @@ private fun getList(dataContext: EDIScreenVM, end: () -> Unit = { }) {
         dataContext.loading(false)
         if (ret.result != true) {
             dataContext.toast(ret.msg)
+            FLog.debug("mhha", "${ret.msg}")
         }
         end()
     })

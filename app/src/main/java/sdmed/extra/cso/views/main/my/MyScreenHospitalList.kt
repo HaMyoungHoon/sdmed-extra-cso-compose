@@ -28,7 +28,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import sdmed.extra.cso.interfaces.command.ICommand
-import sdmed.extra.cso.models.retrofit.hospitals.HospitalModel
+import sdmed.extra.cso.models.retrofit.users.ExtraMyInfoHospital
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
 import sdmed.extra.cso.views.theme.FThemeUtil
@@ -54,20 +54,20 @@ fun myScreenHospitalList(dataContext: MyScreenVM, heightMax: Dp = Dp.Unspecified
     }
 }
 
-private fun LazyListScope.hospitalItems(hospitalModel: MutableList<HospitalModel>, selectHospital: HospitalModel, relayCommand: ICommand) {
+private fun LazyListScope.hospitalItems(hospitalModel: MutableList<ExtraMyInfoHospital>, selectHospital: ExtraMyInfoHospital, relayCommand: ICommand) {
     items(hospitalModel) { x ->
         itemContainer(x, selectHospital.thisPK == x.thisPK, relayCommand)
     }
 }
 
 @Composable
-private fun itemContainer(data: HospitalModel, select: Boolean = false, relayCommand: ICommand) {
+private fun itemContainer(data: ExtraMyInfoHospital, select: Boolean = false, relayCommand: ICommand) {
     val color = FThemeUtil.safeColorC()
     data.relayCommand = relayCommand
     Card(Modifier.fillMaxWidth()
         .semantics { selected = select }
         .clip(RoundedCornerShape(5.dp))
-        .clickable { data.onClick(HospitalModel.ClickEvent.THIS) }
+        .clickable { data.onClick(ExtraMyInfoHospital.ClickEvent.THIS) }
         .clip(RoundedCornerShape(5.dp)),
         RoundedCornerShape(5.dp),
         cardSelectColor(select)) {

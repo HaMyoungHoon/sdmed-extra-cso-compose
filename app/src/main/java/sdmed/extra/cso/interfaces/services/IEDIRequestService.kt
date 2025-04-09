@@ -7,15 +7,15 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import sdmed.extra.cso.bases.FConstants
 import sdmed.extra.cso.models.RestResultT
-import sdmed.extra.cso.models.retrofit.edi.EDIApplyDateModel
 import sdmed.extra.cso.models.retrofit.edi.EDIHosBuffModel
 import sdmed.extra.cso.models.retrofit.edi.EDIMedicineBuffModel
 import sdmed.extra.cso.models.retrofit.edi.EDIPharmaBuffModel
 import sdmed.extra.cso.models.retrofit.edi.EDIUploadModel
+import sdmed.extra.cso.models.retrofit.edi.ExtraEDIApplyDateResponse
 
 interface IEDIRequestService {
     @GET("${FConstants.REST_API_EDI_REQUEST}/list/applyDate")
-    suspend fun getApplyDateList(): RestResultT<List<EDIApplyDateModel>>
+    suspend fun getApplyDateList(): RestResultT<List<ExtraEDIApplyDateResponse>>
     @GET("${FConstants.REST_API_EDI_REQUEST}/list/hospital")
     suspend fun getHospitalList(@Query("applyDate") applyDate: String): RestResultT<List<EDIHosBuffModel>>
     @GET("${FConstants.REST_API_EDI_REQUEST}/list/pharma")

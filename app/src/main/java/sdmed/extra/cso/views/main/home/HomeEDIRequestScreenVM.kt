@@ -13,13 +13,13 @@ import sdmed.extra.cso.models.common.EDISASKeyQueueModel
 import sdmed.extra.cso.models.common.MediaFileType
 import sdmed.extra.cso.models.common.MediaPickerSourceModel
 import sdmed.extra.cso.models.eventbus.EventList
-import sdmed.extra.cso.models.retrofit.edi.EDIApplyDateModel
 import sdmed.extra.cso.models.retrofit.edi.EDIHosBuffModel
 import sdmed.extra.cso.models.retrofit.edi.EDIPharmaBuffModel
 import sdmed.extra.cso.models.retrofit.edi.EDIType
 import sdmed.extra.cso.models.retrofit.edi.EDIUploadModel
 import sdmed.extra.cso.models.retrofit.edi.EDIUploadPharmaMedicineModel
 import sdmed.extra.cso.models.retrofit.edi.EDIUploadPharmaModel
+import sdmed.extra.cso.models.retrofit.edi.ExtraEDIApplyDateResponse
 import sdmed.extra.cso.models.services.FBackgroundEDIRequestUpload
 import sdmed.extra.cso.utils.FDI
 import sdmed.extra.cso.utils.FEventBus
@@ -29,8 +29,8 @@ class HomeEDIRequestScreenVM(applicationContext: Context? = null): FBaseViewMode
     private val ediRequestRepository: IEDIRequestRepository by FDI.di(applicationContext).instance(IEDIRequestRepository::class)
     private val backgroundService: FBackgroundEDIRequestUpload by FDI.di(applicationContext).instance(FBackgroundEDIRequestUpload::class)
     private val eventChannel = FEventBus.createEventChannel<EventList.EDIUploadEvent>()
-    val applyDateModel = MutableStateFlow(mutableListOf<EDIApplyDateModel>())
-    val selectApplyDate = MutableStateFlow<EDIApplyDateModel?>(null)
+    val applyDateModel = MutableStateFlow(mutableListOf<ExtraEDIApplyDateResponse>())
+    val selectApplyDate = MutableStateFlow<ExtraEDIApplyDateResponse?>(null)
     val hospitalOpen = MutableStateFlow(true)
     val hospitalModel = MutableStateFlow(mutableListOf<EDIHosBuffModel>())
     val selectHospital = MutableStateFlow<EDIHosBuffModel?>(null)
@@ -52,7 +52,7 @@ class HomeEDIRequestScreenVM(applicationContext: Context? = null): FBaseViewMode
             }
         }
     }
-    suspend fun getApplyData(): RestResultT<List<EDIApplyDateModel>> {
+    suspend fun getApplyData(): RestResultT<List<ExtraEDIApplyDateResponse>> {
         val ret = ediRequestRepository.getApplyDateList()
         if (ret.result == true) {
             applyDateModel.value = ret.data?.toMutableList() ?: mutableListOf()
@@ -123,7 +123,7 @@ class HomeEDIRequestScreenVM(applicationContext: Context? = null): FBaseViewMode
         backgroundService.sasKeyEnqueue(data)
 //        pharmaFileClear()
     }
-    suspend fun applyDateSelect(data: EDIApplyDateModel?) {
+    suspend fun applyDateSelect(data: ExtraEDIApplyDateResponse?) {
         selectApplyDate.value?.isSelect?.value = false
         hospitalModel.value = mutableListOf()
         if (data == null) {

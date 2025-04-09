@@ -48,7 +48,7 @@ import sdmed.extra.cso.models.common.PaginationModel
 import sdmed.extra.cso.models.menu.MenuItem
 import sdmed.extra.cso.models.menu.NavigationType
 import sdmed.extra.cso.models.menu.WindowPanelType
-import sdmed.extra.cso.models.retrofit.medicines.MedicineModel
+import sdmed.extra.cso.models.retrofit.medicines.ExtraMedicinePriceResponse
 import sdmed.extra.cso.utils.FCoroutineUtil
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.CustomTextFieldData
@@ -210,7 +210,7 @@ private fun itemListContainer(dataContext: PriceScreenVM, isWide: Boolean = true
     }
 }
 @Composable
-private fun medicineItemContainer(dataContext: PriceScreenVM, item: MedicineModel) {
+private fun medicineItemContainer(dataContext: PriceScreenVM, item: ExtraMedicinePriceResponse) {
     val color = FThemeUtil.safeColorC()
     item.relayCommand = dataContext.relayCommand
     Box(Modifier) {
@@ -354,10 +354,10 @@ private fun setThisCommand(data: Any?, dataContext: PriceScreenVM) {
 }
 private fun setItemCommand(data: Any?, dataContext: PriceScreenVM) {
     if (data !is ArrayList<*> || data.size <= 1) return
-    val eventName = data[0] as? MedicineModel.ClickEvent ?: return
-    val dataBuff = data[1] as? MedicineModel ?: return
+    val eventName = data[0] as? ExtraMedicinePriceResponse.ClickEvent ?: return
+    val dataBuff = data[1] as? ExtraMedicinePriceResponse ?: return
     when (eventName) {
-        MedicineModel.ClickEvent.THIS -> { }
+        ExtraMedicinePriceResponse.ClickEvent.THIS -> { }
     }
 }
 private fun setPageCommand(data: Any?, dataContext: PriceScreenVM) {

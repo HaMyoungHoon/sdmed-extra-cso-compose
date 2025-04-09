@@ -54,10 +54,9 @@ import sdmed.extra.cso.models.menu.MenuItem
 import sdmed.extra.cso.models.menu.MenuList
 import sdmed.extra.cso.models.menu.NavigationType
 import sdmed.extra.cso.models.menu.WindowPanelType
-import sdmed.extra.cso.models.retrofit.edi.EDIApplyDateModel
 import sdmed.extra.cso.models.retrofit.edi.EDIHosBuffModel
 import sdmed.extra.cso.models.retrofit.edi.EDIPharmaBuffModel
-import sdmed.extra.cso.utils.fCoilLoad
+import sdmed.extra.cso.models.retrofit.edi.ExtraEDIApplyDateResponse
 import sdmed.extra.cso.utils.FCoroutineUtil
 import sdmed.extra.cso.utils.FStorage.getParcelableList
 import sdmed.extra.cso.utils.fImageLoad
@@ -177,7 +176,7 @@ private fun ediDateContainer(dataContext: HomeEDIRequestScreenVM) {
                         item.relayCommand = dataContext.relayCommand
                         shapeRoundedBox(ShapeRoundedBoxData().apply {
                             backgroundColor = if (selectApplyDate?.thisPK == item.thisPK) color.onPrimary else color.disableBackGray
-                            modifier = Modifier.padding(5.dp).clickable { item.onClick(EDIApplyDateModel.ClickEvent.THIS) }
+                            modifier = Modifier.padding(5.dp).clickable { item.onClick(ExtraEDIApplyDateResponse.ClickEvent.THIS) }
                         }) {
                             customText(CustomTextData().apply {
                                 text = item.yearMonth
@@ -425,10 +424,10 @@ private fun setThisCommand(data: Any?, dataContext: HomeEDIRequestScreenVM) {
 }
 private fun setApplyDateCommand(data: Any?, dataContext: HomeEDIRequestScreenVM) {
     if (data !is ArrayList<*> || data.size <= 1) return
-    val eventName = data[0] as? EDIApplyDateModel.ClickEvent ?: return
-    val dataBuff = data[1] as? EDIApplyDateModel ?: return
+    val eventName = data[0] as? ExtraEDIApplyDateResponse.ClickEvent ?: return
+    val dataBuff = data[1] as? ExtraEDIApplyDateResponse ?: return
     when (eventName) {
-        EDIApplyDateModel.ClickEvent.THIS -> applyDateSelect(dataContext, dataBuff)
+        ExtraEDIApplyDateResponse.ClickEvent.THIS -> applyDateSelect(dataContext, dataBuff)
     }
 }
 private fun setHosBuffCommand(data: Any?, dataContext: HomeEDIRequestScreenVM) {
@@ -496,7 +495,7 @@ private fun save(dataContext: HomeEDIRequestScreenVM) {
     dataContext.startBackgroundService()
 }
 
-private fun applyDateSelect(dataContext: HomeEDIRequestScreenVM, data: EDIApplyDateModel) {
+private fun applyDateSelect(dataContext: HomeEDIRequestScreenVM, data: ExtraEDIApplyDateResponse) {
     FCoroutineUtil.coroutineScope({
         dataContext.applyDateSelect(data)
     })

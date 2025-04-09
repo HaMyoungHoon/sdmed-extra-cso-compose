@@ -5,24 +5,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import sdmed.extra.cso.bases.FDataModelClass
 import sdmed.extra.cso.fDate.FDateTime
 
-data class EDIUploadModel(
+data class ExtraEDIListResponse(
     var thisPK: String = "",
-    var userPK: String = "",
     var year: String = "",
     var month: String = "",
-    var day: String = "",
-    var hospitalPK: String = "",
     var orgName: String = "",
     var tempHospitalPK: String = "",
     var tempOrgName: String = "",
-    var name: String = "",
     var ediState: EDIState = EDIState.None,
     var ediType: EDIType = EDIType.DEFAULT,
     var regDate: String = "",
-    var etc: String = "",
-    var pharmaList: MutableList<EDIUploadPharmaModel> = arrayListOf(),
-    var responseList: MutableList<EDIUploadResponseModel> = arrayListOf()
-): FDataModelClass<EDIUploadModel.ClickEvent>() {
+    var pharmaList: MutableList<String> = mutableListOf()
+): FDataModelClass<ExtraEDIListResponse.ClickEvent>() {
     val isSelected = MutableStateFlow(false)
     val orgViewName get() = if (ediType == EDIType.DEFAULT) orgName else tempOrgName
     val tempOrgString get() = "(${tempOrgName})"

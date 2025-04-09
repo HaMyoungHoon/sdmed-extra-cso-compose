@@ -6,7 +6,7 @@ import org.kodein.di.instance
 import sdmed.extra.cso.bases.FBaseViewModel
 import sdmed.extra.cso.interfaces.repository.IMyInfoRepository
 import sdmed.extra.cso.models.RestResultT
-import sdmed.extra.cso.models.retrofit.users.UserDataModel
+import sdmed.extra.cso.models.retrofit.users.ExtraMyInfoResponse
 import sdmed.extra.cso.utils.FDI
 
 class PasswordChangeDialogVM(applicationContext: Context? = null): FBaseViewModel(applicationContext) {
@@ -19,7 +19,7 @@ class PasswordChangeDialogVM(applicationContext: Context? = null): FBaseViewMode
     val confirmPWRuleVisible = MutableStateFlow(false)
     val pwUnMatchVisible = MutableStateFlow(false)
 
-    suspend fun putPasswordChange(): RestResultT<UserDataModel> {
+    suspend fun putPasswordChange(): RestResultT<ExtraMyInfoResponse> {
         val ret = myInfoRepository.putPasswordChange(currentPW.value, afterPW.value, confirmPW.value)
         return ret
     }

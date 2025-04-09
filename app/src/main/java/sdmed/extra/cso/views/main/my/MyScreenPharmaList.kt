@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import sdmed.extra.cso.R
-import sdmed.extra.cso.models.retrofit.pharmas.PharmaModel
+import sdmed.extra.cso.models.retrofit.users.ExtraMyInfoPharma
 import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
 import sdmed.extra.cso.views.theme.FThemeUtil
@@ -48,19 +48,19 @@ fun myScreenPharmaList(dataContext: MyScreenVM, heightMax: Dp = Dp.Unspecified) 
     }
 }
 
-private fun LazyListScope.pharmaItems(pharmaModel: MutableList<PharmaModel>) {
+private fun LazyListScope.pharmaItems(pharmaModel: MutableList<ExtraMyInfoPharma>) {
     items(pharmaModel) { x ->
         itemContainer(x)
     }
 }
 
 @Composable
-private fun itemContainer(data: PharmaModel) {
+private fun itemContainer(data: ExtraMyInfoPharma) {
     val color = FThemeUtil.safeColorC()
     Card(Modifier.fillMaxWidth()
         .semantics { selected = false }
         .clip(RoundedCornerShape(5.dp))
-        .clickable { data.onClick(PharmaModel.ClickEvent.THIS) }
+        .clickable { data.onClick(ExtraMyInfoPharma.ClickEvent.THIS) }
         .clip(RoundedCornerShape(5.dp)),
         RoundedCornerShape(5.dp),
         cardSelectColor()) {

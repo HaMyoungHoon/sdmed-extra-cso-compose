@@ -13,11 +13,11 @@ import sdmed.extra.cso.models.common.EDISASKeyQueueModel
 import sdmed.extra.cso.models.common.MediaFileType
 import sdmed.extra.cso.models.common.MediaPickerSourceModel
 import sdmed.extra.cso.models.eventbus.EventList
-import sdmed.extra.cso.models.retrofit.edi.EDIApplyDateModel
 import sdmed.extra.cso.models.retrofit.edi.EDIPharmaBuffModel
 import sdmed.extra.cso.models.retrofit.edi.EDIType
 import sdmed.extra.cso.models.retrofit.edi.EDIUploadModel
 import sdmed.extra.cso.models.retrofit.edi.EDIUploadPharmaModel
+import sdmed.extra.cso.models.retrofit.edi.ExtraEDIApplyDateResponse
 import sdmed.extra.cso.models.retrofit.hospitals.HospitalTempModel
 import sdmed.extra.cso.models.services.FBackgroundEDIRequestNewUploadService
 import sdmed.extra.cso.utils.FDI
@@ -30,8 +30,8 @@ class HomeEDIRequestNewScreenVM(applicationContext: Context? = null): FBaseViewM
     private val eventChannel = FEventBus.createEventChannel<EventList.EDIUploadEvent>()
     val ediTypeModel = MutableStateFlow(mutableListOf<EDIType>())
     val selectEDITypePosition = MutableStateFlow(0)
-    val applyDateModel = MutableStateFlow(mutableListOf<EDIApplyDateModel>())
-    val selectApplyDate = MutableStateFlow<EDIApplyDateModel?>(null)
+    val applyDateModel = MutableStateFlow(mutableListOf<ExtraEDIApplyDateResponse>())
+    val selectApplyDate = MutableStateFlow<ExtraEDIApplyDateResponse?>(null)
     val tempHospitalPK = MutableStateFlow<String>("")
     val tempOrgName = MutableStateFlow<String>("")
     val selectHospitalBuff = MutableStateFlow(HospitalTempModel())
@@ -55,7 +55,7 @@ class HomeEDIRequestNewScreenVM(applicationContext: Context? = null): FBaseViewM
         }
     }
 
-    suspend fun getData(): RestResultT<List<EDIApplyDateModel>> {
+    suspend fun getData(): RestResultT<List<ExtraEDIApplyDateResponse>> {
         val ret = ediRequestRepository.getApplyDateList()
         if (ret.result == true) {
             applyDateModel.value = ret.data?.toMutableList() ?: mutableListOf()
@@ -103,7 +103,7 @@ class HomeEDIRequestNewScreenVM(applicationContext: Context? = null): FBaseViewM
         backgroundService.sasKeyEnqueue(data)
 //        pharmaFileClear()
     }
-    fun applyDateSelect(data: EDIApplyDateModel) {
+    fun applyDateSelect(data: ExtraEDIApplyDateResponse) {
         if (selectApplyDate.value == data) {
             selectApplyDate.value?.isSelect?.value = false
             selectApplyDate.value = null

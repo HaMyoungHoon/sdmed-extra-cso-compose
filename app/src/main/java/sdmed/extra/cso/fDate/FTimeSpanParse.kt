@@ -419,6 +419,14 @@ internal object FTimeSpanParse {
 
         return Pair(first, Pair(second, third))
     }
+    fun parseExactLiteral(tokenizer: TimeSpanTokenizer, enquotedString: StringBuilder): Boolean {
+        for (i in 0 until enquotedString.length) {
+            if (enquotedString[i] != tokenizer.nextChar) {
+                return false
+            }
+        }
+        return true
+    }
     fun tryParseExact(input: String, format: String, localize: FLocalize, styles: TimeSpanStyles, result: FTimeSpan): Boolean {
         val parseResult = TimeSpanResult().init(TimeSpanThrowStyle.None)
         return if (tryParseExactTimeSpan(input, format, localize, styles, parseResult)) {
@@ -1044,6 +1052,7 @@ internal object FTimeSpanParse {
                         result.setFailure(ParseFailureKind.Format, "format data is bad")
                         return false
                     }
+                    leadingZeroes = pair.second.first
                     ff = pair.second.second
                     seenFF = true
                 }
@@ -1067,7 +1076,16 @@ internal object FTimeSpanParse {
                     seenDD = true
                 }
                 '\'', '\"' -> {
-
+                    val enquotedString = StringBuilder()
+                    val pair = FDateTimeParse.tryParseQuoteString(format, i, enquotedString)
+                    if (!pair.first) {
+                        result.setFailure(ParseFailureKind.FormatWithParameter, "format data is bad")
+                        return false
+                    }
+                    if (!parseExactLiteral(tokenizer, enquotedString)) {
+                        result.setFailure(ParseFailureKind.Format, "format data is bad")
+                        return false
+                    }
                 }
                 '%' -> {
                     nextFormatChar = FDateTimeFormat.parseNextChar(format, i)

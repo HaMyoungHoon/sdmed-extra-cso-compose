@@ -52,10 +52,10 @@ import sdmed.extra.cso.models.common.MediaPickerSourceModel
 import sdmed.extra.cso.models.common.MediaViewParcelModel
 import sdmed.extra.cso.models.menu.NavigationType
 import sdmed.extra.cso.models.menu.WindowPanelType
-import sdmed.extra.cso.models.retrofit.edi.EDIUploadModel
 import sdmed.extra.cso.models.retrofit.edi.EDIUploadPharmaFileModel
-import sdmed.extra.cso.models.retrofit.edi.EDIUploadPharmaModel
-import sdmed.extra.cso.models.retrofit.edi.EDIUploadResponseModel
+import sdmed.extra.cso.models.retrofit.edi.ExtraEDIListResponse
+import sdmed.extra.cso.models.retrofit.edi.ExtraEDIPharma
+import sdmed.extra.cso.models.retrofit.edi.ExtraEDIResponse
 import sdmed.extra.cso.utils.fCoilLoad
 import sdmed.extra.cso.utils.FCoroutineUtil
 import sdmed.extra.cso.utils.FStorage.getParcelableList
@@ -78,7 +78,7 @@ import sdmed.extra.cso.views.theme.FThemeUtil
 import java.util.ArrayList
 
 @Composable
-fun ediScreenDetail(selectedItem: EDIUploadModel,
+fun ediScreenDetail(selectedItem: ExtraEDIListResponse,
                     windowPanelType: WindowPanelType = WindowPanelType.SINGLE_PANE,
                     displayFeatures: List<DisplayFeature> = emptyList(),
                     navigationType: NavigationType = NavigationType.BOTTOM,
@@ -197,7 +197,7 @@ private fun pharmaListContainer(dataContext: EDIScreenDetailVM, isWide: Boolean 
     }
 }
 @Composable
-private fun pharmaItemContainer(dataContext: EDIScreenDetailVM, item: EDIUploadPharmaModel, isWide: Boolean = true) {
+private fun pharmaItemContainer(dataContext: EDIScreenDetailVM, item: ExtraEDIPharma, isWide: Boolean = true) {
     val color = FThemeUtil.safeColorC()
     val isOpen by item.isOpen.collectAsState()
     item.relayCommand = dataContext.relayCommand
@@ -206,7 +206,7 @@ private fun pharmaItemContainer(dataContext: EDIScreenDetailVM, item: EDIUploadP
         modifier = Modifier.padding(10.dp)
     }) {
         Column(Modifier.padding(5.dp).align(Alignment.Center)) {
-            Row(Modifier.fillMaxWidth().clickable { item.onClick(EDIUploadPharmaModel.ClickEvent.OPEN) }) {
+            Row(Modifier.fillMaxWidth().clickable { item.onClick(ExtraEDIPharma.ClickEvent.OPEN) }) {
                 if (item.isCarriedOver) {
                     customText(CustomTextData().apply {
                         text = stringResource(R.string.carried_over_desc)
@@ -268,7 +268,7 @@ private fun pharmaFileContainer(dataContext: EDIScreenDetailVM, items: MutableLi
     }
 }
 @Composable
-private fun pharmaFileUploadContainer(dataContext: EDIScreenDetailVM, item: EDIUploadPharmaModel) {
+private fun pharmaFileUploadContainer(dataContext: EDIScreenDetailVM, item: ExtraEDIPharma) {
     val ediUploadItem by dataContext.item.collectAsState()
     if (!ediUploadItem.ediState.isEditable()) {
         return
@@ -289,7 +289,7 @@ private fun pharmaFileUploadContainer(dataContext: EDIScreenDetailVM, item: EDIU
                 Arrangement.SpaceEvenly) {
                 shapeRoundedBox(ShapeRoundedBoxData().apply {
                     backgroundColor = color.buttonBackground
-                    modifier = Modifier.align(Alignment.CenterVertically).padding(5.dp).clickable { item.onClick(EDIUploadPharmaModel.ClickEvent.ADD) }
+                    modifier = Modifier.align(Alignment.CenterVertically).padding(5.dp).clickable { item.onClick(ExtraEDIPharma.ClickEvent.ADD) }
                 }) {
                     customText(CustomTextData().apply {
                         text = stringResource(R.string.add_file_desc)
@@ -299,7 +299,7 @@ private fun pharmaFileUploadContainer(dataContext: EDIScreenDetailVM, item: EDIU
                 }
                 shapeRoundedBox(ShapeRoundedBoxData().apply {
                     backgroundColor = if (isSavable) color.buttonBackground else color.disableBackGray
-                    modifier = Modifier.align(Alignment.CenterVertically).padding(5.dp).clickable { item.onClick(EDIUploadPharmaModel.ClickEvent.SAVE) }
+                    modifier = Modifier.align(Alignment.CenterVertically).padding(5.dp).clickable { item.onClick(ExtraEDIPharma.ClickEvent.SAVE) }
                 }) {
                     customText(CustomTextData().apply {
                         text = stringResource(R.string.save_desc)
@@ -349,7 +349,7 @@ private fun responseListContainer(dataContext: EDIScreenDetailVM, isWide: Boolea
     }
 }
 @Composable
-private fun responseItemContainer(dataContext: EDIScreenDetailVM, item: EDIUploadResponseModel) {
+private fun responseItemContainer(dataContext: EDIScreenDetailVM, item: ExtraEDIResponse) {
     val color = FThemeUtil.safeColorC()
     val isOpen by item.isOpen.collectAsState()
     item.relayCommand = dataContext.relayCommand
@@ -357,7 +357,7 @@ private fun responseItemContainer(dataContext: EDIScreenDetailVM, item: EDIUploa
         backgroundColor = color.quinary
         modifier = Modifier.padding(10.dp)
     }) {
-        Column(Modifier.padding(5.dp).clickable { item.onClick(EDIUploadResponseModel.ClickEvent.OPEN) }) {
+        Column(Modifier.padding(5.dp).clickable { item.onClick(ExtraEDIResponse.ClickEvent.OPEN) }) {
             Row(Modifier) {
                 customText(CustomTextData().apply {
                     text = item.getResponseDate()
@@ -474,12 +474,12 @@ private fun setThisCommand(data: Any?, dataContext: EDIScreenDetailVM, onDismiss
 }
 private fun setEDIPharmaCommand(data: Any?, dataContext: EDIScreenDetailVM) {
     if (data !is ArrayList<*> || data.size <= 1) return
-    val eventName = data[0] as? EDIUploadPharmaModel.ClickEvent ?: return
-    val dataBuff = data[1] as? EDIUploadPharmaModel ?: return
+    val eventName = data[0] as? ExtraEDIPharma.ClickEvent ?: return
+    val dataBuff = data[1] as? ExtraEDIPharma ?: return
     when (eventName) {
-        EDIUploadPharmaModel.ClickEvent.OPEN -> dataBuff.isOpen.value = !dataBuff.isOpen.value
-        EDIUploadPharmaModel.ClickEvent.ADD -> addPharmaFile(dataContext, dataBuff)
-        EDIUploadPharmaModel.ClickEvent.SAVE -> savePharmaFile(dataContext, dataBuff)
+        ExtraEDIPharma.ClickEvent.OPEN -> dataBuff.isOpen.value = !dataBuff.isOpen.value
+        ExtraEDIPharma.ClickEvent.ADD -> addPharmaFile(dataContext, dataBuff)
+        ExtraEDIPharma.ClickEvent.SAVE -> savePharmaFile(dataContext, dataBuff)
     }
 }
 private fun setEDIPharmaFileCommand(data: Any?, dataContext: EDIScreenDetailVM) {
@@ -502,10 +502,10 @@ private fun setEDIPharmaFileUploadCommand(data: Any?, dataContext: EDIScreenDeta
 }
 private fun setEDIResponseCommand(data: Any?) {
     if (data !is ArrayList<*> || data.size <= 1) return
-    val eventName = data[0] as? EDIUploadResponseModel.ClickEvent ?: return
-    val dataBuff = data[1] as? EDIUploadResponseModel ?: return
+    val eventName = data[0] as? ExtraEDIResponse.ClickEvent ?: return
+    val dataBuff = data[1] as? ExtraEDIResponse ?: return
     when (eventName) {
-        EDIUploadResponseModel.ClickEvent.OPEN -> dataBuff.isOpen.value = !dataBuff.isOpen.value
+        ExtraEDIResponse.ClickEvent.OPEN -> dataBuff.isOpen.value = !dataBuff.isOpen.value
     }
 }
 
@@ -527,7 +527,7 @@ private fun hospitalDetail(dataContext: EDIScreenDetailVM) {
     dataContext.hospitalTempDetail.value = true
 }
 
-private fun addPharmaFile(dataContext: EDIScreenDetailVM, dataBuff: EDIUploadPharmaModel) {
+private fun addPharmaFile(dataContext: EDIScreenDetailVM, dataBuff: ExtraEDIPharma) {
     if (!dataBuff.isAddable) {
         return
     }
@@ -536,7 +536,7 @@ private fun addPharmaFile(dataContext: EDIScreenDetailVM, dataBuff: EDIUploadPha
         dataContext.addPharmaFilePK.value = dataBuff.thisPK
     }
 }
-private fun savePharmaFile(dataContext: EDIScreenDetailVM, dataBuff: EDIUploadPharmaModel) {
+private fun savePharmaFile(dataContext: EDIScreenDetailVM, dataBuff: ExtraEDIPharma) {
     if (!dataBuff.isAddable) {
         return
     }

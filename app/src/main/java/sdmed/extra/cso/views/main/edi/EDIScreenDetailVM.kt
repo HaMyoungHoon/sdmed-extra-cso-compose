@@ -1,7 +1,6 @@
 package sdmed.extra.cso.views.main.edi
 
 import android.content.Context
-import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -14,10 +13,10 @@ import sdmed.extra.cso.models.common.MediaFileType
 import sdmed.extra.cso.models.common.MediaPickerSourceModel
 import sdmed.extra.cso.models.common.MediaViewParcelModel
 import sdmed.extra.cso.models.eventbus.EventList
-import sdmed.extra.cso.models.retrofit.edi.EDIUploadFileModel
 import sdmed.extra.cso.models.retrofit.edi.EDIUploadModel
 import sdmed.extra.cso.models.retrofit.edi.EDIUploadPharmaFileModel
-import sdmed.extra.cso.models.retrofit.edi.EDIUploadPharmaModel
+import sdmed.extra.cso.models.retrofit.edi.ExtraEDIDetailResponse
+import sdmed.extra.cso.models.retrofit.edi.ExtraEDIPharma
 import sdmed.extra.cso.models.services.FBackgroundEDIFileUpload
 import sdmed.extra.cso.utils.FDI
 import sdmed.extra.cso.utils.FEventBus
@@ -28,7 +27,7 @@ class EDIScreenDetailVM(applicationContext: Context? = null): FBaseViewModel(app
     private val eventChannel = FEventBus.createEventChannel<EventList.EDIUploadEvent>()
 
     val thisPK = MutableStateFlow("")
-    val item = MutableStateFlow(EDIUploadModel())
+    val item = MutableStateFlow(ExtraEDIDetailResponse())
     val closeAble = MutableStateFlow(true)
     val addPharmaFilePK = MutableStateFlow<String?>(null)
     val hospitalTempDetail = MutableStateFlow(false)
@@ -44,26 +43,15 @@ class EDIScreenDetailVM(applicationContext: Context? = null): FBaseViewModel(app
     }
     fun reSet() {
         thisPK.value = ""
-        item.value = EDIUploadModel()
+        item.value = ExtraEDIDetailResponse()
     }
-    suspend fun getData(): RestResultT<EDIUploadModel> {
+    suspend fun getData(): RestResultT<ExtraEDIDetailResponse> {
         if (thisPK.value.isEmpty()) {
-            return RestResultT<EDIUploadModel>().emptyResult()
+            return RestResultT<ExtraEDIDetailResponse>().emptyResult()
         }
         val ret = ediListRepository.getData(thisPK.value)
         if (ret.result == true) {
-            item.value = ret.data ?: EDIUploadModel()
-        }
-        return ret
-    }
-    suspend fun postFile(ediUploadFileModel: List<EDIUploadFileModel>): RestResultT<List<EDIUploadFileModel>> {
-        return ediListRepository.postFile(thisPK.value, ediUploadFileModel)
-    }
-
-    fun getMediaViewFiles(): ArrayList<MediaViewParcelModel> {
-        val ret = arrayListOf<MediaViewParcelModel>()
-        item.value.fileList.forEach { x ->
-            ret.add(MediaViewParcelModel().parse(x))
+            item.value = ret.data ?: ExtraEDIDetailResponse()
         }
         return ret
     }
@@ -106,7 +94,7 @@ class EDIScreenDetailVM(applicationContext: Context? = null): FBaseViewModel(app
         item.value.pharmaList = buff
     }
 
-    fun startBackgroundService(data: EDIUploadPharmaModel) {
+    fun startBackgroundService(data: ExtraEDIPharma) {
         closeAble.value = false
         backgroundService.sasKeyEnqueue(EDISASKeyQueueModel().apply {
             pharmaPK = data.thisPK
@@ -116,7 +104,7 @@ class EDIScreenDetailVM(applicationContext: Context? = null): FBaseViewModel(app
                 month = item.value.month
                 tempHospitalPK = item.value.tempHospitalPK
                 tempOrgName = item.value.tempOrgName
-                pharmaList = item.value.pharmaList.filter { x -> x.uploadItems.value.isNotEmpty() }.toMutableList()
+                pharmaList = item.value.pharmaList.filter { x -> x.uploadItems.value.isNotEmpty() }.map { it.toEDIUploadPharmaModel() }.toMutableList()
             }
         })
     }

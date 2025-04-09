@@ -79,7 +79,6 @@ fun fImageLoad(mediaUrl: String? = null, mediaFileType: MediaFileType?, mediaFil
                                 ImageDecoder.decodeBitmap(source, resampler)
                             }
                         } catch (e: Exception) {
-                            FLog.debug("mhha", "${e.message}")
                             null
                         }
                     })

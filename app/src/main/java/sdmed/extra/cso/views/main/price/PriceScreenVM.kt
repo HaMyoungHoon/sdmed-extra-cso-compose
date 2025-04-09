@@ -8,6 +8,7 @@ import sdmed.extra.cso.interfaces.repository.IMedicinePriceListRepository
 import sdmed.extra.cso.models.RestPage
 import sdmed.extra.cso.models.RestResultT
 import sdmed.extra.cso.models.common.PaginationModel
+import sdmed.extra.cso.models.retrofit.medicines.ExtraMedicinePriceResponse
 import sdmed.extra.cso.models.retrofit.medicines.MedicineModel
 import sdmed.extra.cso.utils.FDI
 
@@ -19,10 +20,10 @@ class PriceScreenVM(applicationContext: Context? = null): FBaseViewModel(applica
     val previousPage = MutableStateFlow(0)
     val page = MutableStateFlow(0)
     val size = MutableStateFlow(20)
-    val medicineModel = MutableStateFlow(mutableListOf<MedicineModel>())
+    val medicineModel = MutableStateFlow(mutableListOf<ExtraMedicinePriceResponse>())
     val paginationModel = MutableStateFlow(PaginationModel())
 
-    suspend fun getList(): RestResultT<RestPage<MutableList<MedicineModel>>> {
+    suspend fun getList(): RestResultT<RestPage<MutableList<ExtraMedicinePriceResponse>>> {
         page.value = 0
         val ret = priceListRepository.getList(page.value, size.value)
         if (ret.result == true) {
@@ -31,7 +32,7 @@ class PriceScreenVM(applicationContext: Context? = null): FBaseViewModel(applica
         }
         return ret
     }
-    suspend fun getLike(): RestResultT<RestPage<MutableList<MedicineModel>>> {
+    suspend fun getLike(): RestResultT<RestPage<MutableList<ExtraMedicinePriceResponse>>> {
         page.value = 0
         val ret = priceListRepository.getLike(searchString, page.value, size.value)
         if (ret.result == true) {
@@ -40,7 +41,7 @@ class PriceScreenVM(applicationContext: Context? = null): FBaseViewModel(applica
         }
         return ret
     }
-    suspend fun addList(): RestResultT<RestPage<MutableList<MedicineModel>>> {
+    suspend fun addList(): RestResultT<RestPage<MutableList<ExtraMedicinePriceResponse>>> {
         val ret = priceListRepository.getList(page.value, size.value)
         if (ret.result == true) {
             medicineModel.value = ret.data?.content ?: mutableListOf()
@@ -51,7 +52,7 @@ class PriceScreenVM(applicationContext: Context? = null): FBaseViewModel(applica
         }
         return ret
     }
-    suspend fun addLike(): RestResultT<RestPage<MutableList<MedicineModel>>> {
+    suspend fun addLike(): RestResultT<RestPage<MutableList<ExtraMedicinePriceResponse>>> {
         val ret = priceListRepository.getLike(searchString, page.value, size.value)
         if (ret.result == true) {
             medicineModel.value = ret.data?.content ?: mutableListOf()

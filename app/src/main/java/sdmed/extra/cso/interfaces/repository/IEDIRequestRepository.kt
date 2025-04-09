@@ -1,14 +1,14 @@
 package sdmed.extra.cso.interfaces.repository
 
 import sdmed.extra.cso.models.RestResultT
-import sdmed.extra.cso.models.retrofit.edi.EDIApplyDateModel
 import sdmed.extra.cso.models.retrofit.edi.EDIHosBuffModel
 import sdmed.extra.cso.models.retrofit.edi.EDIMedicineBuffModel
 import sdmed.extra.cso.models.retrofit.edi.EDIPharmaBuffModel
 import sdmed.extra.cso.models.retrofit.edi.EDIUploadModel
+import sdmed.extra.cso.models.retrofit.edi.ExtraEDIApplyDateResponse
 
 interface IEDIRequestRepository {
-    suspend fun getApplyDateList(): RestResultT<List<EDIApplyDateModel>>
+    suspend fun getApplyDateList(): RestResultT<List<ExtraEDIApplyDateResponse>>
     suspend fun getHospitalList(applyDate: String): RestResultT<List<EDIHosBuffModel>>
     suspend fun getPharmaList(): RestResultT<List<EDIPharmaBuffModel>>
     suspend fun getPharmaList(hosPK: String, applyDate: String): RestResultT<List<EDIPharmaBuffModel>>

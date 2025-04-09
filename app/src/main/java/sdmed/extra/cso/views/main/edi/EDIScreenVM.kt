@@ -6,13 +6,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.kodein.di.instance
 import sdmed.extra.cso.bases.FBaseViewModel
-import sdmed.extra.cso.bases.FMainApplication
 import sdmed.extra.cso.interfaces.repository.IEDIListRepository
 import sdmed.extra.cso.models.RestResultT
 import sdmed.extra.cso.models.eventbus.EventList
 import sdmed.extra.cso.models.retrofit.edi.EDIState
 import sdmed.extra.cso.models.retrofit.edi.EDIType
-import sdmed.extra.cso.models.retrofit.edi.EDIUploadModel
+import sdmed.extra.cso.models.retrofit.edi.ExtraEDIListResponse
 import sdmed.extra.cso.utils.FDI
 import sdmed.extra.cso.utils.FEventBus
 import sdmed.extra.cso.utils.FExtensions
@@ -23,12 +22,12 @@ class EDIScreenVM(applicationContext: Context? = null): FBaseViewModel(applicati
     private val ediListRepository: IEDIListRepository by FDI.di(applicationContext).instance(IEDIListRepository::class)
     private val eventChannel = FEventBus.createEventChannel<EventList.EDIUploadEvent>()
 
-    val items = MutableStateFlow(mutableListOf<EDIUploadModel>())
+    val items = MutableStateFlow(mutableListOf<ExtraEDIListResponse>())
     val startDate = MutableStateFlow(FExtensions.getToday().addMonth(-1).toString("yyyy-MM-dd"))
     val endDate = MutableStateFlow(FExtensions.getTodayString())
     val startDateSelect = MutableStateFlow(false)
     val endDateSelect = MutableStateFlow(false)
-    val selectItem = MutableStateFlow<EDIUploadModel?>(null)
+    val selectItem = MutableStateFlow<ExtraEDIListResponse?>(null)
 
     init {
         viewModelScope.launch {
@@ -39,7 +38,7 @@ class EDIScreenVM(applicationContext: Context? = null): FBaseViewModel(applicati
         }
     }
 
-    suspend fun getList(): RestResultT<List<EDIUploadModel>> {
+    suspend fun getList(): RestResultT<List<ExtraEDIListResponse>> {
         val ret = ediListRepository.getList(startDate.value, endDate.value)
         if (ret.result == true) {
             items.value = ret.data?.toMutableList() ?: mutableListOf()
@@ -48,8 +47,8 @@ class EDIScreenVM(applicationContext: Context? = null): FBaseViewModel(applicati
     }
 
     override fun fakeInit() {
-        val list = mutableListOf<EDIUploadModel>()
-        list.add(EDIUploadModel().apply {
+        val list = mutableListOf<ExtraEDIListResponse>()
+        list.add(ExtraEDIListResponse().apply {
             thisPK = UUID.randomUUID().toString()
             regDate = "2025-01-02"
             ediState = EDIState.Reject
@@ -58,7 +57,7 @@ class EDIScreenVM(applicationContext: Context? = null): FBaseViewModel(applicati
             ediType = EDIType.NEW
             isSelected.value = true
         })
-        list.add(EDIUploadModel().apply {
+        list.add(ExtraEDIListResponse().apply {
             thisPK = UUID.randomUUID().toString()
             regDate = "2025-02-03"
             ediState = EDIState.Pending
@@ -67,7 +66,7 @@ class EDIScreenVM(applicationContext: Context? = null): FBaseViewModel(applicati
             ediType = EDIType.TRANSFER
             isSelected.value = false
         })
-        list.add(EDIUploadModel().apply {
+        list.add(ExtraEDIListResponse().apply {
             thisPK = UUID.randomUUID().toString()
             regDate = "2025-03-04"
             ediState = EDIState.OK

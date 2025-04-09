@@ -296,7 +296,7 @@ open class FDateTime2 {
                 currentMonth -= 12
                 currentYear += 1
             } else if (currentMonth <= 0) {
-                currentMonth = 12
+                currentMonth += 12
                 currentYear -= 1
                 if (currentYear <= 0) {
                     currentYear = 9999
