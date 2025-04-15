@@ -29,7 +29,9 @@ import sdmed.extra.cso.bases.FMainApplication
 import sdmed.extra.cso.models.common.NotifyIndex
 import sdmed.extra.cso.models.menu.Route
 import sdmed.extra.cso.models.retrofit.FRetrofitVariable
+import sdmed.extra.cso.utils.FAmhohwa
 import sdmed.extra.cso.utils.FCoroutineUtil
+import sdmed.extra.cso.utils.FExtensions
 import sdmed.extra.cso.utils.FStorage
 import sdmed.extra.cso.utils.FVersionControl
 import sdmed.extra.cso.views.dialog.message.MessageDialogData
@@ -92,8 +94,13 @@ class MainActivity: FBaseActivity<MainActivityVM>() {
     override fun onResume() {
         super.onResume()
         if (FRetrofitVariable.token.value.isNullOrEmpty()) {
-            FRetrofitVariable.token.value = FStorage.getAuthToken(this)
+            if (!FAmhohwa.tokenCheck(dataContext)) {
+                FAmhohwa.tokenRefresh(dataContext) {
+                    toast(it.msg)
+                }
+            }
         }
+        versionCheck(dataContext)
     }
 
     private fun openPage(): String {
