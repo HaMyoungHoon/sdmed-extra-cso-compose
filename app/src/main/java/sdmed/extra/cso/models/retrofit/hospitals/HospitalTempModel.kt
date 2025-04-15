@@ -26,7 +26,7 @@ data class HospitalTempModel(
     var longitude: Double = 0.0,
     var latitude: Double = 0.0,
     var markerType: MarkerClusterType = MarkerClusterType.HOSPITAL,
-    var fileList: MutableList<HospitalTempModel> = mutableListOf()
+    var fileList: MutableList<HospitalTempFileModel> = mutableListOf()
 ): FDataModelClass<HospitalTempModel.ClickEvent>(), Parcelable {
     @IgnoredOnParcel
     @Transient
