@@ -16,7 +16,7 @@ import sdmed.extra.cso.models.retrofit.users.UserTrainingModel
 
 interface IMyInfoService {
     @GET("${FConstants.REST_API_MY_INFO}/data")
-    suspend fun getData(@Query("relationView") relationView: Boolean = true, @Query("trainingModelView") trainingModelView: Boolean = true): RestResultT<ExtraMyInfoResponse>
+    suspend fun getData(@Query("relationView") relationView: Boolean = true): RestResultT<ExtraMyInfoResponse>
     @PUT("${FConstants.REST_API_MY_INFO}/passwordChange")
     suspend fun putPasswordChange(@Query("currentPW") currentPW: String, @Query("afterPW") afterPW: String, @Query("confirmPW") confirmPW: String): RestResultT<ExtraMyInfoResponse>
     @PUT("${FConstants.REST_API_MY_INFO}/file/{thisPK}")
