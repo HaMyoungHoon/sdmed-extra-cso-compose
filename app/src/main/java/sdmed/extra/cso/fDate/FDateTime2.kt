@@ -443,7 +443,7 @@ open class FDateTime2 {
             throw Exception("setMonth format illegal dateString : $dateString, splitChar : $splitChar")
         }
 
-        if (month <= 0 || month > 13) {
+        if (month <= 0 || month > 12) {
             throw Exception("setMonth format illegal month : $month")
         }
         val year = getYearString(dateString, splitChar)
