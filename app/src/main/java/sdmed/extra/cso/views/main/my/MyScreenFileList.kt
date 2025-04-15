@@ -81,7 +81,7 @@ fun myScreenFileList(dataContext: MyScreenVM) {
         item {
             Column(Modifier.widthIn(100.dp, 120.dp)) {
                 Box(Modifier.width(100.dp).height(100.dp).align(Alignment.CenterHorizontally)
-                    .clickable { dataContext.relayCommand.execute(MyScreenVM.ClickEvent.IMAGE_BANK_ACCOUNT)}) {
+                    .clickable { dataContext.relayCommand.execute(MyScreenVM.ClickEvent.IMAGE_CSO_REPORT)}) {
                     fCoilLoad(thisData.csoReportUrl, thisData.csoReportMimeType, thisData.csoReportFilename)
                 }
                 customText(CustomTextData().apply {
@@ -95,7 +95,7 @@ fun myScreenFileList(dataContext: MyScreenVM) {
         item {
             Column(Modifier.widthIn(100.dp, 120.dp)) {
                 Box(Modifier.width(100.dp).height(100.dp).align(Alignment.CenterHorizontally)
-                    .clickable { dataContext.relayCommand.execute(MyScreenVM.ClickEvent.IMAGE_CSO_REPORT)}) {
+                    .clickable { dataContext.relayCommand.execute(MyScreenVM.ClickEvent.IMAGE_BANK_ACCOUNT)}) {
                     fCoilLoad(thisData.bankAccountUrl, thisData.bankAccountMimeType, thisData.bankAccountFilename)
                 }
                 customText(CustomTextData().apply {
