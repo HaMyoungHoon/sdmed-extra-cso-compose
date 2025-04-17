@@ -84,11 +84,12 @@ class FMqttService(applicationContext: Context): FBaseService(applicationContext
                     .build()
                 client?.toAsync()?.subscribe(mqtt5Subscribe) { x -> parsePublish(x) }
             }
-            val mqtt5Subscribe = Mqtt5Subscribe.builder()
-                .topicFilter("test/1234/test/1234")
-                .qos(MqttQos.AT_LEAST_ONCE)
-                .build()
-            client?.toAsync()?.subscribe(mqtt5Subscribe) { x -> parsePublish(x) }
+            // 어 이거 테스트 코드 같은데
+//            val mqtt5Subscribe = Mqtt5Subscribe.builder()
+//                .topicFilter("test/1234/test/1234")
+//                .qos(MqttQos.AT_LEAST_ONCE)
+//                .build()
+//            client?.toAsync()?.subscribe(mqtt5Subscribe) { x -> parsePublish(x) }
         } catch (e: Exception) {
         }
     }
