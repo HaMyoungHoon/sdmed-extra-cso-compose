@@ -131,13 +131,13 @@ class FBackgroundUserFileUpload(applicationContext: Context): FBaseService(appli
             val blobName = data.blobName(context)
             val ret = commonRepository.postGenerateSasList(blobName.map { it.second })
             if (ret.result != true || ret.data == null) {
-                notificationService.sendNotify(context, NotifyIndex.QNA_UPLOAD, context.getString(R.string.qna_upload_fail), ret.msg ?: "")
+                notificationCall(context.getString(R.string.user_file_upload_fail))
                 return@coroutineScope
             }
             val uuid = UUID.randomUUID().toString()
             resultEnqueue(UserFileResultQueueModel(uuid, itemIndex = -1, itemCount = data.medias.size, mediaTypeIndex = data.mediaTypeIndex))
             ret.data?.forEachIndexed { index, x ->
-                val queue = UserFileAzureQueueModel(uuid, mediaTypeIndex = index).parse(data, blobName, x) ?: return@forEachIndexed
+                val queue = UserFileAzureQueueModel(uuid, itemIndex = index, mediaTypeIndex = data.mediaTypeIndex).parse(data, blobName, x) ?: return@forEachIndexed
                 azureEnqueue(queue)
             }
             progressNotificationCall(uuid)
@@ -151,7 +151,7 @@ class FBackgroundUserFileUpload(applicationContext: Context): FBaseService(appli
                     val ret = azureBlobRepository.upload(data.userFileModel.blobUrlKey(), cachedFile, data.userFileModel.mimeType)
                     FImageUtils.fileDelete(context, cachedFile)
                     if (ret.isSuccessful) {
-                        resultEnqueue(UserFileResultQueueModel(data.uuid, data.userFileModel, data.mediaTypeIndex, mediaTypeIndex = data.mediaTypeIndex))
+                        resultEnqueue(UserFileResultQueueModel(data.uuid, data.userFileModel, data.itemIndex, mediaTypeIndex = data.mediaTypeIndex))
                     } else {
                         progressNotificationCall(data.uuid, true)
                         notificationCall(context.getString(R.string.user_file_upload_fail))

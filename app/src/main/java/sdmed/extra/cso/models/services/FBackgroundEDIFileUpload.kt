@@ -91,7 +91,6 @@ class FBackgroundEDIFileUpload(applicationContext: Context): FBaseService(applic
                 val blobName = data.blobName(context, pharma)
                 val ret = commonRepository.postGenerateSasList(blobName.map { it.second })
                 if (ret.result != true || ret.data == null) {
-                    notificationService.sendNotify(context, NotifyIndex.EDI_FILE_UPLOAD, context.getString(R.string.edi_file_upload_fail), ret.msg ?: "")
                     notificationCall(context.getString(R.string.edi_file_upload_fail), ret.msg)
                     resultBreak(uuid)
                     return@coroutineScope

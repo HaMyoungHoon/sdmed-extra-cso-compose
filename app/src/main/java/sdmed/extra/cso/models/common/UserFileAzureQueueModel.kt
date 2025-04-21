@@ -8,6 +8,7 @@ data class UserFileAzureQueueModel(
     var uuid: String = "",
     var media: MediaPickerSourceModel = MediaPickerSourceModel(),
     var userFileModel: BlobUploadModel = BlobUploadModel(),
+    var itemIndex: Int = 0,
     var mediaTypeIndex: Int = 0
 ) {
     fun parse(keyQueue: UserFileSASKeyQueueModel, blobName: List<Pair<String, String>>, blobInfo: BlobStorageInfoModel): UserFileAzureQueueModel? {

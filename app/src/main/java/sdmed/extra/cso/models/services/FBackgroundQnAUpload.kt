@@ -89,7 +89,7 @@ class FBackgroundQnAUpload(applicationContext: Context): FBaseService(applicatio
             val blobName = data.blobName(context)
             val ret = commonRepository.postGenerateSasList(blobName.map { it.second })
             if (ret.result != true || ret.data == null) {
-                notificationService.sendNotify(context, NotifyIndex.QNA_UPLOAD, context.getString(R.string.qna_upload_fail), ret.msg ?: "")
+                notificationCall(context.getString(R.string.qna_upload_fail))
                 return@coroutineScope
             }
             val uuid = UUID.randomUUID().toString()
