@@ -32,11 +32,11 @@ class FBackgroundUserFileUpload(applicationContext: Context): FBaseService(appli
     val myInfoRepository: IMyInfoRepository by di.instance(IMyInfoRepository::class)
 
     private val sasKeyQ = QueueLockModel<UserFileSASKeyQueueModel>("sasQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")} ${UUID.randomUUID()}")
-    private val azureQ = QueueLockModel<UserFileAzureQueueModel>("sasQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")} ${UUID.randomUUID()}")
-    private val resultQ = QueueLockModel<UserFileResultQueueModel>("sasQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")} ${UUID.randomUUID()}")
-    private val sasTrainingQ = QueueLockModel<UserTrainingFileSASKeyQueueModel>("sasQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")} ${UUID.randomUUID()}")
-    private val azureTrainingQ = QueueLockModel<UserTrainingFileAzureQueueModel>("sasQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")} ${UUID.randomUUID()}")
-    private val resultTrainingQ = QueueLockModel<UserTrainingFileResultQueueModel>("sasQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")} ${UUID.randomUUID()}")
+    private val azureQ = QueueLockModel<UserFileAzureQueueModel>("azureQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")} ${UUID.randomUUID()}")
+    private val resultQ = QueueLockModel<UserFileResultQueueModel>("resultQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")} ${UUID.randomUUID()}")
+    private val sasTrainingQ = QueueLockModel<UserTrainingFileSASKeyQueueModel>("sasTrainingQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")} ${UUID.randomUUID()}")
+    private val azureTrainingQ = QueueLockModel<UserTrainingFileAzureQueueModel>("azureTrainingQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")} ${UUID.randomUUID()}")
+    private val resultTrainingQ = QueueLockModel<UserTrainingFileResultQueueModel>("resultTrainingQ ${FExtensions.getToday().toString("yyyyMMdd_HHmmss")} ${UUID.randomUUID()}")
 
     private var resultQRun = false
     private var resultTrainingQRun = false
@@ -123,7 +123,7 @@ class FBackgroundUserFileUpload(applicationContext: Context): FBaseService(appli
             postResultData(resultTrainingDequeue())
             Thread.sleep(100)
         }
-        this.resultQRun = false
+        this.resultTrainingQRun = false
     }, resultQRun)
 
     private fun checkSASKeyQ(data: UserFileSASKeyQueueModel) {
