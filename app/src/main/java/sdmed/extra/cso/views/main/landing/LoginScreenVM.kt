@@ -11,6 +11,7 @@ import sdmed.extra.cso.bases.FBaseViewModel
 import sdmed.extra.cso.models.RestResultT
 import sdmed.extra.cso.models.eventbus.EventList
 import sdmed.extra.cso.models.retrofit.users.UserMultiLoginModel
+import sdmed.extra.cso.utils.FCoroutineUtil
 import sdmed.extra.cso.utils.FEventBus
 import sdmed.extra.cso.utils.FStorage
 
@@ -38,6 +39,12 @@ class LoginScreenVM(applicationContext: Context? = null): FBaseViewModel(applica
             multiSignItems.value = it.toMutableList()
         }
     }
+    fun mqttReInit() {
+        FCoroutineUtil.coroutineScope({
+            mqttService.mqttDisconnect()
+            mqttService.mqttInit()
+        })
+    }
     fun reSet() {
         id.value = ""
         pw.value = ""
@@ -46,6 +53,9 @@ class LoginScreenVM(applicationContext: Context? = null): FBaseViewModel(applica
     }
     suspend fun signIn(): RestResultT<String> {
         val ret = commonRepository.signIn(id.value, pw.value)
+        if (ret.result == true) {
+            mqttReInit()
+        }
         return ret
     }
 

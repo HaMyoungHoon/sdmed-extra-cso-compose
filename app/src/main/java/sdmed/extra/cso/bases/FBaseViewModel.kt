@@ -12,9 +12,11 @@ import sdmed.extra.cso.interfaces.command.IAsyncEventListener
 import sdmed.extra.cso.interfaces.command.ICommand
 import sdmed.extra.cso.interfaces.repository.IAzureBlobRepository
 import sdmed.extra.cso.interfaces.repository.ICommonRepository
+import sdmed.extra.cso.interfaces.services.IMqttService
 import sdmed.extra.cso.models.RestResultT
 import sdmed.extra.cso.models.command.AsyncRelayCommand
 import sdmed.extra.cso.models.retrofit.users.UserStatus
+import sdmed.extra.cso.models.services.FMqttService
 import sdmed.extra.cso.models.services.FPermissionService
 import sdmed.extra.cso.models.services.FUIStateService
 import sdmed.extra.cso.utils.FDI
@@ -25,6 +27,7 @@ abstract class FBaseViewModel(applicationContext: Context? = null): ViewModel() 
     }
     val permissionService: FPermissionService by FDI.di(applicationContext).instance(FPermissionService::class)
     val uiStateService: FUIStateService by FDI.di(applicationContext).instance(FUIStateService::class)
+    protected val mqttService: FMqttService by FDI.di(applicationContext).instance(FMqttService::class)
     protected val azureBlobRepository: IAzureBlobRepository by FDI.di(applicationContext).instance(IAzureBlobRepository::class)
     protected val commonRepository: ICommonRepository by FDI.di(applicationContext).instance(ICommonRepository::class)
 

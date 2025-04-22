@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import sdmed.extra.cso.bases.FBaseViewModel
 import sdmed.extra.cso.models.RestResultT
+import sdmed.extra.cso.utils.FCoroutineUtil
 
 class LoginDialogVM(applicationContext: Context? = null): FBaseViewModel(applicationContext) {
     val id = MutableStateFlow("")
@@ -19,6 +20,12 @@ class LoginDialogVM(applicationContext: Context? = null): FBaseViewModel(applica
     suspend fun signIn(): RestResultT<String> {
         val ret = commonRepository.signIn(id.value, pw.value)
         return ret
+    }
+    fun mqttReInit() {
+        FCoroutineUtil.coroutineScope({
+            mqttService.mqttDisconnect()
+            mqttService.mqttInit()
+        })
     }
 
     enum class ClickEvent(var index: Int) {

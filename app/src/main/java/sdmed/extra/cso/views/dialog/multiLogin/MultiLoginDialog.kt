@@ -184,6 +184,7 @@ private fun setItemCommand(data: Any?, dataContext: MultiLoginDialogVM, onDismis
                     FStorage.setAuthToken(dataContext.context, ret.data)
                     FAmhohwa.addLoginData(dataContext.context)
                     FEventBus.emit(EventList.MultiLoginEvent)
+                    mqttReInit(dataContext)
                     onDismissRequest()
                     return@coroutineScope
                 }
@@ -192,7 +193,9 @@ private fun setItemCommand(data: Any?, dataContext: MultiLoginDialogVM, onDismis
         }
     }
 }
-
+private fun mqttReInit(dataContext: MultiLoginDialogVM) {
+    dataContext.mqttReInit()
+}
 private fun addLogin(dataContext: MultiLoginDialogVM) {
     dataContext.addLogin.value = true
 }

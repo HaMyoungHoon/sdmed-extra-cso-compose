@@ -63,6 +63,9 @@ class MyScreenVM(applicationContext: Context? = null): FBaseViewModel(applicatio
         }
         return ret
     }
+    fun mqttDisconnect() {
+        mqttService.mqttDisconnect()
+    }
     fun userFileUpload(mediaTypeIndex: Int, mediaList: ArrayList<MediaPickerSourceModel>) {
         if (mediaTypeIndex == -1) return
         if (mediaList.isEmpty()) return

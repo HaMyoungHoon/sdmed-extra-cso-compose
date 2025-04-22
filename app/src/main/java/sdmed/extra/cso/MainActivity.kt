@@ -19,14 +19,17 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.adaptive.calculateDisplayFeatures
 import sdmed.extra.cso.bases.FBaseActivity
 import sdmed.extra.cso.bases.FConstants
 import sdmed.extra.cso.bases.FMainApplication
 import sdmed.extra.cso.models.common.NotifyIndex
+import sdmed.extra.cso.models.menu.MenuList
 import sdmed.extra.cso.models.menu.Route
 import sdmed.extra.cso.models.retrofit.FRetrofitVariable
 import sdmed.extra.cso.utils.FAmhohwa
@@ -37,6 +40,7 @@ import sdmed.extra.cso.utils.FVersionControl
 import sdmed.extra.cso.views.dialog.message.MessageDialogData
 import sdmed.extra.cso.views.dialog.message.MessageDialogVM
 import sdmed.extra.cso.views.dialog.message.messageDialog
+import sdmed.extra.cso.views.navigation.NavigationAction
 import sdmed.extra.cso.views.navigation.getFoldingDevicePosture
 import sdmed.extra.cso.views.navigation.getWindowPaneType
 import sdmed.extra.cso.views.navigation.thisApp
@@ -62,6 +66,7 @@ class MainActivity: FBaseActivity<MainActivityVM>() {
                 val windowPanelType = getWindowPaneType(windowSize, foldingDevicePosture)
                 val updateVisible by dataContext.updateVisible.collectAsState()
                 val updateApp by dataContext.updateApp.collectAsState()
+                val tokenExpired by dataContext.tokenExpired.collectAsState()
                 Box(Modifier
                     .windowInsetsPadding(WindowInsets.statusBars.only(WindowInsetsSides.Top))
                     .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Bottom))
@@ -84,6 +89,15 @@ class MainActivity: FBaseActivity<MainActivityVM>() {
                     }
                     val dest = openPage()
                     thisApp(windowPanelType, displayFeatures, dest)
+
+                    if (tokenExpired) {
+                        val navHostController = rememberNavController()
+                        val navigationActions = remember(navHostController) {
+                            NavigationAction(navHostController)
+                        }
+                        navigationActions.navigateTo(MenuList.menuLanding(), true)
+                        dataContext.tokenExpired.value = false
+                    }
                 }
                 mqttInit()
             }
@@ -96,7 +110,13 @@ class MainActivity: FBaseActivity<MainActivityVM>() {
         if (FRetrofitVariable.token.value.isNullOrEmpty()) {
             if (!FAmhohwa.tokenCheck(dataContext)) {
                 FAmhohwa.tokenRefresh(dataContext) {
-                    toast(it.msg)
+                    if (it.result == true) {
+                        dataContext.mqttReInit()
+                    } else {
+                        FAmhohwa.logout(this, true)
+                        dataContext.mqttDisconnect()
+                        dataContext.tokenExpired.value = true
+                    }
                 }
             }
         }
@@ -143,9 +163,7 @@ class MainActivity: FBaseActivity<MainActivityVM>() {
     }
 
     private fun mqttInit() {
-        FCoroutineUtil.coroutineScope({
-            dataContext.mqttService.mqttInit()
-        })
+        dataContext.mqttInit()
     }
     private fun setBackPressed() {
         _backPressed = object: OnBackPressedCallback(true) {

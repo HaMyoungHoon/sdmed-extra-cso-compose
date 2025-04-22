@@ -37,6 +37,13 @@ class FMqttService(applicationContext: Context): FBaseService(applicationContext
     suspend fun mqttEDIFileAdd(thisPK: String, content: String) = mqttRepository.postEDIFileAdd(thisPK, content)
     suspend fun mqttQnA(thisPK: String, content: String) = mqttRepository.postQnA(thisPK, content)
     suspend fun mqttUserFileAdd(thisPK: String, content: String) = mqttRepository.postEDIFileAdd(thisPK, content)
+    fun mqttDisconnect() {
+        if (client?.state?.isConnected != true) {
+            return
+        }
+
+        client?.toAsync()?.disconnect()
+    }
     fun mqttConnect(mqttConnectModel: MqttConnectModel?) {
         mqttConnectModel ?: return
         if (client?.state?.isConnected == true) {
