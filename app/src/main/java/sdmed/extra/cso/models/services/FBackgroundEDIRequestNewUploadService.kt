@@ -39,7 +39,9 @@ class FBackgroundEDIRequestNewUploadService(applicationContext: Context): FBaseS
         resultQ.locking()
         val findBuff = resultQ.findQ(false, { it.uuid == data.uuid })
         if (findBuff == null) {
-            resultQ.enqueue(data, false)
+            if (data.itemIndex == -1) {
+                resultQ.enqueue(data, false)
+            }
         } else {
             findBuff.appendItemPath(data.currentMedia, data.itemIndex)
         }
@@ -62,12 +64,9 @@ class FBackgroundEDIRequestNewUploadService(applicationContext: Context): FBaseS
     }
     private fun resultBreak(uuid: String) {
         resultQ.locking()
-        val retBuff = resultQ.findQ(false, { it.uuid == uuid})
-        if (retBuff == null) {
-            resultQ.unlocking()
-            return
+        resultQ.findQ(false, { it.uuid == uuid })?.let {
+            resultQ.removeQ(it, false)
         }
-        resultQ.removeQ(retBuff, false)
         resultQ.unlocking()
     }
 
@@ -120,6 +119,7 @@ class FBackgroundEDIRequestNewUploadService(applicationContext: Context): FBaseS
                     } else {
                         progressNotificationCall(data.uuid, true)
                         notificationCall(context.getString(R.string.edi_file_upload_fail))
+                        resultBreak(data.uuid)
                     }
                 } catch (_: Exception) {
                     notificationCall(context.getString(R.string.edi_file_upload_fail))
@@ -135,7 +135,7 @@ class FBackgroundEDIRequestNewUploadService(applicationContext: Context): FBaseS
             val ret = ediRequestRepository.postNewData(data.parseEDIUploadModel())
             if (ret.result == true) {
                 notificationCall(context.getString(R.string.edi_file_upload_comp), ediPK = ret.data?.thisPK ?: "")
-                mqttService.mqttEDIFileAdd(ret.data?.thisPK ?: "", data.ediUploadModel.orgName)
+                mqttService.mqttEDIRequest(ret.data?.thisPK ?: "", data.ediUploadModel.orgName)
             } else {
                 notificationCall(context.getString(R.string.edi_file_upload_fail), ret.msg)
             }

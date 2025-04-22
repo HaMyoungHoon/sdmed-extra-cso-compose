@@ -36,7 +36,9 @@ class FBackgroundEDIFileUpload(applicationContext: Context): FBaseService(applic
         resultQ.locking()
         val findBuff = resultQ.findQ(false, { it.uuid == data.uuid })
         if (findBuff == null) {
-            resultQ.enqueue(data, false)
+            if (data.itemIndex == -1) {
+                resultQ.enqueue(data, false)
+            }
         } else {
             findBuff.appendItemPath(data.currentMedia, data.itemIndex)
         }
@@ -59,12 +61,9 @@ class FBackgroundEDIFileUpload(applicationContext: Context): FBaseService(applic
     }
     private fun resultBreak(uuid: String) {
         resultQ.locking()
-        val retBuff = resultQ.findQ(false, { it.uuid == uuid})
-        if (retBuff == null) {
-            resultQ.unlocking()
-            return
+        resultQ.findQ(false, { it.uuid == uuid })?.let {
+            resultQ.removeQ(it, false)
         }
-        resultQ.removeQ(retBuff, false)
         resultQ.unlocking()
     }
 
@@ -116,6 +115,7 @@ class FBackgroundEDIFileUpload(applicationContext: Context): FBaseService(applic
                     } else {
                         progressNotificationCall(data.uuid, true)
                         notificationCall(context.getString(R.string.edi_file_upload_fail))
+                        resultBreak(data.uuid)
                     }
                 } catch (_: Exception) {
                     notificationCall(context.getString(R.string.edi_file_upload_fail))

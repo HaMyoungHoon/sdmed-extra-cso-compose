@@ -47,7 +47,9 @@ class FBackgroundQnAUpload(applicationContext: Context): FBaseService(applicatio
         resultQ.locking()
         val findBuff = resultQ.findQ(false, { it.uuid == data.uuid })
         if (findBuff == null) {
-            resultQ.enqueue(data, false)
+            if (data.itemIndex == -1) {
+                resultQ.enqueue(data, false)
+            }
         } else {
             findBuff.appendItemPath(data.currentMedia, data.itemIndex)
         }
@@ -67,6 +69,13 @@ class FBackgroundQnAUpload(applicationContext: Context): FBaseService(applicatio
         }
         resultQ.unlocking()
         return ret
+    }
+    private fun resultBreak(uuid: String) {
+        resultQ.locking()
+        resultQ.findQ(false, { it.uuid == uuid })?.let {
+            resultQ.removeQ(it, false)
+        }
+        resultQ.unlocking()
     }
     private fun sasKeyThreadStart() = sasKeyQ.threadStart {
         checkSASKeyQ(sasKeyQ.dequeue())
@@ -113,6 +122,7 @@ class FBackgroundQnAUpload(applicationContext: Context): FBaseService(applicatio
                     } else {
                         progressNotificationCall(data.uuid, true)
                         notificationCall(context.getString(R.string.qna_upload_fail))
+                        resultBreak(data.uuid)
                     }
                 } catch (_: Exception) {
                     progressNotificationCall(data.uuid, true)

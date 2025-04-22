@@ -49,7 +49,9 @@ class FBackgroundUserFileUpload(applicationContext: Context): FBaseService(appli
         resultQ.locking()
         val findBuff = resultQ.findQ(false, { it.uuid == data.uuid })
         if (findBuff == null) {
-            resultQ.enqueue(data, false)
+            if (data.itemIndex == -1) {
+                resultQ.enqueue(data, false)
+            }
         } else {
             findBuff.appendItemPath(data.currentMedia, data.itemIndex)
         }
@@ -61,7 +63,9 @@ class FBackgroundUserFileUpload(applicationContext: Context): FBaseService(appli
         resultTrainingQ.locking()
         val findBuff = resultTrainingQ.findQ(false, { it.uuid == data.uuid })
         if (findBuff == null) {
-            resultTrainingQ.enqueue(data, false)
+            if (data.trainingDate.isEmpty()) {
+                resultTrainingQ.enqueue(data, false)
+            }
         } else {
             findBuff.setThis(data)
         }
@@ -82,6 +86,13 @@ class FBackgroundUserFileUpload(applicationContext: Context): FBaseService(appli
         resultQ.unlocking()
         return ret
     }
+    private fun resultBreak(uuid: String) {
+        resultQ.locking()
+        resultQ.findQ(false, { it.uuid == uuid })?.let {
+            resultQ.removeQ(it, false)
+        }
+        resultQ.unlocking()
+    }
     private fun resultTrainingDequeue(): UserTrainingFileResultQueueModel {
         resultTrainingQ.locking()
         val ret: UserTrainingFileResultQueueModel
@@ -94,6 +105,13 @@ class FBackgroundUserFileUpload(applicationContext: Context): FBaseService(appli
         }
         resultTrainingQ.unlocking()
         return ret
+    }
+    private fun resultTrainingBreak(uuid: String) {
+        resultTrainingQ.locking()
+        resultTrainingQ.findQ(false, { it.uuid == uuid })?.let {
+            resultTrainingQ.removeQ(it, false)
+        }
+        resultTrainingQ.unlocking()
     }
     private fun sasKeyThreadStart() = sasKeyQ.threadStart {
         checkSASKeyQ(sasKeyQ.dequeue())
@@ -155,6 +173,7 @@ class FBackgroundUserFileUpload(applicationContext: Context): FBaseService(appli
                     } else {
                         progressNotificationCall(data.uuid, true)
                         notificationCall(context.getString(R.string.user_file_upload_fail))
+                        resultBreak(data.uuid)
                     }
                 } catch (_: Exception) {
                     progressNotificationCall(data.uuid, true)
@@ -214,6 +233,7 @@ class FBackgroundUserFileUpload(applicationContext: Context): FBaseService(appli
                     } else {
                         progressNotificationCall(data.uuid, true)
                         notificationCall(context.getString(R.string.user_file_upload_fail))
+                        resultTrainingBreak(data.uuid)
                     }
                 } catch (_: Exception) {
                     progressNotificationCall(data.uuid, true)
