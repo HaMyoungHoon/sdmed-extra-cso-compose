@@ -181,9 +181,9 @@ class FBackgroundUserFileUpload(applicationContext: Context): FBaseService(appli
     }
     private fun getUserFileContent(userFileType: UserFileType) = when (userFileType) {
         UserFileType.Taxpayer -> context.getString(R.string.mqtt_title_taxpaayer_add)
-        UserFileType.BankAccount -> context.getString(R.string.mqtt_title_taxpaayer_add)
-        UserFileType.CsoReport -> context.getString(R.string.mqtt_title_taxpaayer_add)
-        UserFileType.MarketingContract -> context.getString(R.string.mqtt_title_taxpaayer_add)
+        UserFileType.BankAccount -> context.getString(R.string.mqtt_title_bank_account_add)
+        UserFileType.CsoReport -> context.getString(R.string.mqtt_title_cso_report_add)
+        UserFileType.MarketingContract -> context.getString(R.string.mqtt_title_marketing_contract_add)
     }
     private fun checkSASKeyQ(data: UserTrainingFileSASKeyQueueModel) {
         FCoroutineUtil.coroutineScope({

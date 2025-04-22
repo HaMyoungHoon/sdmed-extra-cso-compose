@@ -40,6 +40,10 @@ class MyScreenTrainingCertificateVM(applicationContext: Context? = null): FBaseV
         checkSavable()
     }
     fun startBackground() {
+        if (!isSavable.value) {
+            return
+        }
+        loading()
         val uploadBuff = uploadBuff.value ?: return
         backgroundService.sasKeyEnqueue(UserTrainingFileSASKeyQueueModel().apply {
             media = uploadBuff
