@@ -460,10 +460,10 @@ object FImageUtils {
             val resizedBitmap = rotateScaledBitmap(originBitmap, options, resize, orientation)
             val outputStream = FileOutputStream(outFile)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                resizedBitmap.compress(Bitmap.CompressFormat.WEBP_LOSSLESS, 100, outputStream)
+                resizedBitmap.compress(Bitmap.CompressFormat.WEBP_LOSSLESS, 75, outputStream)
             } else {
                 @Suppress("DEPRECATION")
-                resizedBitmap.compress(Bitmap.CompressFormat.WEBP, 100, outputStream)
+                resizedBitmap.compress(Bitmap.CompressFormat.WEBP, 75, outputStream)
             }
             originBitmap.recycle()
             resizedBitmap.recycle()
@@ -494,7 +494,7 @@ object FImageUtils {
         inputStream.reset()
         return ret
     }
-    private fun calcResize(options: BitmapFactory.Options, limitSize: Int = 1290): Float {
+    private fun calcResize(options: BitmapFactory.Options, limitSize: Int = 2500): Float {
         val height = options.outHeight
         val width = options.outWidth
         var inSampleSize = 1F
