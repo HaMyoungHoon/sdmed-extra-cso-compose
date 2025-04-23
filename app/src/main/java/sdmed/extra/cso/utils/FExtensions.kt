@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -151,7 +152,10 @@ object FExtensions {
         return FContentsType.findContentType(ext)
     }
 
-    fun <T: StateFlow<M>, M> stateIn(item: T, initialValue: M): StateFlow<M> {
+    fun <T: Flow<R>, R> stateIn(item: T, initialValue: R): StateFlow<R> {
+        return item.stateIn(CoroutineScope(Dispatchers.Main + SupervisorJob()), SharingStarted.Lazily, initialValue)
+    }
+    fun <T: StateFlow<R>, R> stateIn(item: T, initialValue: R): StateFlow<R> {
         return item.stateIn(CoroutineScope(Dispatchers.Main + SupervisorJob()), SharingStarted.Lazily, initialValue)
     }
     suspend fun <T> restTryT(fn: suspend () -> RestResultT<T>): RestResultT<T> {

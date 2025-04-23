@@ -1,16 +1,12 @@
 package sdmed.extra.cso.models.retrofit.edi
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import sdmed.extra.cso.bases.FDataModelClass
 import sdmed.extra.cso.models.common.MediaPickerSourceModel
+import sdmed.extra.cso.utils.FExtensions
 
 data class EDIUploadPharmaModel(
     var thisPK: String = "",
@@ -28,17 +24,9 @@ data class EDIUploadPharmaModel(
     @Transient
     @JsonIgnore
     var uploadItems: MutableStateFlow<MutableList<MediaPickerSourceModel>> = MutableStateFlow(mutableListOf())
-    val isAddable get() = ediState.isEditable()
     val isOpen = MutableStateFlow(false)
-    val isSavable: StateFlow<Boolean> = uploadItems.map { it.isNotEmpty() }
-        .stateIn(CoroutineScope(Dispatchers.Main + SupervisorJob()), SharingStarted.Lazily, false)
-    val currentPosition = MutableStateFlow<Int>(1)
-    val positionString: StateFlow<String> = currentPosition.map { "${it}/${fileList.size}" }
-        .stateIn(CoroutineScope(Dispatchers.Main + SupervisorJob()), SharingStarted.Lazily, "${currentPosition.value}/${fileList.size}")
+    val isSavable: StateFlow<Boolean> = FExtensions.stateIn(uploadItems.map { it.isNotEmpty() }, false)
 
-    fun getYearMonth() = "${year}-${month}"
-//    fun getEdiColor() = ediState.parseEDIColor()
-//    fun getEdiBackColor() = ediState.parseEDIBackColor()
     enum class ClickEvent(var index: Int) {
         OPEN(0),
         ADD(1),

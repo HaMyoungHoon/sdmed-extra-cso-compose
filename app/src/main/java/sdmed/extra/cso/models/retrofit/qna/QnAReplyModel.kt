@@ -1,17 +1,9 @@
 package sdmed.extra.cso.models.retrofit.qna
 
 import android.text.Html
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import sdmed.extra.cso.bases.FDataModelClass
 import sdmed.extra.cso.fDate.FDateTime
-import sdmed.extra.cso.models.common.EllipseItemModel
 import java.util.Date
 
 data class QnAReplyModel(
@@ -25,9 +17,6 @@ data class QnAReplyModel(
 ): FDataModelClass<QnAReplyModel.ClickEvent>() {
     var open = MutableStateFlow(false)
     val htmlContentString get() = Html.fromHtml(content, Html.FROM_HTML_MODE_COMPACT)
-    val currentPosition = MutableStateFlow<Int>(1)
-    val positionString: StateFlow<String> = currentPosition.map { "${it}/${fileList.size}" }
-        .stateIn(CoroutineScope(Dispatchers.Main + SupervisorJob()), SharingStarted.Lazily, "${currentPosition.value}/${fileList.size}")
     val regDateString get() = FDateTime().setThis(regDate.time).toString("yyyy-MM-dd")
     enum class ClickEvent(var index: Int) {
         OPEN(0),
