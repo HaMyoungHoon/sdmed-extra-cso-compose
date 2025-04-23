@@ -26,6 +26,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,6 +45,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.zIndex
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import sdmed.extra.cso.R
 import sdmed.extra.cso.bases.FConstants
 import sdmed.extra.cso.models.common.MediaViewModel
@@ -53,6 +56,7 @@ import sdmed.extra.cso.views.component.customText.CustomTextData
 import sdmed.extra.cso.views.component.customText.customText
 import sdmed.extra.cso.views.component.vector.FVectorData
 import sdmed.extra.cso.views.component.vector.vectorArrowLeft
+import sdmed.extra.cso.views.component.vector.vectorArrowRight
 import sdmed.extra.cso.views.component.vector.vectorCircle
 import sdmed.extra.cso.views.theme.FThemeUtil
 
@@ -71,19 +75,34 @@ fun mediaListViewScreen(dataContext: MediaListViewActivityVM) {
 @Composable
 private fun mediaListViewScreenTopContainer(dataContext: MediaListViewActivityVM) {
     val color = FThemeUtil.safeColorC()
-    Row(Modifier.fillMaxWidth().padding(5.dp)) {
+    val selectedIndex by dataContext.selectedIndex.collectAsState()
+    var title by remember { mutableStateOf("") }
+    Row(Modifier.fillMaxWidth().padding(10.dp)) {
         Icon(vectorArrowLeft(FVectorData().apply {
             this.tintColor = color.background
             this.fillColor = color.primary
-        }), stringResource(R.string.close_desc),
-            Modifier.clickable { dataContext.relayCommand.execute(MediaListViewActivityVM.ClickEvent.CLOSE) },
+        }), stringResource(R.string.prev_desc),
+            Modifier.clickable { dataContext.relayCommand.execute(MediaListViewActivityVM.ClickEvent.PREV) },
             Color.Unspecified)
         customText(CustomTextData().apply {
-            text = stringResource(R.string.media_list_view_title_desc)
+            text = title
             textColor = color.paragraph
             textAlign = TextAlign.Center
             modifier = Modifier.weight(1F)
         })
+        Icon(vectorArrowRight(FVectorData().apply {
+            this.tintColor = color.background
+            this.fillColor = color.primary
+        }), stringResource(R.string.next_desc),
+            Modifier.clickable { dataContext.relayCommand.execute(MediaListViewActivityVM.ClickEvent.NEXT) },
+            Color.Unspecified)
+    }
+    LaunchedEffect(selectedIndex) {
+        title = if (selectedIndex > dataContext.items.value.count() - 1) {
+            ""
+        } else {
+            dataContext.items.value[selectedIndex].originalFilename.value
+        }
     }
 }
 
@@ -91,30 +110,17 @@ private fun mediaListViewScreenTopContainer(dataContext: MediaListViewActivityVM
 private fun mediaListViewScreenItemContainer(dataContext: MediaListViewActivityVM) {
     val items by dataContext.items.collectAsState()
     val pagerState = rememberPagerState(pageCount = { items.size })
-    var scrollEnabled by remember { mutableStateOf(true) }
-    HorizontalPager(pagerState, Modifier.fillMaxSize(), userScrollEnabled = scrollEnabled) { page ->
+    val selectedIndex by dataContext.selectedIndex.collectAsState()
+    HorizontalPager(pagerState, Modifier.fillMaxSize(), userScrollEnabled = false) { page ->
         val item = items.getOrNull(page) ?: items.getOrNull(0) ?: return@HorizontalPager
-        if (item.isImage) {
+        if (item.isImage || item.isExcel) {
             mediaListViewScreenImageView(item)
         } else {
-            mediaListViewScreenWebView(item, webViewTouch = {
-                when (it.action) {
-                    MotionEvent.ACTION_UP -> {
-                        scrollEnabled = true
-                        false
-                    }
-                    MotionEvent.ACTION_DOWN -> {
-                        scrollEnabled = false
-                        false
-                    }
-                    MotionEvent.ACTION_CANCEL -> {
-                        scrollEnabled = true
-                        false
-                    }
-                    else -> false
-                }
-            })
+            mediaListViewScreenWebView(item)
         }
+    }
+    LaunchedEffect(selectedIndex) {
+        pagerState.animateScrollToPage(selectedIndex)
     }
 }
 
@@ -123,41 +129,21 @@ private fun mediaListViewScreenImageView(item: MediaViewModel) {
     val color = FThemeUtil.safeColorC()
     var scale by remember { mutableStateOf(1F) }
     var offset by remember { mutableStateOf(Offset.Zero) }
-    Box(Modifier.fillMaxSize().background(color.gray), contentAlignment = Alignment.Center) {
+    Box(Modifier.fillMaxSize().background(color.gray).pointerInput(Unit) {
+        detectTransformGestures { _, pan, zoom, _ ->
+            scale = (scale * zoom).coerceIn(1F, 5F)
+            if (scale != 1F) {
+                offset += pan
+            } else {
+                offset = Offset.Zero
+            }
+        }
+    }, contentAlignment = Alignment.Center) {
         fCoilLoad(item.blobUrl.value,
             item.mimeType.value,
             item.originalFilename.value,
             Modifier.fillMaxWidth().graphicsLayer(scale, scale, 1F, offset.x, offset.y),
             ContentScale.FillWidth)
-        Box(Modifier.zIndex(100F).align(Alignment.TopEnd).width(200.dp).height(200.dp).pointerInput(Unit) {
-            detectTransformGestures { _, pan, zoom, _ ->
-                scale = (scale * zoom).coerceIn(1F, 5F)
-                if (scale != 1F) {
-                    offset += pan
-                } else {
-                    offset = Offset.Zero
-                }
-            }
-        }) {
-            customText(CustomTextData().apply {
-                text = "zoom"
-                textColor = color.absoluteWhite
-                textAlign = TextAlign.Center
-                modifier = Modifier.align(Alignment.Center)
-            })
-            Icon(vectorCircle(FVectorData(color.transparent, color.scrim)),
-                stringResource(R.string.media_view_title_desc),
-                Modifier.align(Alignment.TopEnd).fillMaxSize(),
-                Color.Unspecified)
-        }
-        customText(CustomTextData().apply {
-            text = item.originalFilename.value
-            textColor = color.disableForeGray
-            textSize = FThemeUtil.textUnit(18F)
-            maxLines = 2
-            modifier = Modifier.align(Alignment.BottomStart).padding(10.dp)
-            overflow = TextOverflow.Ellipsis
-        })
     }
 }
 
@@ -185,7 +171,7 @@ private fun mediaListViewScreenWebView(item: MediaViewModel, webViewTouch: ((eve
     }
     BackHandler(enabled = canGoBack) {
         if (webview?.canGoBack() == true) {
-            webview?.goBack()
+            webview.goBack()
         }
     }
 }

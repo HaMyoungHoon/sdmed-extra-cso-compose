@@ -38,7 +38,8 @@ class MediaListViewActivity: FBaseActivity<MediaListViewActivityVM>() {
     private fun setThisCommand(data: Any?) {
         val eventName = data as? MediaListViewActivityVM.ClickEvent ?: return
         when (eventName) {
-            MediaListViewActivityVM.ClickEvent.CLOSE -> close()
+            MediaListViewActivityVM.ClickEvent.PREV -> prev()
+            MediaListViewActivityVM.ClickEvent.NEXT -> next()
         }
     }
     private fun setAdapterCommand(data: Any?) {
@@ -49,7 +50,16 @@ class MediaListViewActivity: FBaseActivity<MediaListViewActivityVM>() {
             MediaViewModel.ClickEvent.THIS -> { }
         }
     }
-    private fun close() {
-        finish()
+    private fun prev() {
+        if (dataContext.selectedIndex.value <= 0) {
+            return
+        }
+        dataContext.selectedIndex.value--
+    }
+    private fun next() {
+        if (dataContext.selectedIndex.value >= dataContext.items.value.count() - 1) {
+            return
+        }
+        dataContext.selectedIndex.value++
     }
 }

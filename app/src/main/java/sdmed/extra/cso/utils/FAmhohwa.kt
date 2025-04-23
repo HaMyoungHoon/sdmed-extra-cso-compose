@@ -57,6 +57,7 @@ object FAmhohwa {
     fun logout(context: Context?, expired: Boolean = false) {
         context ?: return
         removeLoginData(context)
+        FStorage.logoutMultiLoginData(context)
 //        FExtensions.moveToLandingActivity(context, expired)
     }
     fun removeLoginData(context: Context) {

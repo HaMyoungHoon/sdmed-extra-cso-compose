@@ -245,7 +245,6 @@ private fun setHospitalCommand(data: Any?, dataContext: MyScreenVM) {
 private fun logout(dataContext: MyScreenVM, navigate: (MenuItem, Boolean) -> Unit) {
     dataContext.mqttDisconnect()
     FAmhohwa.logout(dataContext.context)
-    FStorage.logoutMultiLoginData(dataContext.context)
     navigate(MenuList.menuLanding(), true)
 }
 private fun passwordChange(dataContext: MyScreenVM) {

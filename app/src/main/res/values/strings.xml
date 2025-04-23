@@ -142,4 +142,6 @@
     <string name="mqtt_title_marketing_contract_add">마케팅계약서 추가</string>
     <string name="mqtt_title_training_certificate_add">교육수료증 추가</string>
     <string name="mqtt_title_user_file">유저 파일 추가</string>
+    <string name="prev_desc">이전</string>
+    <string name="next_desc">다음</string>
 </resources>

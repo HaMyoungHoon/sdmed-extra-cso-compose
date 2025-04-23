@@ -7,6 +7,12 @@ import android.util.TypedValue
 import androidx.core.app.ActivityCompat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import sdmed.extra.cso.bases.FConstants
 import sdmed.extra.cso.fDate.FDateTime
 import sdmed.extra.cso.fDate.FLocalize
@@ -145,6 +151,9 @@ object FExtensions {
         return FContentsType.findContentType(ext)
     }
 
+    fun <T: StateFlow<M>, M> stateIn(item: T, initialValue: M): StateFlow<M> {
+        return item.stateIn(CoroutineScope(Dispatchers.Main + SupervisorJob()), SharingStarted.Lazily, initialValue)
+    }
     suspend fun <T> restTryT(fn: suspend () -> RestResultT<T>): RestResultT<T> {
         return try {
             fn()
