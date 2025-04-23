@@ -17,6 +17,7 @@ import android.os.Build
 import android.os.Environment
 import android.os.ParcelFileDescriptor
 import android.provider.MediaStore
+import android.util.Size
 import android.view.View
 import android.webkit.MimeTypeMap
 import androidx.core.content.ContextCompat
@@ -60,6 +61,45 @@ object FImageUtils {
         } catch (_: Exception) {
             BitmapDescriptorFactory.fromResource(R.drawable.buff_image)
         }
+    }
+    fun createImageThumbnail(context: Context, uri: Uri, width: Int, height: Int): Bitmap? {
+        return try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                context.contentResolver.loadThumbnail(uri, Size(width, height), null)
+            } else {
+                context.contentResolver.openInputStream(uri).use {
+                    BitmapFactory.decodeStream(it)
+                }
+            }
+        } catch (_: Exception) {
+            null
+        }
+    }
+    fun createImageThumbnail(url: String, width: Int, height: Int): Bitmap? {
+        val options = BitmapFactory.Options().apply {
+            inJustDecodeBounds = true
+        }
+        val file = File(url)
+        FileInputStream(file).use {
+            BitmapFactory.decodeStream(it, null, options)
+        }
+        options.inSampleSize = calcSampleSize(options, width, height)
+        options.inJustDecodeBounds = false
+        FileInputStream(file).use {
+            return BitmapFactory.decodeStream(it, null, options)
+        }
+    }
+    fun calcSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
+        val (height, width) = options.outHeight to options.outWidth
+        var ret = 1
+        if (height > reqHeight || width > reqWidth) {
+            val halfHeight = height / 2
+            val halfWidth = width / 2
+            while ((halfHeight / ret) >= reqHeight && (halfWidth / ret) >= reqWidth) {
+                ret *= 2
+            }
+        }
+        return ret
     }
     fun bitmapHexagonMask(bitmap: Bitmap, radius: Float = 5F, cornerLength: Float = 10F) {
         val canvas = Canvas(bitmap)
@@ -307,8 +347,6 @@ object FImageUtils {
         return file
     }
     fun uriToFile(context: Context, fileUri: Uri, fileName: String): File {
-        if (isLocalFile(context, fileUri)) return fileUri.toFile()
-
         val fileDescriptor = try {
             context.contentResolver.openFileDescriptor(fileUri, "r") ?: return fileUri.toFile()
         } catch (_: Exception) {
@@ -392,8 +430,6 @@ object FImageUtils {
         return file
     }
     fun uriToGifFile(context: Context, fileUri: Uri, fileName: String): File {
-        if (isLocalFile(context, fileUri)) return fileUri.toFile()
-
         val fileDescriptor = try {
             context.contentResolver.openFileDescriptor(fileUri, "r") ?: return fileUri.toFile()
         } catch (_: Exception) {

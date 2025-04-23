@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.window.layout.DisplayFeature
 import com.google.accompanist.adaptive.calculateDisplayFeatures
@@ -112,23 +113,23 @@ class MediaPickerActivity: FBaseActivity<MediaPickerActivityVM>() {
         val dataBuff = data[1] as? MediaPickerSourceModel ?: return
         when (eventName) {
             MediaPickerSourceModel.ClickEvent.SELECT -> {
-                val findItem = dataContext.clickItemBuff.firstOrNull { it.mediaUrl == dataBuff.mediaUrl }
+                val findItem = dataContext.clickItemBuff.firstOrNull { it.mediaUri == dataBuff.mediaUri }
                 if (findItem != null) {
-                    if (dataContext.mediaUrl.value == findItem.mediaUrl) {
+                    if (dataContext.mediaUri.value == findItem.mediaUri) {
                         dataContext.removeClickedItem(dataBuff)
                         dataContext.confirmEnable.value = dataContext.getClickItemCount() > 0
                         val lastItem = dataContext.clickItemBuff.lastOrNull()
                         if (lastItem != null) {
                             dataContext.setLastClickedItem(lastItem)
-                            dataContext.mediaUrl.value = lastItem.mediaUrl
+                            dataContext.mediaUri.value = lastItem.mediaUri
                             dataContext.mediaFileType.value = lastItem.mediaFileType
                             dataContext.mediaName.value = lastItem.mediaName
                         } else {
-                            dataContext.mediaUrl.value = null
+                            dataContext.mediaUri.value = null
                         }
                     } else {
                         dataContext.setLastClickedItem(dataBuff)
-                        dataContext.mediaUrl.value = findItem.mediaUrl
+                        dataContext.mediaUri.value = findItem.mediaUri
                         dataContext.mediaFileType.value = findItem.mediaFileType
                         dataContext.mediaName.value = findItem.mediaName
                     }
@@ -141,7 +142,7 @@ class MediaPickerActivity: FBaseActivity<MediaPickerActivityVM>() {
 
                 dataContext.setLastClickedItem(dataBuff)
                 dataContext.appendClickedItem(dataBuff)
-                dataContext.mediaUrl.value = dataBuff.mediaUrl
+                dataContext.mediaUri.value = dataBuff.mediaUri
                 dataContext.mediaFileType.value = dataBuff.mediaFileType
                 dataContext.mediaName.value = dataBuff.mediaName
                 playerPlay()
@@ -182,12 +183,12 @@ class MediaPickerActivity: FBaseActivity<MediaPickerActivityVM>() {
         val modelBuff = dataBuff.data as? MediaPickerSourceModel ?: return
         when (eventName) {
             SelectListModel.ClickEvent.SELECT -> {
-                val url = modelBuff.mediaUrl
-                if (url != null) {
+                val uri = modelBuff.mediaUri
+                if (uri != null) {
                     dataContext.removeClickedItem(modelBuff)
                     dataContext.removeItems(modelBuff)
                     try {
-                        FImageUtils.fileDelete(this, url)
+                        FImageUtils.fileDelete(this, uri)
                     } catch (_: Exception) {
 
                     }
@@ -197,7 +198,7 @@ class MediaPickerActivity: FBaseActivity<MediaPickerActivityVM>() {
     }
     private fun getFileList(buff: MutableList<Pair<String, MutableList<MediaPickerSourceModel>>>?): MutableList<Pair<String, MutableList<MediaPickerSourceModel>>> {
         val mediaList = buff ?: mutableListOf()
-        val projection = arrayOf(MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns.DISPLAY_NAME, MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME, MediaStore.Files.FileColumns.DATE_ADDED, MediaStore.Files.FileColumns.MIME_TYPE)
+        val projection = arrayOf(MediaStore.Files.FileColumns._ID, MediaStore.Files.FileColumns.DISPLAY_NAME, MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME, MediaStore.Files.FileColumns.DATE_ADDED, MediaStore.Files.FileColumns.MIME_TYPE)
         val sortOrder = "${MediaStore.Files.FileColumns.DATE_ADDED} DESC"
         val selection = "${MediaStore.Files.FileColumns.MIME_TYPE} IN (?, ?, ?, ?)"
         val selectionArgs = arrayOf(FContentsType.type_pdf, FContentsType.type_xlsx, FContentsType.type_xls, FContentsType.type_zip)
@@ -210,13 +211,17 @@ class MediaPickerActivity: FBaseActivity<MediaPickerActivityVM>() {
         )
 
         query?.use { cursor ->
-            val dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA)
+            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID)
             val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DISPLAY_NAME)
             val folderColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME)
             val dateTimeColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATE_ADDED)
             val mimeTypeColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MIME_TYPE)
             while (cursor.moveToNext()) {
-                val url = cursor.getString(dataColumn)
+                val id = cursor.getLong(idColumn)
+                val uri = ContentUris.withAppendedId(
+                    MediaStore.Files.getContentUri("external"),
+                    id
+                )
                 val name = cursor.getString(nameColumn)
                 val folderName = cursor.getString(folderColumn)
                 val dateTime = cursor.getString(dateTimeColumn)
@@ -228,7 +233,7 @@ class MediaPickerActivity: FBaseActivity<MediaPickerActivityVM>() {
                 if (findFolder != null) {
                     findFolder.second.add(
                         MediaPickerSourceModel().apply {
-                            mediaUrl = url
+                            mediaUri = uri
                             mediaName = name
                             mediaFileType = MediaFileType.fromMimeType(mimeString)
                             mediaDateTime = dateTime
@@ -238,7 +243,7 @@ class MediaPickerActivity: FBaseActivity<MediaPickerActivityVM>() {
                 } else {
                     mediaList.add(Pair(folderName, arrayListOf(
                         MediaPickerSourceModel().apply {
-                            mediaUrl = url
+                            mediaUri = uri
                             mediaName = name
                             mediaFileType = MediaFileType.fromMimeType(mimeString)
                             mediaDateTime = dateTime
@@ -252,7 +257,7 @@ class MediaPickerActivity: FBaseActivity<MediaPickerActivityVM>() {
     }
     private fun getImageList(): MutableList<Pair<String, MutableList<MediaPickerSourceModel>>> {
         val mediaList = mutableListOf<Pair<String, MutableList<MediaPickerSourceModel>>>()
-        val projection = arrayOf(MediaStore.Images.Media.DATA, MediaStore.Images.Media.DISPLAY_NAME, MediaStore.Images.Media.BUCKET_DISPLAY_NAME, MediaStore.Images.Media.DATE_ADDED, MediaStore.Images.Media.MIME_TYPE)
+        val projection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.DISPLAY_NAME, MediaStore.Images.Media.BUCKET_DISPLAY_NAME, MediaStore.Images.Media.DATE_ADDED, MediaStore.Images.Media.MIME_TYPE)
         val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} DESC"
         val query = this.contentResolver.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -262,13 +267,17 @@ class MediaPickerActivity: FBaseActivity<MediaPickerActivityVM>() {
             sortOrder
         )
         query?.use { cursor ->
-            val dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
             val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME)
             val folderColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)
             val dateTimeColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_ADDED)
             val mimeTypeColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.MIME_TYPE)
             while (cursor.moveToNext()) {
-                val url = cursor.getString(dataColumn)
+                val id = cursor.getLong(idColumn)
+                val uri = ContentUris.withAppendedId(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    id
+                )
                 val name = cursor.getString(nameColumn)
                 val folderName = cursor.getString(folderColumn)
                 val dateTime = cursor.getString(dateTimeColumn)
@@ -277,7 +286,7 @@ class MediaPickerActivity: FBaseActivity<MediaPickerActivityVM>() {
                 if (findFolder != null) {
                     findFolder.second.add(
                         MediaPickerSourceModel().apply {
-                            mediaUrl = url
+                            mediaUri = uri
                             mediaName = name
                             mediaFileType = MediaFileType.IMAGE
                             mediaDateTime = dateTime
@@ -287,7 +296,7 @@ class MediaPickerActivity: FBaseActivity<MediaPickerActivityVM>() {
                 } else {
                     mediaList.add(Pair(folderName, arrayListOf(
                         MediaPickerSourceModel().apply {
-                            mediaUrl = url
+                            mediaUri = uri
                             mediaName = name
                             mediaFileType = MediaFileType.IMAGE
                             mediaDateTime = dateTime
@@ -301,7 +310,7 @@ class MediaPickerActivity: FBaseActivity<MediaPickerActivityVM>() {
     }
     private fun getVideoList(buff: MutableList<Pair<String, MutableList<MediaPickerSourceModel>>>?): MutableList<Pair<String, MutableList<MediaPickerSourceModel>>> {
         val mediaList = buff ?: mutableListOf()
-        val projection = arrayOf(MediaStore.Video.Media.DATA, MediaStore.Video.Media.DISPLAY_NAME, MediaStore.Video.Media.BUCKET_DISPLAY_NAME, MediaStore.Video.Media.DATE_ADDED, MediaStore.Video.Media.DURATION)
+        val projection = arrayOf(MediaStore.Video.Media._ID, MediaStore.Video.Media.DISPLAY_NAME, MediaStore.Video.Media.BUCKET_DISPLAY_NAME, MediaStore.Video.Media.DATE_ADDED, MediaStore.Video.Media.DURATION)
         val sortOrder = "${MediaStore.Video.Media.DATE_ADDED} DESC"
         val query = this.contentResolver.query(
             MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
@@ -311,13 +320,17 @@ class MediaPickerActivity: FBaseActivity<MediaPickerActivityVM>() {
             sortOrder
         )
         query?.use { cursor ->
-            val dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)
+            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID)
             val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME)
             val folderColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.BUCKET_DISPLAY_NAME)
             val dateTimeColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_ADDED)
             val durationColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION)
             while (cursor.moveToNext()) {
-                val url = cursor.getString(dataColumn)
+                val id = cursor.getLong(idColumn)
+                val uri = ContentUris.withAppendedId(
+                    MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                    id
+                )
                 val name = cursor.getString(nameColumn)
                 val folderName = cursor.getString(folderColumn)
                 val dateTime = cursor.getString(dateTimeColumn)
@@ -326,21 +339,21 @@ class MediaPickerActivity: FBaseActivity<MediaPickerActivityVM>() {
                 if (findFolder != null) {
                     findFolder.second.add(
                         MediaPickerSourceModel().apply {
-                            mediaUrl = url
+                            mediaUri = uri
                             mediaName = name
                             mediaFileType = MediaFileType.VIDEO
                             mediaDateTime = dateTime
-                            mediaMimeType = FExtensions.getFileMimeType(File(url))
+                            mediaMimeType = FExtensions.getFileMimeType(uri.toFile())
                             this.duration.value = duration
                         }.generateData())
                 } else {
                     mediaList.add(Pair(folderName, arrayListOf(
                         MediaPickerSourceModel().apply {
-                            mediaUrl = url
+                            mediaUri = uri
                             mediaName = name
                             mediaFileType = MediaFileType.VIDEO
                             mediaDateTime = dateTime
-                            mediaMimeType = FExtensions.getFileMimeType(File(url))
+                            mediaMimeType = FExtensions.getFileMimeType(uri.toFile())
                             this.duration.value = duration
                         }.generateData())))
                 }
@@ -349,24 +362,24 @@ class MediaPickerActivity: FBaseActivity<MediaPickerActivityVM>() {
         return mediaList
     }
     private fun playerPlay() {
-        if (dataContext.mediaUrl.value == null) {
+        if (dataContext.mediaUri.value == null) {
             return
         }
         if (dataContext.mediaFileType.value != MediaFileType.VIDEO) {
             playerStop()
             return
         }
-        dataContext.videoUrl.value = dataContext.mediaUrl.value
+        dataContext.videoUri.value = dataContext.mediaUri.value
     }
     private fun playerStop() {
 //        val player = binding?.playerView?.player ?: return
 //        player.stop()
-        dataContext.videoUrl.value = null
+        dataContext.videoUri.value = null
     }
     private fun playerRelease() {
 //        val player = binding?.playerView?.player ?: return
 //        player.stop()
 //        player.release()
-        dataContext.videoUrl.value = null
+        dataContext.videoUri.value = null
     }
 }

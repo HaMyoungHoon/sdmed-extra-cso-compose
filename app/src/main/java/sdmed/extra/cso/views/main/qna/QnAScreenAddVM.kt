@@ -1,6 +1,7 @@
 package sdmed.extra.cso.views.main.qna
 
 import android.content.Context
+import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -52,12 +53,12 @@ class QnAScreenAddVM(applicationContext: Context? = null): FBaseViewModel(applic
     fun removeImage(data: MediaPickerSourceModel?) {
         uploadItems.value = uploadItems.value.filter { it != data }.toMutableList()
     }
-    fun addImage(url: String?, name: String, fileType: MediaFileType, mimeType: String) {
-        url ?: return
+    fun addImage(uri: Uri?, name: String, fileType: MediaFileType, mimeType: String) {
+        uri ?: return
         try {
             val imageBuff = uploadItems.value.toMutableList()
             imageBuff.add(MediaPickerSourceModel().apply {
-                mediaUrl = url
+                mediaUri = uri
                 mediaName = name
                 mediaFileType = fileType
                 mediaMimeType = mimeType

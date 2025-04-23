@@ -1,6 +1,7 @@
 package sdmed.extra.cso.views.main.home
 
 import android.content.Context
+import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -187,15 +188,15 @@ class HomeEDIRequestScreenVM(applicationContext: Context? = null): FBaseViewMode
         }
         isSavable.value = true
     }
-    fun addImage(pharmaBuffPK: String, url: String?, name: String, fileType: MediaFileType, mimeType: String) {
-        url ?: return
+    fun addImage(pharmaBuffPK: String, uri: Uri?, name: String, fileType: MediaFileType, mimeType: String) {
+        uri ?: return
         val buff = this.pharmaModel.value.toMutableList()
 
         try {
             val findBuff = buff.find { x -> x.thisPK == pharmaBuffPK } ?: return
             val imageBuff = findBuff.uploadItems.value.toMutableList()
             imageBuff.add(MediaPickerSourceModel().apply {
-                mediaUrl = url
+                mediaUri = uri
                 mediaName = name
                 mediaFileType = fileType
                 mediaMimeType = mimeType

@@ -328,7 +328,7 @@ private fun pharmaFileUploadItemContainer(dataContext: EDIScreenDetailVM, item: 
                     stringResource(R.string.remove_desc),
                     Modifier, Color.Unspecified)
             }
-            fImageLoad(item.mediaUrl,
+            fImageLoad(item.mediaUri,
                 item.mediaFileType,
                 item.mediaName,
                 Modifier.width(100.dp).height(100.dp).padding(10.dp),

@@ -70,14 +70,69 @@ fun fImageLoad(mediaUrl: String? = null, mediaFileType: MediaFileType?, mediaFil
                 mediaUrl?.let {
                     FCoroutineUtil.coroutineScopeIO({
                         bitmap = try {
-                            val size = Size(size, size)
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                                ThumbnailUtils.createImageThumbnail(File(mediaUrl), size, null)
-                            } else {
-                                val resampler = DecodeResampler(size, null)
-                                val source = ImageDecoder.createSource(File(mediaUrl))
-                                ImageDecoder.decodeBitmap(source, resampler)
-                            }
+                            FImageUtils.createImageThumbnail(mediaUrl, size, size)
+//                            val size = Size(size, size)
+//                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//                                FLog.debug("mhha", "thumbnailUtil ${mediaUrl}")
+//                                ThumbnailUtils.createImageThumbnail(File(mediaUrl), size, null)
+//                            } else {
+//                                FLog.debug("mhha", "imageDecoder ${mediaUrl}")
+//                                val resampler = DecodeResampler(size, null)
+//                                val source = ImageDecoder.createSource(File(mediaUrl))
+//                                ImageDecoder.decodeBitmap(source, resampler)
+//                            }
+                        } catch (e: Exception) {
+                            null
+                        }
+                    })
+                }
+            }
+            bitmap?.let {
+                Image(it.asImageBitmap(),
+                    mediaFilename,
+                    modifier,
+                    contentScale = contentScale,
+                    filterQuality = FilterQuality.None)
+            } ?: Image(painterResource(R.drawable.image_loading),
+                mediaFilename,
+                modifier,
+                contentScale = contentScale)
+            return
+        }
+        MediaFileType.VIDEO -> { }
+        MediaFileType.UNKNOWN -> {  }
+        MediaFileType.PDF -> { imageId = R.drawable.image_pdf }
+        MediaFileType.EXCEL -> { imageId = R.drawable.image_excel }
+        MediaFileType.ZIP -> { imageId = R.drawable.image_zip }
+        else -> { }
+    }
+    Image(painterResource(imageId),
+        mediaFilename,
+        modifier,
+        contentScale = contentScale)
+}
+@Composable
+fun fImageLoad(mediaUri: Uri? = null, mediaFileType: MediaFileType?, mediaFilename: String? = null, modifier: Modifier, contentScale: ContentScale = ContentScale.Crop, size: Int = 256) {
+    val context = FDI.context()
+    var imageId = R.drawable.image_no_image_1920
+    when (mediaFileType) {
+        MediaFileType.IMAGE -> {
+            var bitmap by remember { mutableStateOf<Bitmap?>(null) }
+            LaunchedEffect(mediaUri) {
+                mediaUri?.let {
+                    FCoroutineUtil.coroutineScopeIO({
+                        bitmap = try {
+                            FImageUtils.createImageThumbnail(context, mediaUri, size, size)
+//                            val size = Size(size, size)
+//                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//                                FLog.debug("mhha", "thumbnailUtil ${mediaUrl}")
+//                                ThumbnailUtils.createImageThumbnail(File(mediaUrl), size, null)
+//                            } else {
+//                                FLog.debug("mhha", "imageDecoder ${mediaUrl}")
+//                                val resampler = DecodeResampler(size, null)
+//                                val source = ImageDecoder.createSource(File(mediaUrl))
+//                                ImageDecoder.decodeBitmap(source, resampler)
+//                            }
                         } catch (e: Exception) {
                             null
                         }

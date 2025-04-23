@@ -102,9 +102,9 @@ fun mediaPickerScreenTablet(dataContext: MediaPickerActivityVM) {
 }
 @Composable
 fun mediaPickerScreenTwoPane(dataContext: MediaPickerActivityVM, displayFeatures: List<DisplayFeature>) {
-    val mediaUrl by dataContext.mediaUrl.collectAsState()
+    val mediaUri by dataContext.mediaUri.collectAsState()
     mediaPickerScreen {
-        mediaUrl?.let {
+        mediaUri?.let {
             Column(Modifier) {
                 topContainer(dataContext)
                 mediaListContainer(dataContext)
@@ -186,10 +186,10 @@ private fun topContainer(dataContext: MediaPickerActivityVM) {
 }
 @Composable
 private fun mediaContainer(dataContext: MediaPickerActivityVM, isFull: Boolean = false) {
-    val mediaUrl by dataContext.mediaUrl.collectAsState()
+    val mediaUri by dataContext.mediaUri.collectAsState()
     val mediaFileType by dataContext.mediaFileType.collectAsState()
     val mediaName by dataContext.mediaName.collectAsState()
-    mediaUrl?.let {
+    mediaUri?.let {
         val modifier = if (isFull) Modifier.fillMaxSize() else Modifier.fillMaxWidth().height(300.dp)
         Box(modifier) {
             fImageLoad(it,
@@ -215,7 +215,7 @@ private fun mediaListContainer(dataContext: MediaPickerActivityVM) {
                 if (lastClick) {
                     Box(Modifier.fillMaxSize().zIndex(99F).background(color.scrim))
                 }
-                fImageLoad(item.mediaUrl,
+                fImageLoad(item.mediaUri,
                     item.mediaFileType,
                     item.mediaName,
                     Modifier.fillMaxSize(),

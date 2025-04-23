@@ -360,7 +360,7 @@ private fun ediPharmaContainer(dataContext: HomeEDIRequestNewScreenVM) {
                                                         stringResource(R.string.remove_desc),
                                                         Modifier, Color.Unspecified)
                                                 }
-                                                fImageLoad(uploadItem.mediaUrl,
+                                                fImageLoad(uploadItem.mediaUri,
                                                     uploadItem.mediaFileType,
                                                     uploadItem.mediaName,
                                                     Modifier.width(100.dp).height(100.dp).padding(10.dp),
