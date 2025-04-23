@@ -40,6 +40,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import sdmed.extra.cso.R
 import sdmed.extra.cso.bases.FConstants
+import java.io.ByteArrayOutputStream
 
 object FImageUtils {
     fun getBitmapFromView(view: View): Bitmap {
@@ -439,7 +440,7 @@ object FImageUtils {
         ).apply {
         }
     }
-    fun imageResize(inputStream: ByteArrayInputStream, outFile: File, needConverter: Boolean = false): Boolean {
+    fun imageResize(inputStream: ByteArrayInputStream, outFile: File): Boolean {
         try {
             val options = BitmapFactory.Options().apply {
                 inJustDecodeBounds = true
@@ -447,9 +448,9 @@ object FImageUtils {
                 inSampleSize = calcResize(this).roundToInt()
                 inJustDecodeBounds = false
             }
-            if (needConverter) {
-                options.inPreferredConfig = Bitmap.Config.ARGB_8888
-            }
+//            if (needConverter) {
+//                options.inPreferredConfig = Bitmap.Config.ARGB_8888
+//            }
             inputStream.reset()
             val resize = calcResize(options)
 //            if (resize <= 1F) {
@@ -458,13 +459,24 @@ object FImageUtils {
             val orientation = getOrientation(inputStream)
             val originBitmap = BitmapFactory.decodeStream(inputStream, null, options) ?: return false
             val resizedBitmap = rotateScaledBitmap(originBitmap, options, resize, orientation)
+            inputStream.reset()
+            val originSize = inputStream.available()
+            val targetSize = if (FConstants.MAX_FILE_SIZE > originSize) originSize else FConstants.MAX_FILE_SIZE
+            var quality = 80
+            var streamBuff = ByteArrayOutputStream()
             val outputStream = FileOutputStream(outFile)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                resizedBitmap.compress(Bitmap.CompressFormat.WEBP_LOSSLESS, 75, outputStream)
-            } else {
-                @Suppress("DEPRECATION")
-                resizedBitmap.compress(Bitmap.CompressFormat.WEBP, 75, outputStream)
-            }
+            do {
+                streamBuff.reset()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    resizedBitmap.compress(Bitmap.CompressFormat.WEBP_LOSSLESS, quality, streamBuff)
+                } else {
+                    @Suppress("DEPRECATION")
+                    resizedBitmap.compress(Bitmap.CompressFormat.WEBP, quality, streamBuff)
+                }
+                quality -= 10
+            } while (streamBuff.size() > targetSize && quality > 10)
+            streamBuff.writeTo(outputStream)
+            streamBuff.close()
             originBitmap.recycle()
             resizedBitmap.recycle()
             outputStream.close()

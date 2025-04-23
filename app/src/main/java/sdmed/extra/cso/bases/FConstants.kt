@@ -60,6 +60,7 @@ object FConstants {
     const val DEF_LATITUDE = 37.6618
     const val DEF_LONGITUDE = 126.76905
     const val DEF_ZOOM = 15F
+    const val MAX_FILE_SIZE = 10 * 1024 * 1024
 
     const val REGEX_NUMBER_REPLACE = "[^0-9]"
     // 숫자, 문자(영대소한글)

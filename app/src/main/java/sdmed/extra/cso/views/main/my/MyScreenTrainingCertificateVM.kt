@@ -28,6 +28,7 @@ class MyScreenTrainingCertificateVM(applicationContext: Context? = null): FBaseV
         viewModelScope.launch {
             for (event in eventChannel) {
                 loading(false)
+                uploadBuff.value = null
             }
         }
     }
