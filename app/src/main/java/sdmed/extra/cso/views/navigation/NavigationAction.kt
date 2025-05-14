@@ -24,4 +24,8 @@ class NavigationAction(private val navController: NavHostController) {
             launchSingleTop = true
         }
     }
+    fun getCurrentNavigate(): String {
+        val ret = navController.currentBackStackEntry?.destination?.route ?: ""
+        return ret
+    }
 }

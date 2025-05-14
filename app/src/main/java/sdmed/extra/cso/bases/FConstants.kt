@@ -30,12 +30,10 @@ object FConstants {
     const val HOSPITAL_PK = "hospitalPK"
 
     const val GOOGLE_DOC_PREFIX = "https://docs.google.com/viewer?url="
-    const val WEB_VIEW_PREFIX = "https://intra-cso.sdmed.co.kr/externalBlobView?blobUrl="
+    const val WEB_VIEW_PREFIX = "https://intra-cso.mhha.kr/externalBlobView?blobUrl="
 
-    const val TEST_BLOB_URL = "https://devsdmed1.blob.core.windows.net/devsdmed1/edi/test/20250310/ae6838cf-b0b7-43e3-8c2d-471bc68fe815.webp"
-
-    const val REST_API_DEBUG_RUL = "https://back-cso.sdmed.co.kr"
-    const val REST_API_URL = "https://back-cso.sdmed.co.kr"
+    const val REST_API_DEBUG_RUL = "https://back-cso.mhha.kr"
+    const val REST_API_URL = "https://back-cso.mhha.kr"
 
     const val REST_API_COMMON = "common"
     const val REST_API_MQTT = "mqtt"

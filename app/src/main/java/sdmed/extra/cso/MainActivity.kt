@@ -95,7 +95,10 @@ class MainActivity: FBaseActivity<MainActivityVM>() {
                         val navigationActions = remember(navHostController) {
                             NavigationAction(navHostController)
                         }
-                        navigationActions.navigateTo(MenuList.menuLanding(), true)
+                        val landing = MenuList.menuLanding()
+                        if (navigationActions.getCurrentNavigate() != landing.route.data.path) {
+//                            navigationActions.navigateTo(MenuList.menuLanding(), true)
+                        }
                         dataContext.tokenExpired.value = false
                     }
                 }
