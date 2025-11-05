@@ -102,7 +102,7 @@ class FMqttService(applicationContext: Context): FBaseService(applicationContext
     }
     fun parsePublish(data: Mqtt5Publish) {
         try {
-            val mqttContentModel = MqttContentModel().parseThis("topic", data.payloadAsBytes)
+            val mqttContentModel = MqttContentModel().parseThis(data.payloadAsBytes)
             if (mqttContentModel.senderPK == FAmhohwa.getThisPK(context)) {
                 return
             }
